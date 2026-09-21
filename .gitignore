@@ -1,0 +1,21 @@
+# Python 字节码
+__pycache__/
+*.pyc
+
+# 可再生的载荷构建缓存（重组前/后路径）
+server/cache/
+backend/cache/
+
+# 大体积数据文件：不进版本历史，靠 manifest+SHA256 核验完整性
+inputs/
+data/
+incopat/output/
+pipeline/output/
+*.sqlite3
+fusion_weak_signal/incopat_run/*.xlsx
+analytics/incopat_run/*.xlsx
+
+# 操作系统杂项
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="zh-CN" data-module="frontier">
+<head>
+  <base href="./">
+  <link rel="stylesheet" href="shared/fusion-nav.css?v=20260811-unified1">
+  <link rel="stylesheet" href="shared/layout-polish.css?v=20260812-impeccable2">
+  <link rel="stylesheet" href="assets/frontier/enterprise-river.css?v=20260904-node-highlight">
+  <script src="shared/fusion-nav.js?v=20260811-unified1" data-active="frontier" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>主题交互雷达图面板</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --line: #dce2e8;
+      --text: #17212f;
+      --muted: #647083;
+      --primary: #005fb8;
+      --primary-soft: rgba(0, 95, 184, 0.16);
+      --accent: #b00020;
+      --green: #007a63;
+      font-family: Arial, "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .route-panel {
+      margin-top: 10px;
+      border: 1px solid #dbe5ef;
+      border-radius: 8px;
+      background: #f8fbff;
+      padding: 10px 12px;
+    }
+    .route-panel h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: #17212f;
+    }
+    .route-panel p {
+      margin: 5px 0;
+      color: #344255;
+      line-height: 1.38;
+      font-size: 12px;
+    }
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 7px;
+    }
+    .route-block {
+      min-width: 0;
+    }
+    .route-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #526174;
+      margin-bottom: 3px;
+    }
+    .route-list {
+      margin: 0;
+      padding-left: 17px;
+      color: #344255;
+      font-size: 11.5px;
+      line-height: 1.34;
+    }
+    .route-status {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #e7edf4;
+      color: #526174;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(560px, 1fr) 430px;
+      gap: 18px;
+      height: 100vh;
+      padding: 18px;
+    }
+    .main, .side {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-width: 0;
+    }
+    .main {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden;
+    }
+    .topic-header {
+      padding: 18px 20px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+    .topic-meta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .keywords {
+      margin: 10px 0 0;
+      color: #384556;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+    .chart-area {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      align-content: start;
+      padding: 0 18px 18px;
+      min-height: 0;
+      overflow-y: auto;
+    }
+    #radar {
+      width: min(650px, 100%);
+      max-height: 52vh;
+      aspect-ratio: 1 / 1;
+      overflow: visible;
+      transform: translateY(-28px);
+      margin-bottom: -42px;
+    }
+    .trend-panel {
+      width: min(700px, 100%);
+      border: 1px solid #dbe5ef;
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 12px 14px 10px;
+      margin-bottom: 4px;
+    }
+    .trend-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .trend-head h2 {
+      margin: 0;
+      font-size: 15px;
+      color: #17212f;
+    }
+    .trend-summary {
+      color: var(--muted);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    #patentTrend, #growthTrend, #ipcDistribution {
+      width: 100%;
+      height: 190px;
+      display: block;
+      overflow: visible;
+    }
+    #ipcDistribution {
+      height: 230px;
+    }
+    .trend-axis {
+      stroke: #aeb8c4;
+      stroke-width: 1.2;
+      fill: none;
+    }
+    .trend-grid {
+      stroke: #e1e7ee;
+      stroke-width: 1;
+      fill: none;
+    }
+    .trend-line {
+      stroke: var(--green);
+      stroke-width: 3;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      fill: none;
+    }
+    .growth-line {
+      stroke: #b23b3b;
+      stroke-width: 3;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      fill: none;
+    }
+    .zero-line {
+      stroke: #9aa6b2;
+      stroke-width: 1.2;
+      stroke-dasharray: 5 5;
+      fill: none;
+    }
+    .ipc-segment {
+      stroke: #ffffff;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+    .ipc-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      min-height: 22px;
+      margin-top: 4px;
+      color: #526174;
+      font-size: 12px;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .trend-label {
+      fill: #526174;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+    .trend-value {
+      fill: #17212f;
+      font-size: 12px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .trend-empty {
+      fill: #647083;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .grid-line, .axis-line {
+      stroke: #d7dde4;
+      stroke-width: 1;
+      fill: none;
+    }
+    .avg-ring {
+      stroke: #858f9c;
+      stroke-width: 1.8;
+      stroke-dasharray: 6 6;
+      fill: none;
+    }
+    .radar-shape {
+      fill: var(--primary-soft);
+      stroke: var(--primary);
+      stroke-width: 3;
+      stroke-linejoin: round;
+    }
+    .radar-point {
+      fill: #ffffff;
+      stroke: var(--primary);
+      stroke-width: 2.4;
+      transition: r 180ms ease;
+    }
+    .radar-point.top1 {
+      fill: var(--accent);
+      stroke: #ffffff;
+      stroke-width: 2;
+    }
+    .axis-label {
+      fill: #263241;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: help;
+    }
+    .tick-label {
+      fill: #667386;
+      font-size: 11px;
+    }
+    .top1-label {
+      fill: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 260ms ease;
+    }
+    .top1-label.show {
+      opacity: 1;
+    }
+    .side {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .side-head {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .side-head h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .top-list {
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .metric-group {
+      margin-bottom: 14px;
+      border: 1px solid #e2e7ed;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .metric-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #f2f5f8;
+      font-weight: 700;
+      color: #263241;
+      font-size: 14px;
+      cursor: help;
+    }
+    .metric-explanation {
+      border-top: 1px solid #edf0f3;
+      background: #fbfcfe;
+      padding: 9px 12px 10px;
+      color: #4a5768;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .metric-explanation-label {
+      display: inline-block;
+      margin-right: 6px;
+      color: #263241;
+      font-weight: 800;
+    }
+    .sorter-panel {
+      padding: 10px 12px 12px;
+    }
+    .sorter-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .sorter-button {
+      border: 1px solid #d9e1ea;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #263241;
+      cursor: pointer;
+      min-width: 0;
+      padding: 8px 9px;
+      text-align: left;
+      transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+    .sorter-button:hover {
+      border-color: #9db9d8;
+      background: #f7fbff;
+    }
+    .sorter-button.active {
+      border-color: var(--primary);
+      background: #eaf3ff;
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+    .sorter-button-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .sorter-order {
+      flex: 0 0 auto;
+      min-width: 22px;
+      height: 20px;
+      border-radius: 999px;
+      background: #e7edf4;
+      color: #526174;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .sorter-button.active .sorter-order {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .sorter-note {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .sorter-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .sorter-reset {
+      border: 0;
+      border-radius: 999px;
+      background: #e7edf4;
+      color: #526174;
+      cursor: pointer;
+      flex: 0 0 auto;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 5px 10px;
+    }
+    .sorter-reset:hover {
+      background: #d9e4f0;
+    }
+    .sorter-results {
+      margin-top: 12px;
+      border: 1px solid #e2e7ed;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .sorter-results-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #f2f5f8;
+      color: #263241;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .sorter-direction-summary {
+      padding: 8px 12px;
+      border-top: 1px solid #e2e7ed;
+      background: #f8fafc;
+      color: #344255;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .sorter-empty {
+      padding: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .sorter-breakdown {
+      margin-top: 5px;
+      color: #526174;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .topic-button {
+      width: 100%;
+      border: 0;
+      border-top: 1px solid #edf0f3;
+      background: #ffffff;
+      text-align: left;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background 180ms ease, transform 180ms ease;
+    }
+    .topic-button:hover {
+      background: #f6f9fc;
+    }
+    .topic-button.active {
+      background: #eaf3ff;
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+    .topic-button:active {
+      transform: translateY(1px);
+    }
+    .topic-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .topic-id {
+      font-weight: 800;
+      color: #17212f;
+    }
+    .score {
+      font-variant-numeric: tabular-nums;
+      color: var(--green);
+      font-weight: 700;
+    }
+    .topic-key {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .hover-tip {
+      position: fixed;
+      z-index: 40;
+      left: 0;
+      top: 0;
+      max-width: 360px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #17212f;
+      color: #ffffff;
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.26);
+      font-size: 12px;
+      line-height: 1.45;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px) scale(0.98);
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+    .hover-tip.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .tip-title {
+      font-weight: 800;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+    .tip-muted {
+      color: #c8d1dd;
+    }
+    @media (max-width: 1080px) {
+      .shell {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+      }
+      .main, .chart-area {
+        overflow: visible;
+      }
+      .side {
+        max-height: none;
+      }
+      #radar {
+        max-height: none;
+        transform: translateY(-16px);
+        margin-bottom: -26px;
+      }
+      .trend-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .trend-summary {
+        text-align: left;
+      }
+      .route-grid {
+        grid-template-columns: 1fr;
+      }
+      .sorter-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <main class="main">
+      <header class="topic-header">
+        <h1 id="topicTitle">主题</h1>
+        <div class="topic-meta">
+          <span id="topicSize"></span>
+          <span id="outlierFlag"></span>
+          <span id="maxMetric"></span>
+        </div>
+        <p class="keywords" id="topicKeywords"></p>
+        <section class="route-panel" id="routePanel"></section>
+      </header>
+      <section class="chart-area">
+        <svg id="radar" viewBox="0 0 720 720" role="img" aria-label="主题雷达图"></svg>
+        <section id="enterpriseRiverPanel" class="enterprise-river-panel" aria-label="中国企业产业链布局流">
+          <div class="river-skeleton" role="status" aria-live="polite">
+            <span>正在汇总中国企业产业链布局</span><i></i><i></i><i></i>
+          </div>
+        </section>
+      </section>
+    </main>
+    <aside class="side">
+      <div class="side-head">
+        <h2>指标排序器</h2>
+      </div>
+      <div class="top-list" id="topList"></div>
+    </aside>
+  </div>
+  <div class="hover-tip" id="hoverTip"></div>
+  <script type="module">
+    import { loadPayloads } from "./shared/api-preload.js?v=20260921-api2";
+    await loadPayloads(["frontier-dashboard", "frontier-index"], [
+      "assets/frontier/frontier-app.js?v=20260921-api2",
+      "assets/frontier/enterprise-river.js?v=20260904-node-highlight",
+      "shared/module-mode.js?v=20260806-refactor4",
+    ]);
+  </script>
+  <script src="shared/enterprise-name.js?v=20260901-clean-name1"></script>
+</body>
+</html>

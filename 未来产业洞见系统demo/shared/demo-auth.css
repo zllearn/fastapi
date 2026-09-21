@@ -1,0 +1,149 @@
+:root {
+  --auth-paper: #f7f3ed;
+  --auth-panel: #fffdf9;
+  --auth-ink: #152337;
+  --auth-muted: #718092;
+  --auth-line: rgba(21, 35, 55, .14);
+  --auth-orange: #e9632d;
+  --auth-wine: #8c174f;
+  --auth-blue: #315c79;
+}
+
+.demo-login {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 40px;
+  color: var(--auth-ink);
+  background:
+    radial-gradient(circle at 76% 28%, rgba(233, 99, 45, .09), transparent 26rem),
+    linear-gradient(rgba(21, 35, 55, .028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 35, 55, .028) 1px, transparent 1px),
+    var(--auth-paper);
+  background-size: auto, 64px 64px, 64px 64px, auto;
+  transition: opacity .28s ease, visibility .28s ease;
+}
+
+.demo-login[hidden] {
+  display: grid;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.demo-login-shell {
+  width: min(1120px, 100%);
+  min-height: min(660px, calc(100vh - 80px));
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr);
+  border: 1px solid var(--auth-line);
+  background: rgba(255, 253, 249, .78);
+  box-shadow: 0 28px 90px rgba(65, 45, 35, .12);
+}
+
+.demo-login-intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(42px, 6vw, 76px);
+  overflow: hidden;
+  border-right: 1px solid var(--auth-line);
+}
+
+.demo-login-intro::after {
+  content: "";
+  position: absolute;
+  right: -96px;
+  bottom: -96px;
+  width: 330px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(49, 92, 121, .2);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 46px rgba(49, 92, 121, .025), inset 0 0 0 92px rgba(233, 99, 45, .025);
+}
+
+.demo-login-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font: 700 11px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: .13em;
+}
+
+.demo-login-atom {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  background: radial-gradient(circle, var(--auth-orange) 0 3px, transparent 3.5px);
+}
+
+.demo-login-atom::before,
+.demo-login-atom::after {
+  content: "";
+  position: absolute;
+  inset: 9px 0;
+  border: 1.4px solid var(--auth-ink);
+  border-radius: 50%;
+  transform: rotate(25deg);
+}
+
+.demo-login-atom::after { transform: rotate(-25deg); }
+.demo-login-kicker { margin: auto 0 18px; color: var(--auth-orange); font: 650 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .16em; }
+.demo-login-intro h1 { margin: 0; font-size: clamp(50px, 6vw, 78px); font-weight: 430; line-height: 1.04; letter-spacing: -.055em; }
+.demo-login-intro h1 span { color: var(--auth-wine); }
+.demo-login-intro > p:not(.demo-login-kicker) { max-width: 570px; margin: 25px 0 34px; color: var(--auth-muted); font-size: 14px; line-height: 1.9; }
+.demo-login-scope { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 9px 20px; color: var(--auth-blue); font: 650 10px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
+
+.demo-login-form {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  margin: 44px;
+  padding: 40px;
+  border-top: 2px solid var(--auth-orange);
+  background: rgba(255, 255, 255, .62);
+  box-shadow: 0 18px 54px rgba(65, 45, 35, .08);
+}
+
+.demo-login-form-head span { color: var(--auth-orange); font: 700 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .16em; }
+.demo-login-form-head h2 { margin: 20px 0 8px; font-size: 32px; font-weight: 480; letter-spacing: -.03em; }
+.demo-login-form-head p { margin: 0 0 34px; color: var(--auth-muted); font-size: 13px; }
+.demo-login-form > label { display: grid; gap: 9px; margin-bottom: 20px; color: var(--auth-muted); font-size: 12px; }
+.demo-login-form input { width: 100%; height: 48px; padding: 0 14px; border: 1px solid var(--auth-line); border-radius: 0; outline: none; color: var(--auth-ink); background: var(--auth-panel); font: inherit; transition: border-color .18s ease, box-shadow .18s ease; }
+.demo-login-form input:focus { border-color: var(--auth-blue); box-shadow: 0 0 0 3px rgba(49, 92, 121, .1); }
+.demo-password-field { position: relative; display: block; }
+.demo-password-field input { padding-right: 62px; }
+.demo-password-field button { position: absolute; right: 5px; top: 5px; height: 38px; padding: 0 10px; border: 0; color: var(--auth-blue); background: transparent; cursor: pointer; font-size: 12px; }
+.demo-login-error { min-height: 20px; margin: -4px 0 14px; color: var(--auth-wine); font-size: 12px; line-height: 1.6; }
+.demo-login-submit { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border: 1px solid var(--auth-ink); color: #fff; background: var(--auth-ink); cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; line-height: 1; transition: background .18s ease, transform .18s ease; }
+.demo-login-submit:hover { background: var(--auth-blue); transform: translateY(-1px); }
+.demo-login-submit b { color: var(--auth-orange); font-size: 18px; }
+.demo-login-form > small { margin-top: 18px; color: #929ba5; font: 600 9px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; text-align: center; }
+
+body:not(.demo-authenticated) #views,
+body:not(.demo-authenticated) > .loading { visibility: hidden; }
+
+@media (max-width: 800px) {
+  .demo-login { padding: 18px; }
+  .demo-login-shell { grid-template-columns: 1fr; min-height: 0; }
+  .demo-login-intro { min-height: 300px; padding: 34px; border-right: 0; border-bottom: 1px solid var(--auth-line); }
+  .demo-login-kicker { margin-top: 58px; }
+  .demo-login-form { margin: 0; padding: 34px; box-shadow: none; }
+}
+
+@media (max-width: 480px) {
+  .demo-login { padding: 0; }
+  .demo-login-shell { min-height: 100vh; border: 0; }
+  .demo-login-intro { min-height: 260px; padding: 26px; }
+  .demo-login-intro h1 { font-size: 48px; }
+  .demo-login-kicker { margin-top: 45px; }
+  .demo-login-form { padding: 28px 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-login, .demo-login-submit, .demo-login-form input { transition: none; }
+}

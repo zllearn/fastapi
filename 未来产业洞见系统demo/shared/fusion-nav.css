@@ -1,0 +1,62 @@
+.fusion-site-nav,.fusion-site-nav *{box-sizing:border-box}
+.fusion-site-nav{
+  --nav-bg:rgba(255,253,249,.94);--nav-line:rgba(21,35,55,.14);--nav-ink:#152337;--nav-muted:#718092;--nav-accent:#e9632d;
+  position:fixed;z-index:10000;top:50%;left:16px;width:54px;padding:7px;overflow:hidden;
+  border:1px solid var(--nav-line);border-radius:16px;background:var(--nav-bg);
+  box-shadow:0 18px 48px rgba(65,45,35,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  transform:translateY(-50%);transition:width .26s ease,border-color .26s ease;
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif
+}
+.fusion-site-nav:hover,.fusion-site-nav:focus-within,.fusion-site-nav.is-open{width:246px;border-color:rgba(233,99,45,.34)}
+.fusion-nav-toggle,.fusion-nav-link{
+  width:230px;height:42px;display:grid;grid-template-columns:38px minmax(0,1fr);align-items:center;
+  border:0;border-radius:10px;color:var(--nav-muted);background:transparent;text-decoration:none;cursor:pointer
+}
+.fusion-nav-toggle{margin:0 0 5px;padding:0;font:inherit}
+.fusion-nav-toggle:hover,.fusion-nav-link:hover{color:var(--nav-ink);background:rgba(21,35,55,.055)}
+.fusion-nav-icon{width:38px;display:grid;place-items:center;font:700 10px/1 ui-monospace,monospace}
+.fusion-nav-toggle .fusion-nav-icon{position:relative;height:38px}
+.fusion-nav-toggle .fusion-nav-icon::before,.fusion-nav-toggle .fusion-nav-icon::after{content:"";position:absolute;width:15px;border-top:1px solid currentColor;transition:transform .22s}
+.fusion-nav-toggle .fusion-nav-icon::before{transform:translateY(-4px)}.fusion-nav-toggle .fusion-nav-icon::after{transform:translateY(4px)}
+.fusion-site-nav.is-open .fusion-nav-toggle .fusion-nav-icon::before{transform:rotate(45deg)}.fusion-site-nav.is-open .fusion-nav-toggle .fusion-nav-icon::after{transform:rotate(-45deg)}
+.fusion-nav-label{min-width:0;padding:0 12px 0 5px;overflow:hidden;opacity:0;white-space:nowrap;text-overflow:ellipsis;text-align:left;font-size:12px;transform:translateX(-7px);transition:opacity .16s,transform .22s}
+.fusion-site-nav:hover .fusion-nav-label,.fusion-site-nav:focus-within .fusion-nav-label,.fusion-site-nav.is-open .fusion-nav-label{opacity:1;transform:none}
+.fusion-nav-divider{width:38px;margin:5px 0;border-top:1px solid var(--nav-line);transition:width .26s}
+.fusion-site-nav:hover .fusion-nav-divider,.fusion-site-nav:focus-within .fusion-nav-divider,.fusion-site-nav.is-open .fusion-nav-divider{width:230px}
+.fusion-nav-link{position:relative;margin-top:3px}
+.fusion-nav-link[aria-current=page]{color:var(--nav-ink);background:rgba(233,99,45,.09)}
+.fusion-nav-link[aria-current=page]::before{content:"";position:absolute;left:-7px;top:11px;bottom:11px;border-left:2px solid var(--nav-accent)}
+.fusion-nav-link[aria-current=page] .fusion-nav-icon{color:var(--nav-accent)}
+@media(max-width:760px){
+  .fusion-site-nav,.fusion-site-nav:hover,.fusion-site-nav:focus-within,.fusion-site-nav.is-open{top:auto;right:12px;bottom:12px;left:12px;width:auto;padding:5px;display:grid;grid-template-columns:repeat(4,1fr);border-radius:14px;transform:none}
+  .fusion-nav-toggle,.fusion-nav-divider{display:none}.fusion-nav-link{width:auto;height:46px;grid-template-columns:1fr;margin:0}.fusion-nav-label{display:none}
+  .fusion-nav-link[aria-current=page]::before{top:auto;right:18px;bottom:-5px;left:18px;border:0;border-bottom:2px solid var(--nav-accent)}
+}
+@media(prefers-reduced-motion:reduce){.fusion-site-nav,.fusion-site-nav *{transition-duration:.01ms!important}}
+
+/* Unified module title and section layout — aligned with Geographic Landscape */
+.fusion-module-hero,.fusion-module-section-head{box-sizing:border-box;width:min(1520px,calc(100% - clamp(32px,7vw,112px)));margin-inline:auto;color:#152337;font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+.fusion-module-hero{min-height:300px;padding:35px 0 48px;position:relative;display:flex;flex-direction:column;justify-content:space-between;border-bottom:1px solid rgba(21,35,55,.13)}
+.fusion-module-brand{display:flex;align-items:center;gap:11px;font:700 11px/1 ui-monospace,monospace;letter-spacing:.13em}
+.fusion-module-brand i{width:24px;height:24px;border:1px solid #e9632d;border-radius:50%;box-shadow:inset 0 0 0 7px #f7f3ed,inset 0 0 0 9px #315c79}
+.fusion-module-copy p,.fusion-module-section-head span{margin:0 0 10px;color:#e9632d;font:650 10px/1.2 ui-monospace,monospace;letter-spacing:.16em}
+.fusion-module-copy h1{margin:0;color:#8c174f;font:430 clamp(44px,6vw,76px)/1.05 Georgia,"Noto Serif SC",serif;letter-spacing:-.04em}
+.fusion-module-copy>span{display:block;margin-top:16px;color:#718092;font-size:13px}
+.fusion-module-index{position:absolute;right:0;bottom:45px;color:rgba(21,35,55,.16);font:600 clamp(34px,5vw,72px)/1 ui-monospace,monospace}
+.fusion-module-section-head{min-height:74px;display:flex;align-items:end;justify-content:space-between;gap:35px;padding:0 2px 15px;border-bottom:1px solid rgba(21,35,55,.13)}
+.fusion-module-section-head span{display:block;margin-bottom:7px}
+.fusion-module-section-head h2{margin:0;font:500 clamp(25px,2.3vw,36px)/1.2 Georgia,"Noto Serif SC",serif}
+html[data-module="technology"] body>.topbar,html[data-module="technology"] .filter-dock{display:none!important}
+html[data-module="technology"] .shell{margin-top:0!important}
+html[data-module="technology"] .shell>main{width:min(1520px,calc(100% - clamp(32px,7vw,112px)))!important;padding:42px 0 54px!important}
+html[data-module="technology"] .fusion-module-section-head{width:100%;margin-bottom:16px}
+html[data-module="enterprise"] body>.topbar,html[data-module="enterprise"] main>.intro,html[data-module="enterprise"] .enterprise-toolbar{display:none!important}
+html[data-module="enterprise"] .fusion-module-section-head{width:100%;margin:42px 0 16px}
+html[data-module="frontier"] body{height:auto!important;min-height:100vh;background:#f7f3ed!important}
+html[data-module="frontier"] .fusion-module-section-head{margin-top:42px;margin-bottom:16px}
+html[data-module="frontier"] body>.shell{width:min(1520px,calc(100% - clamp(32px,7vw,112px)))!important;height:auto!important;min-height:820px;margin:0 auto 54px!important;padding:0!important}
+@media(max-width:760px){
+  .fusion-module-hero{min-height:240px;padding:27px 0 34px}.fusion-module-copy h1{font-size:42px}.fusion-module-copy>span{max-width:78%;font-size:12px;line-height:1.7}.fusion-module-index{bottom:34px}.fusion-module-section-head{min-height:66px}.fusion-module-section-head h2{font-size:25px}
+  html[data-module="technology"] .shell>main{width:calc(100% - 24px)!important;padding-top:28px!important}
+  html[data-module="frontier"] body>.shell{width:calc(100% - 24px)!important;min-height:0}
+}

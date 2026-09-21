@@ -1,0 +1,21 @@
+{
+  "local_asset_references": "pass",
+  "missing": [],
+  "excluded_runtime_files": {
+    "assets/home/technology-core.png": "当前页面未引用的旧插图",
+    "assets/frontier/enterprise-bridge.css": "已停用的旧企业名单索引",
+    "assets/frontier/enterprise-bridge.js": "已停用的旧企业名单索引",
+    "assets/derwent/path-diagrams/FRC_top2.png": "当前路径图片映射未使用",
+    "assets/derwent/path-diagrams/FRC_top3.png": "当前路径图片映射未使用"
+  },
+  "excluded_categories": [
+    "虚拟环境",
+    "Python缓存",
+    "历史归档/旧ZIP/备份",
+    "可由正式Excel重建的506MB统一SQLite",
+    "旧原始合并库/技术打标缓存",
+    "实验截图/浏览器测试脚本",
+    "不参与当前构建的联网候选检索日志"
+  ],
+  "scope": "正式已标注专利Excel及当前主题指标/股东核验快照→当前网站；非从原始IncoPat下载文本重新打标的上游项目"
+}

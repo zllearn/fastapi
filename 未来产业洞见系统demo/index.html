@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="未来产业洞见系统统一入口">
+  <title>未来产业洞见系统</title>
+  <link rel="stylesheet" href="shared/demo-auth.css?v=20260826-no-logout1">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      background: #f7f3ed;
+      color: #152337;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      background:
+        linear-gradient(rgba(21,35,55,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(21,35,55,.025) 1px, transparent 1px),
+        #f7f3ed;
+      background-size: 64px 64px;
+    }
+    #views { position: fixed; inset: 0; }
+    .site-view {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #f7f3ed;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .18s ease;
+    }
+    .site-view.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .loading {
+      position: fixed;
+      z-index: 10;
+      left: 50%;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: 1px solid rgba(21,35,55,.12);
+      border-radius: 10px;
+      color: #718092;
+      background: rgba(255,253,249,.92);
+      box-shadow: 0 18px 48px rgba(65,45,35,.12);
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      transition: opacity .18s ease;
+    }
+    .loading::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(21,35,55,.15);
+      border-top-color: #e9632d;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    .loading.hidden { opacity: 0; pointer-events: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .site-view, .loading { transition: none; }
+      .loading::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <section id="demoLogin" class="demo-login" aria-labelledby="demoLoginTitle">
+    <div class="demo-login-shell">
+      <div class="demo-login-intro">
+        <div class="demo-login-brand"><i class="demo-login-atom" aria-hidden="true"></i><span>FUTURE INDUSTRY INSIGHT</span></div>
+        <p class="demo-login-kicker">FUSION TECHNOLOGY INTELLIGENCE / 2026</p>
+        <h1 id="demoLoginTitle">未来产业<br><span>洞见系统</span></h1>
+        <p>从技术演进、地理竞争、企业布局与前沿主题四个维度，研判未来产业创新格局。</p>
+        <div class="demo-login-scope"><span>01 技术演进</span><span>02 地理版图</span><span>03 企业画像</span><span>04 前沿技术</span></div>
+      </div>
+      <form id="demoLoginForm" class="demo-login-form" novalidate>
+        <div class="demo-login-form-head"><span>AUTHORIZED ACCESS</span><h2>系统登录</h2><p>请输入演示账号与密码</p></div>
+        <label for="demoUsername"><span>用户名</span><input id="demoUsername" name="username" type="text" autocomplete="username" required></label>
+        <label for="demoPassword"><span>密码</span><span class="demo-password-field"><input id="demoPassword" name="password" type="password" autocomplete="current-password" required><button id="demoPasswordToggle" type="button" aria-label="显示密码">显示</button></span></label>
+        <p id="demoLoginError" class="demo-login-error" role="alert" aria-live="polite"></p>
+        <button class="demo-login-submit" type="submit"><span>进入系统</span><b>→</b></button>
+        <small>DEMO ACCESS · 本地会话验证</small>
+      </form>
+    </div>
+  </section>
+  <main id="views" aria-live="polite"></main>
+  <div id="loading" class="loading" role="status">正在载入分析模块</div>
+  <script src="shared/demo-auth.js?v=20260826-no-logout1"></script>
+  <script>
+    (() => {
+      const PAGE_URLS = {
+        home: "home.html",
+        technology: "technology.html",
+        industry: "industry.html",
+        enterprise: "enterprise.html",
+        frontier: "frontier.html"
+      };
+      const PAGE_TITLES = {
+        home: "未来产业洞见系统",
+        technology: "技术演进脉络 · 未来产业洞见系统",
+        industry: "地理版图洞察 · 未来产业洞见系统",
+        enterprise: "企业画像 · 未来产业洞见系统",
+        frontier: "前沿技术关注 · 未来产业洞见系统"
+      };
+      const VALID_VIEWS = new Set(Object.keys(PAGE_URLS));
+      const frames = new Map();
+      const viewsHost = document.getElementById("views");
+      const loading = document.getElementById("loading");
+      let activeView = "";
+
+      const markFrameReady = (view, frame) => {
+        if (frame.dataset.loaded === "true") return;
+        frame.dataset.loaded = "true";
+        clearInterval(frame._readyPoll);
+        clearTimeout(frame._readyTimeout);
+        if (view === activeView) loading.classList.add("hidden");
+      };
+
+      const viewFromHash = () => {
+        const candidate = location.hash.slice(1).toLowerCase();
+        return VALID_VIEWS.has(candidate) ? candidate : "home";
+      };
+
+      const ensureFrame = view => {
+        if (frames.has(view)) return frames.get(view);
+        const frame = document.createElement("iframe");
+        frame.className = "site-view";
+        frame.dataset.view = view;
+        frame.title = PAGE_TITLES[view];
+        frame.src = PAGE_URLS[view];
+        frame.addEventListener("load", () => markFrameReady(view, frame), { once: true });
+        viewsHost.appendChild(frame);
+        frames.set(view, frame);
+        frame._readyPoll = window.setInterval(() => {
+          try {
+            if (["interactive", "complete"].includes(frame.contentDocument?.readyState)) {
+              markFrameReady(view, frame);
+            }
+          } catch (_) {
+            // 保留超时兜底，兼容更严格的本地文件安全策略。
+          }
+        }, 120);
+        frame._readyTimeout = window.setTimeout(() => markFrameReady(view, frame), 8000);
+        return frame;
+      };
+
+      const activate = (view, historyMode = "none") => {
+        if (!VALID_VIEWS.has(view)) view = "home";
+        activeView = view;
+        const frame = ensureFrame(view);
+        frames.forEach((item, name) => {
+          const selected = name === view;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-hidden", String(!selected));
+          item.contentWindow?.postMessage({ type: "fusion:visibility", visible: selected }, "*");
+        });
+        document.title = PAGE_TITLES[view];
+        loading.classList.toggle("hidden", frame.dataset.loaded === "true");
+        const nextHash = view === "home" ? "#home" : `#${view}`;
+        if (historyMode === "push" && location.hash !== nextHash) {
+          history.pushState({ view }, "", nextHash);
+        } else if (!location.hash) {
+          history.replaceState({ view }, "", nextHash);
+        }
+      };
+
+      window.addEventListener("message", event => {
+        if (event.data?.type === "fusion:navigate" && VALID_VIEWS.has(event.data.view)) {
+          activate(event.data.view, "push");
+          return;
+        }
+        if (event.data?.type !== "fusion:open-enterprise" || !event.data.company) return;
+        const frame = ensureFrame("enterprise");
+        const openProfile = () => frame.contentWindow?.postMessage({
+          type: "fusion:open-enterprise",
+          company: String(event.data.company)
+        }, "*");
+        activate("enterprise", "push");
+        if (frame.dataset.loaded === "true") {
+          requestAnimationFrame(openProfile);
+        } else {
+          frame.addEventListener("load", openProfile, { once: true });
+        }
+      });
+      window.addEventListener("hashchange", () => activate(viewFromHash()));
+      activate(viewFromHash());
+    })();
+  </script>
+</body>
+</html>

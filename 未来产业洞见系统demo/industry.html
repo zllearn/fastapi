@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN" data-module="industry">
+<head>
+  <base href="./">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="核聚变专利地理版图洞察">
+  <title>地理版图洞察 · 未来产业洞见系统</title>
+  <link rel="stylesheet" href="shared/fusion-nav.css?v=20260811-unified1">
+  <link rel="stylesheet" href="shared/layout-polish.css?v=20260812-impeccable2">
+  <link rel="stylesheet" href="assets/industry/styles.css?v=20260826-country-pair1">
+  <script src="shared/fusion-nav.js?v=20260811-unified1" data-active="industry" defer></script>
+</head>
+<body>
+  <header class="industry-hero">
+    <div class="industry-brand"><i></i><span>FUSION / INDUSTRY</span></div>
+    <div class="hero-copy">
+      <p>INDUSTRY COMPARISON · PATENT INTELLIGENCE</p>
+      <h1>地理版图洞察</h1>
+      <span>从多维专利结构、国家竞争和中国区域分工观察核聚变产业链。</span>
+    </div>
+    <div class="hero-index">02 / 04</div>
+  </header>
+
+  <main>
+    <section class="module-section">
+      <div class="section-head">
+        <div><span>01 · INCOPAT</span><h2>产业三维动态对比分析</h2></div>
+      </div>
+      <div class="embed-shell">
+        <iframe id="matrixEmbed" class="module-embed matrix-embed" src="technology.html?module=industry&amp;embed=1&amp;v=20260828-matrix-tools1" title="产业三维动态对比分析"></iframe>
+      </div>
+    </section>
+
+    <section class="module-section narrative-section">
+      <div class="section-head">
+        <div><span>02 · COUNTRY BENCHMARK</span><h2 id="benchmarkTitle">国家产业技术对比</h2></div>
+        <div class="comparison-head-tools">
+          <div class="benchmark-country-pickers" role="group" aria-label="选择对比国家">
+            <label><span>国家 A</span><input id="benchmarkCountryA" list="benchmarkCountryOptions" value="中国" autocomplete="off" aria-label="选择对比国家 A"></label>
+            <label><span>国家 B</span><input id="benchmarkCountryB" list="benchmarkCountryOptions" value="美国" autocomplete="off" aria-label="选择对比国家 B"></label>
+            <datalist id="benchmarkCountryOptions"></datalist>
+          </div>
+          <div class="benchmark-time-axis" role="group" aria-label="国家对比时间范围">
+            <div class="benchmark-time-head"><span>时间范围</span><strong><span id="benchmarkYearStartText">--</span> – <span id="benchmarkYearEndText">--</span></strong></div>
+            <div class="benchmark-dual-range">
+              <div class="benchmark-time-track"><i id="benchmarkYearFill" class="benchmark-time-fill"></i></div>
+              <input id="benchmarkYearStart" type="range" aria-label="国家对比起始年份">
+              <input id="benchmarkYearEnd" type="range" aria-label="国家对比结束年份">
+            </div>
+            <div class="benchmark-time-scale"><span id="benchmarkYearMinText">--</span><span id="benchmarkYearMaxText">--</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="benchmark-grid">
+        <article class="benchmark-panel">
+          <div class="benchmark-head">
+            <div><span>RELATIVE TECHNOLOGY ADVANTAGE</span><h3>B1–B9 技术相对优势矩阵</h3></div>
+            <p>RTA = 本国该路线占比 ÷ 全球该路线占比；<br>大于 1 表示超过全球平均水平。</p>
+          </div>
+          <div id="techAdvantageMatrix" class="advantage-matrix"></div>
+        </article>
+        <article class="benchmark-panel chain-gap-panel">
+          <div class="benchmark-head">
+            <div><span>INDUSTRY CHAIN GAP</span><h3>产业链差值分析</h3></div>
+          </div>
+          <div id="chainGapAnalysis" class="chain-gap-analysis"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="module-section">
+      <div class="section-head">
+        <div><span>03 · INCOPAT / CHINA</span><h2>中国地区类型图谱</h2></div>
+      </div>
+      <div class="embed-shell">
+        <iframe id="chinaEmbed" class="module-embed china-embed" src="enterprise.html?module=china&amp;embed=1" title="IncoPat 中国地区类型图谱"></iframe>
+      </div>
+    </section>
+
+  </main>
+
+  <footer><span>FUSION PATENT INTELLIGENCE</span></footer>
+  <script type="module">
+    import { loadPayloads } from "./shared/api-preload.js?v=20260921-api2";
+    await loadPayloads(["atlas-dashboard"], [
+      "assets/industry/app.js?v=20260903-copy-distill1",
+    ]);
+  </script>
+</body>
+</html>

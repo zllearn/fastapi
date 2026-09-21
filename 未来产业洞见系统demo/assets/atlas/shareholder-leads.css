@@ -1,0 +1,22 @@
+.shareholder-panel { margin-top: 24px; border-top: 1px solid var(--line); color: var(--ink); background: #fffdf9; font-size: 14px; line-height: 1.6; }
+.shareholder-panel[hidden],.shareholder-pagination[hidden] { display: none !important; }
+.shareholder-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 24px 28px 18px; border-bottom: 1px solid var(--line); }
+.shareholder-head h3 { margin: 0; font-size: 22px; font-weight: 600; }
+.shareholder-head p { margin: 6px 0 0; overflow-wrap: anywhere; color: #536274; }
+.shareholder-status { display: inline-block; margin-left: 10px; color: #803558; font-family: inherit; font-size: 13px; font-weight: 400; line-height: 1.6; vertical-align: middle; }
+.shareholder-panel button { min-height: 44px; border: 1px solid var(--blue); border-radius: 2px; padding: 8px 12px; color: var(--blue); background: #fffdf9; font: inherit; cursor: pointer; flex-shrink: 0; }
+.shareholder-panel button:hover:not(:disabled) { background: var(--blue); color: #fff; }
+.shareholder-panel button:disabled { color: #606975; border-color: var(--line); cursor: not-allowed; }
+.shareholder-panel button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.shareholder-patent { padding: 18px 28px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.shareholder-patent h4 { margin: 0; font-size: 15px; font-weight: 600; }
+.shareholder-patent p { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 6px 0 0; color: #536274; font-size: 13px; }
+.shareholder-empty { padding: 28px; margin: 0; color: #536274; }
+.shareholder-pagination { display: flex; justify-content: center; align-items: center; gap: 20px; padding: 18px; }
+.directory-company-action .directory-shareholder-button { font-size: 12px; }
+@media (max-width: 640px) {
+  .shareholder-head { align-items: start; }
+  .shareholder-head,.shareholder-patent { padding: 18px 16px; }
+  .shareholder-head h3 { font-size: 18px; }
+  .shareholder-patent p { flex-direction: column; }
+}

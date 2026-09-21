@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="zh-CN" data-module="enterprise">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="核聚变专利世界、中国与企业产业链交互分析面板">
+  <title>核聚变专利多维度可视化面板</title>
+  <script>document.documentElement.dataset.module = new URLSearchParams(location.search).get("module") || document.documentElement.dataset.module || "enterprise";</script>
+  <link rel="stylesheet" href="assets/atlas/styles.css?v=20260903-copy-distill1">
+  <link rel="stylesheet" href="shared/fusion-nav.css?v=20260811-unified1">
+  <link rel="stylesheet" href="shared/layout-polish.css?v=20260812-impeccable2">
+  <link rel="stylesheet" href="assets/intelligence/styles.css?v=20260814-event-filter1">
+  <link rel="stylesheet" href="assets/atlas/enterprise-directory.css?v=20260903-copy-distill1">
+  <link rel="stylesheet" href="assets/atlas/shareholder-leads.css?v=20260917-compact1">
+  <script src="shared/fusion-nav.js?v=20260811-unified1" data-active="enterprise" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="聚变专利地理图谱首页">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><b>FUSION / ATLAS</b><small>聚变专利地理图谱</small></span>
+    </a>
+    <nav class="view-switch" aria-label="数据维度">
+      <button class="nav-button active" data-view="world"><span>01</span> 世界维度</button>
+      <button class="nav-button" data-view="china"><span>02</span> 中国维度</button>
+      <button class="nav-button" data-view="enterprise"><span>03</span> 企业画像</button>
+    </nav>
+    <div class="source-stamp"><span class="live-dot"></span><span>数据已就绪</span><b id="generatedAt">—</b></div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">GEOGRAPHIC INTELLIGENCE · 1911—2026</p>
+        <h1>技术流向，<em>在地理中显影。</em></h1>
+      </div>
+      <p class="intro-copy">从国家竞争格局、中国省市集聚到企业产业链定位，观察核聚变专利的空间分布、演进节奏与创新主体构成。</p>
+    </section>
+
+    <section id="worldView" class="view-panel active" aria-labelledby="worldTitle">
+      <h2 id="worldTitle" class="sr-only">世界维度</h2>
+      <div class="metric-strip" id="worldMetrics"></div>
+
+      <div class="world-layout">
+        <article class="panel map-panel">
+          <div class="panel-head">
+            <div><p class="kicker">GLOBAL DISTRIBUTION</p><h3>世界专利版图</h3></div>
+            <div class="panel-actions"><span class="hint"><i></i> 点击国家查看构成</span><button class="text-button" id="worldReset">恢复全球</button></div>
+          </div>
+          <div id="worldMap" class="chart world-map" role="img" aria-label="世界各国专利数量分级设色地图"></div>
+          <div class="map-legend"><span>专利密度</span><div></div><b>低</b><b>高</b></div>
+        </article>
+
+        <aside class="panel insight-panel">
+          <div class="selection-title">
+            <span class="selection-index">SELECTED / <b id="worldRank">ALL</b></span>
+            <h3 id="worldSelected">全球</h3>
+            <p><strong id="worldSelectedCount">—</strong> 件筛选后去重专利</p>
+          </div>
+          <div id="worldTypeChart" class="chart type-chart" role="img" aria-label="当前权利人类型占比环形图"></div>
+          <div id="worldTypeList" class="type-list"></div>
+        </aside>
+      </div>
+
+      <article class="panel trend-panel">
+        <div class="panel-head trend-head">
+          <div><p class="kicker">EVOLUTION / EU-27 AGGREGATED</p><h3>国家专利公开趋势</h3></div>
+          <div class="range-buttons" aria-label="时间范围">
+            <button data-range="10">近 10 年</button><button data-range="20">近 20 年</button><button data-range="40">近 40 年</button><button class="active" data-range="all">全期</button>
+          </div>
+        </div>
+        <div class="trend-subline"><span>点击 2026 柱查看累计进度</span></div>
+        <div id="trendChart" class="chart trend-chart" role="img" aria-label="各国历年专利数量折线图"></div>
+      </article>
+    </section>
+
+    <section id="chinaView" class="view-panel" aria-labelledby="chinaTitle">
+      <h2 id="chinaTitle" class="sr-only">中国维度</h2>
+      <div class="metric-strip" id="chinaMetrics"></div>
+
+      <div class="china-layout">
+        <article class="panel china-map-panel">
+          <div class="panel-head">
+            <div><p class="kicker">PROVINCIAL INTENSITY</p><h3>中国创新热力柱</h3></div>
+            <div class="panel-actions"><span class="hint"><i></i> 柱高代表专利数量</span><button class="text-button" id="chinaReset">恢复全国</button></div>
+          </div>
+          <div id="chinaMap" class="chart china-map" role="img" aria-label="中国省级专利数量热力柱状地图"></div>
+        </article>
+
+        <aside class="panel insight-panel china-insight">
+          <div class="selection-title">
+            <span class="selection-index">REGION / <b id="provinceRank">ALL</b></span>
+            <h3 id="provinceSelected">全国</h3>
+            <p><strong id="provinceSelectedCount">—</strong> 件筛选后去重专利</p>
+          </div>
+          <div id="chinaTypeChart" class="chart type-chart" role="img" aria-label="选定地区当前权利人类型占比环形图"></div>
+          <div id="chinaTypeList" class="type-list"></div>
+          <p id="chinaInsightNote" class="method-note">点击地图区域或柱体，右侧当前权利人构成与下方城市榜单会同步更新。</p>
+        </aside>
+
+        <article class="panel china-type-trend-panel" aria-labelledby="chinaTypeTrendTitle">
+          <div class="panel-head china-type-trend-head">
+            <div><h3 id="chinaTypeTrendTitle"><span id="chinaTypeTrendScope">全国</span>机构类型年度趋势</h3><p id="chinaTypeTrendNote">按当前权利人—专利族关联数堆叠</p></div>
+            <span class="trend-reading-hint">点击图例隐藏 / 显示机构类型</span>
+          </div>
+          <div id="chinaTypeTrendChart" class="chart china-type-trend-chart" role="img" aria-label="当前选中地区的机构类型年度堆叠折线图"></div>
+        </article>
+
+        <article class="panel region-compare-panel" aria-labelledby="regionCompareTitle">
+          <div class="panel-head region-compare-head">
+            <div><p class="kicker">REGIONAL DEVELOPMENT BENCHMARK</p><h3 id="regionCompareTitle">省 / 市发展对比</h3></div>
+            <div class="region-compare-controls">
+              <div id="regionCompareLevel" class="region-level-switch" role="group" aria-label="对比层级">
+                <button class="active" type="button" data-region-level="province">省级</button>
+                <button type="button" data-region-level="city">市级</button>
+              </div>
+              <label><span>地区 A</span><select id="regionCompareA" aria-label="对比地区 A"></select></label>
+              <label><span>地区 B</span><select id="regionCompareB" aria-label="对比地区 B"></select></label>
+            </div>
+          </div>
+          <div id="regionCompareBody" class="region-compare-body" aria-live="polite"></div>
+        </article>
+
+        <div class="cluster-grid">
+          <article class="panel city-panel">
+            <div class="panel-head city-head">
+              <div><p class="kicker">URBAN CLUSTERS</p><h3><span id="cityScope">全国</span>城市专利集聚</h3></div>
+              <label class="search-box"><span aria-hidden="true">⌕</span><input id="citySearch" type="search" placeholder="搜索城市" autocomplete="off"></label>
+            </div>
+            <div class="city-columns"><span>城市 · 按核心专利排序</span><span title="核心专利：IPC主分类-小类为 G21B">核心 / 全部专利</span></div>
+            <div id="cityList" class="city-list"></div>
+          </article>
+
+          <article class="panel organization-panel">
+            <div class="panel-head organization-head">
+              <div><p class="kicker">CURRENT OWNER RANKING</p><h3><span id="orgScope">全国</span>当前权利人排名</h3></div>
+              <div id="orgFilter" class="org-filter" aria-label="当前权利人类型筛选">
+                <button class="active" data-org-filter="all">全部权利人</button>
+                <button data-org-filter="enterprise">仅企业</button>
+              </div>
+            </div>
+            <div class="org-list-head"><span>当前权利人 / 主体类型 · 点击查看专利分析</span><span title="核心专利：IPC主分类-小类为 G21B">核心 / 全部专利</span></div>
+            <div id="orgList" class="org-list"></div>
+          </article>
+        </div>
+
+        <article class="panel china-trend-panel">
+          <div id="chinaTrendView">
+            <div class="panel-head china-trend-head">
+              <div><p class="kicker">SELECTION EVOLUTION</p><h3><span id="chinaTrendScope">中国</span>专利公开趋势</h3></div>
+              <div class="china-range-buttons" aria-label="中国趋势时间范围">
+                <button data-china-range="10">近 10 年</button><button data-china-range="20">近 20 年</button><button data-china-range="40">近 40 年</button><button class="active" data-china-range="all">全期</button>
+              </div>
+            </div>
+            <div class="trend-subline"><p id="chinaTrendPath">中国 · 全国</p><span>点击 2026 柱查看年度累计进度</span></div>
+            <div id="chinaTrendChart" class="chart china-trend-chart" role="img" aria-label="当前选定国家省市或机构的年度专利趋势"></div>
+          </div>
+
+          <section id="institutionBoard" class="institution-board" hidden>
+            <div class="institution-board-head">
+              <div><p class="kicker">INSTITUTION TECHNOLOGY LANDSCAPE</p><h3 id="institutionName">机构专利分析</h3></div>
+              <button id="institutionBack" class="text-button">返回地域趋势</button>
+            </div>
+            <div id="institutionMetrics" class="institution-metrics"></div>
+            <div class="institution-analysis-grid">
+              <div class="sankey-block">
+                <div class="analysis-block-head"><div><span>技术—产业链流向</span><small>技术分类 → 一级 → 二级 → 三级</small></div><button id="sankeyReset" class="text-button">清除筛选</button></div>
+                <div id="institutionSankey" class="chart institution-sankey" role="img" aria-label="机构专利技术分类与产业链标签桑基图"></div>
+                <p class="sankey-hint">点击任一节点筛选右侧专利；流带宽度代表去重专利数量。</p>
+              </div>
+              <div class="patent-block">
+                <div class="analysis-block-head"><div><span>专利列表</span><small id="patentCountLabel">—</small></div><div class="patent-head-tools"><div id="patentScopeFilter" class="patent-scope-filter" role="group" aria-label="专利范围筛选"><button class="active" type="button" data-patent-scope="all">全部专利</button><button type="button" data-patent-scope="core">核心专利</button></div><label class="search-box patent-search"><span aria-hidden="true">⌕</span><input id="patentSearch" type="search" placeholder="搜索标题、技术特征或标签" autocomplete="off"></label></div></div>
+                <div id="activePatentFilter" class="active-patent-filter">全部技术与产业链标签</div>
+                <div id="institutionPatentList" class="institution-patent-list"></div>
+              </div>
+            </div>
+          </section>
+        </article>
+      </div>
+    </section>
+
+    <section id="enterpriseView" class="view-panel" aria-labelledby="enterpriseTitle">
+      <h2 id="enterpriseTitle" class="sr-only">企业画像</h2>
+
+      <div class="enterprise-mode-switch" role="tablist" aria-label="企业画像内容模式">
+        <button class="active" type="button" role="tab" aria-selected="true" data-enterprise-mode="patent">
+          <span>01</span><b>企业专利画像</b><small>专利布局与技术路线</small>
+        </button>
+        <button type="button" role="tab" aria-selected="false" data-enterprise-mode="directory">
+          <span>02</span><b>企业名单</b><small>产业链三级分类名录</small>
+        </button>
+        <button type="button" role="tab" aria-selected="false" data-enterprise-mode="intelligence">
+          <span>03</span><b>产业资讯动态</b><small>订单、融资与合作事件</small>
+        </button>
+      </div>
+
+      <article class="panel enterprise-toolbar" data-enterprise-panel="patent">
+        <div class="enterprise-toolbar-title">
+          <div><p class="kicker">ENTERPRISE INTELLIGENCE</p><h3>中国企业产业链定位与技术画像</h3></div>
+        </div>
+      </article>
+
+      <div id="enterpriseMetrics" class="metric-strip enterprise-metrics" data-enterprise-panel="patent"></div>
+
+      <article class="panel enterprise-strategy-panel" data-enterprise-panel="patent">
+        <div class="panel-head enterprise-panel-head">
+          <div><p class="kicker">STRATEGIC GROUPING / CORE VIEW</p><h3>企业战略分群图</h3></div>
+          <div class="panel-actions">
+            <div id="enterpriseStrategyScope" class="strategy-subject-filter" role="group" aria-label="战略分群主体范围">
+              <button class="active" type="button" data-strategy-scope="all" aria-pressed="true">全部主体</button>
+              <button type="button" data-strategy-scope="enterprise" aria-pressed="false">企业</button>
+              <button type="button" data-strategy-scope="non-enterprise" aria-pressed="false">非企业</button>
+            </div>
+            <span class="hint"><i></i> 横轴：专利规模 · 纵轴：近五年新增量</span>
+            <button id="enterpriseStrategyReset" class="text-button">重置缩放</button>
+          </div>
+        </div>
+        <div id="enterpriseStrategy" class="chart enterprise-strategy" role="img" aria-label="企业专利规模与近五年新增量战略分群图"></div>
+        <div id="enterprisePositionLegend" class="enterprise-route-legend"></div>
+        <p class="enterprise-note">坐标采用 log(1+x) 展开企业长尾，但悬停值仍为实际专利族数量。头部活跃、成熟存量与新兴成长主体完整展示，专业观察主体按坐标与产业链定位均衡抽样；点大小表示相关专利族规模，颜色分别表示上游、中游和下游企业。</p>
+      </article>
+
+      <article id="enterpriseDetail" class="panel enterprise-detail-panel" data-enterprise-panel="patent">
+        <div class="panel-head enterprise-panel-head">
+          <div><p class="kicker">SELECTED ENTERPRISE PROFILE</p><h3 id="enterpriseDetailName">企业详情</h3></div>
+          <span id="enterpriseDetailPosition" class="enterprise-position-badge">—</span>
+        </div>
+        <div id="enterpriseDetailMeta" class="enterprise-detail-meta"></div>
+        <div id="enterpriseDetailMetrics" class="enterprise-detail-metrics"></div>
+        <section class="enterprise-insight-shell" aria-labelledby="enterpriseInsightHeading">
+          <div class="enterprise-insight-section-head">
+            <div>
+              <p class="kicker">ENTERPRISE PATENT ANALYSIS</p>
+              <h4 id="enterpriseInsightHeading">企业专利技术分析</h4>
+            </div>
+          </div>
+          <div id="enterpriseInsight" class="enterprise-insight" aria-live="polite">
+            <div class="enterprise-insight-empty">选择企业后显示基于全期专利证据生成的技术布局分析。</div>
+          </div>
+        </section>
+        <div class="enterprise-detail-grid">
+          <div>
+            <div class="analysis-block-head"><div><span>上中下游年度趋势</span><small>悬停一级环节，下钻产业二级</small></div></div>
+            <div id="enterpriseTrend" class="chart enterprise-detail-chart" role="img" aria-label="选中企业上中下游年度堆叠趋势及产业二级下钻"></div>
+          </div>
+          <div>
+            <div class="analysis-block-head"><div><span>产业链二级与三级构成</span><small>悬停产业链二级，下钻产业链三级</small></div></div>
+            <div id="enterpriseChainChart" class="chart enterprise-detail-chart" role="img" aria-label="选中企业产业链二级与三级环形下钻"></div>
+          </div>
+        </div>
+        <div class="analysis-block-head enterprise-patent-head"><div><span>代表专利族</span><small>点击展开技术与产业链详情</small></div><span id="enterprisePatentCount">—</span></div>
+        <div id="enterprisePatentList" class="enterprise-patent-list"></div>
+        <section id="enterpriseShareholderLeads" hidden></section>
+      </article>
+
+      <article class="panel enterprise-ranking-panel" data-enterprise-panel="patent">
+        <div class="panel-head enterprise-panel-head">
+          <div><p class="kicker">ENTERPRISE CHAIN RANKING</p><h3>企业产业链排名 · TOP 20</h3></div>
+          <div class="enterprise-ranking-tools enterprise-ranking-fixed" aria-label="排名设置">
+            <span class="enterprise-ranking-fixed-item"><small>数据范围</small><b>全时间段 · 全维度</b></span>
+            <span class="enterprise-ranking-fixed-item"><small>排序指标</small><b>专利族数量</b></span>
+          </div>
+        </div>
+        <div id="enterpriseRanking" class="chart enterprise-ranking" role="img" aria-label="Top企业产业链横向堆叠柱状图"></div>
+      </article>
+
+      <section id="enterpriseIntelligence" class="enterprise-intelligence" data-enterprise-panel="intelligence" aria-label="产业资讯动态" hidden>
+        <article class="panel intelligence-feed-panel">
+          <div class="enterprise-panel-head"><div><p class="kicker">VERIFIED EVENT FEED</p><h3>核验资讯流</h3></div><span id="intelligenceResultCount">—</span></div>
+          <div class="intelligence-filterbar" aria-label="核验资讯筛选">
+            <label class="intelligence-filter-search"><span>公司检索</span><input id="intelligenceCompanySearch" type="search" placeholder="输入公司名称" autocomplete="off"></label>
+            <label><span>公司事件数</span><select id="intelligenceEventCount"><option value="0">不限事件数量</option><option value="2">2 条及以上</option><option value="5">5 条及以上</option><option value="10">10 条及以上</option><option value="20">20 条及以上</option></select></label>
+            <label><span>技术路线</span><select id="intelligenceRoute"><option value="">全部技术路线</option></select></label>
+            <label><span>产业链位置</span><select id="intelligenceChain"><option value="">全部产业链位置</option></select></label>
+            <button id="intelligenceReset" type="button">重置筛选</button>
+          </div>
+          <div id="intelligenceFeed" class="intelligence-feed" aria-live="polite"></div>
+          <div class="intelligence-pagination"><button id="intelligencePrev" type="button">上一页</button><span id="intelligencePage">—</span><button id="intelligenceNext" type="button">下一页</button></div>
+        </article>
+
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <span>FUSION PATENT GEOGRAPHIC INTELLIGENCE</span>
+  </footer>
+
+  <div id="progressModal" class="progress-modal" hidden>
+    <div class="progress-dialog" role="dialog" aria-modal="true" aria-labelledby="progressTitle">
+      <div class="progress-dialog-head">
+        <div><p class="kicker">YEAR-TO-DATE / CUMULATIVE VIEW</p><h3 id="progressTitle">年度累计进度</h3><p id="progressSubtitle">—</p></div>
+        <button id="progressClose" class="modal-close" aria-label="关闭弹窗">×</button>
+      </div>
+      <div id="progressStats" class="progress-stats"></div>
+      <div id="progressChart" class="chart progress-chart" role="img" aria-label="近三年逐月累计专利量对比曲线"></div>
+      <p class="progress-note">当年曲线仅绘制到数据截止月份；往年曲线展示完整年度，用于判断当前进度而非预测全年结果。</p>
+    </div>
+  </div>
+
+  <div id="tooltip" class="custom-tooltip" aria-hidden="true"></div>
+  <div id="loadingError" class="load-error" hidden>图表资源加载失败，请确认 vendor 文件夹与 index.html 位于同一目录。</div>
+
+  <script src="assets/atlas/vendor/echarts.min.js"></script>
+  <script src="assets/atlas/vendor/world.js"></script>
+  <script src="assets/atlas/vendor/china.js"></script>
+  <script type="module">
+    import { loadPayloads } from "./shared/api-preload.js?v=20260921-api2";
+    await loadPayloads(
+      ["atlas-dashboard", "enterprise-insights", "enterprise-directory", "shareholder-leads", "verified-events"],
+      [
+        "assets/atlas/shareholder-leads.js?v=20260917-compact1",
+        "assets/atlas/app.js?v=20260904-technical-feature",
+        "assets/atlas/enterprise.js?v=20260916-shareholder1",
+        "assets/atlas/enterprise-directory.js?v=20260916-shareholder1",
+        "assets/intelligence/app.js?v=20260826-china-only1",
+        "shared/module-mode.js?v=20260806-refactor4",
+      ]
+    );
+  </script>
+  <script src="shared/enterprise-name.js?v=20260901-clean-name1"></script>
+</body>
+</html>

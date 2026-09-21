@@ -1,0 +1,11 @@
+# Optional: only needed to rerun topic clustering or the upstream dashboard generator.
+-r requirements-build.txt
+numpy
+pandas
+scikit-learn
+statsmodels
+torch
+transformers
+sentence-transformers
+umap-learn
+hdbscan

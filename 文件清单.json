@@ -1,0 +1,786 @@
+[
+  {
+    "path": "未来产业洞见系统demo/DESIGN.md",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/DESIGN.md",
+    "bytes": 13040,
+    "sha256": "1822d1b000b7cdb51b96c51130ec2d34ecb258d43df99100429e96ea988f6b6f"
+  },
+  {
+    "path": "未来产业洞见系统demo/PRODUCT.md",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/PRODUCT.md",
+    "bytes": 3797,
+    "sha256": "ffcaa77ff1ff0b620db566dfaf58b1dc7e9bbb7d80a7d3025f0c49824f823f77"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/SHAREHOLDER_LEADS.md",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/SHAREHOLDER_LEADS.md",
+    "bytes": 1171,
+    "sha256": "e3b8de87f7ac950b54a081d1ebc479d8a9db3804a4560b0b44fabbc69139b5e9"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/app.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/app.js",
+    "bytes": 64411,
+    "sha256": "927231f6805ed0ac26c4a7069d70f497d4f4942c113d5a537ab946e3004241b8"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/enterprise-directory.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/enterprise-directory.css",
+    "bytes": 9271,
+    "sha256": "ddcef0f974da052202b7ee1ea5cbd9e84e9033b5b6a5bc815259b6aaf6635410"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/enterprise-directory.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/enterprise-directory.js",
+    "bytes": 54784,
+    "sha256": "e1c1d410b6afcaf0b01ad931a8be32a6bfa6ef29ea71037aa670faed1827aea5"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/enterprise.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/enterprise.js",
+    "bytes": 49859,
+    "sha256": "93b6a2f000d7287cd867a05236c0703e51da9db574045d9dab18a560a2b4b67f"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/shareholder-leads.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/shareholder-leads.css",
+    "bytes": 2028,
+    "sha256": "557d268b7acffd725a88af3b1bc89ad4878092d80bd9ca733b3283370dc4c91a"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/shareholder-leads.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/shareholder-leads.js",
+    "bytes": 3381,
+    "sha256": "9d661ee5827a602105fc9a26693d5a14de5ff298d2c42e2367bb3b5fabd14b35"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/styles.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/styles.css",
+    "bytes": 56523,
+    "sha256": "a1edeeeea98375e19c83a7ca920ef09387150310a2a20835bf7179a67446bbb5"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/vendor/china.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/vendor/china.js",
+    "bytes": 62860,
+    "sha256": "6e763608cb7a0e2fa571ebca3127f6d10940068853b5b404c234feb2f5be15e6"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/vendor/echarts.min.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/vendor/echarts.min.js",
+    "bytes": 1030855,
+    "sha256": "e84270bd0cd5bdf60fefc26d00c2a391cb2e81f4d26a7a9ee16185a54773a3cf"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/atlas/vendor/world.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/vendor/world.js",
+    "bytes": 147885,
+    "sha256": "81fb963c0a057e73ecca32247162e2076224d9de3f60e628450e81ce1fe90e4e"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/app.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/app.js",
+    "bytes": 125716,
+    "sha256": "e63faf7ded1873df1757c9109c55bf7a756aff52c331d924c05d7faf64a04d38"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/knowledge-cards/01_artificial_sun.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/knowledge-cards/01_artificial_sun.png",
+    "bytes": 1332522,
+    "sha256": "8edcaab3c273a406f27e6c84a92cb0013f0e8422961e69a22c78e54458aeeb9d"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/knowledge-cards/02_energy_coordinate.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/knowledge-cards/02_energy_coordinate.png",
+    "bytes": 1788025,
+    "sha256": "ca395b9673324d4adfd0fa99113aa934dd1ae5017e2f5d0425373996c8d91612"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/knowledge-cards/03_fusion_principle.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/knowledge-cards/03_fusion_principle.png",
+    "bytes": 1251454,
+    "sha256": "9e089e4f4f5a8c7e10537cddf6988d1872e7dcf62f0f7cbdf4d2fc826e190604"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/knowledge-cards/05_global_milestones.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/knowledge-cards/05_global_milestones.png",
+    "bytes": 1474921,
+    "sha256": "ceab208cb833b86219793e27ccd06a00c29657c8458943887c4eb8882467cd00"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/knowledge-cards/07_tokamak_components.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/knowledge-cards/07_tokamak_components.png",
+    "bytes": 2075671,
+    "sha256": "dfae431cde34c1b50ba94939ed8ee4ce9257f43c9f4616c4b125af1c07a752f4"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/FRC_top1.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/FRC_top1.png",
+    "bytes": 2026169,
+    "sha256": "67b2b158db3424ed387c8265a048a23d139c8d6776d01e9c30b9f0e054b28535"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/LENR_top1.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/LENR_top1.png",
+    "bytes": 1774898,
+    "sha256": "c599bfc890a1886fe38c3182d464ee4fcc380fcc710aaacaaf5471679abd1b24"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/diverse_spc_top1.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/diverse_spc_top1.png",
+    "bytes": 2228543,
+    "sha256": "8428a332216682a3cfac6faa28e6e712e289fed112e67c0149ad441fe08a53ae"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/diverse_spc_top2.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/diverse_spc_top2.png",
+    "bytes": 1926144,
+    "sha256": "77f8899cb0702304e63d2c8a79169467b5de2f715bab400a9d4f18fe6cc95120"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/diverse_spc_top3.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/diverse_spc_top3.png",
+    "bytes": 2102109,
+    "sha256": "1bd57d6eff7a6557d2b63320c1445c8c0675c3436d5fec3fa6823b625733667b"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/惯性约束_top1.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/惯性约束_top1.png",
+    "bytes": 1901027,
+    "sha256": "185548fc48ae4c3f47fa5bd1f211b567b50f39cac789275dcb1f89e372c6f5d6"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/替代路线_top1.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/替代路线_top1.png",
+    "bytes": 2014470,
+    "sha256": "e390da9d4feabaaf9df18795b28024fd9dbc915b7c99dd41a7937b5c07b318b1"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/磁惯性_top1.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/磁惯性_top1.png",
+    "bytes": 1886362,
+    "sha256": "45ba8b31a2b2a14ddd6be0a2a2a1cc64b6cf9e43b7107e8576019066f5f52dc1"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/path-diagrams/磁约束_top1.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/path-diagrams/磁约束_top1.png",
+    "bytes": 2022501,
+    "sha256": "289bc34551f5fd9fe5052c919ccb75bc57ff15f0b4ec9da9ded07667b2274bc5"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/styles.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/styles.css",
+    "bytes": 69328,
+    "sha256": "b2930b7e646ea1b83f3d5e19a18a87d67c091d2735cf24aa19d79aada8bf87f0"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/vendor/china.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/vendor/china.js",
+    "bytes": 60718,
+    "sha256": "146a69f110aca347228447319216ad665fbf6a57d81c73ddc911c1167aa39249"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/vendor/echarts.min.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/vendor/echarts.min.js",
+    "bytes": 1034102,
+    "sha256": "bf4a223524e40b77c304bec67e1222cf551f14880cf42c69dc046558e11c07b1"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/derwent/vendor/three.min.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/derwent/vendor/three.min.js",
+    "bytes": 669884,
+    "sha256": "170c6789f43217c96b3170f4b42fafe135de7f7cd48497a4218f9757ee1d49fa"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/frontier/enterprise-river.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/frontier/enterprise-river.css",
+    "bytes": 6312,
+    "sha256": "c87fad623e052e4e792d755cf55ca68220ab688ff1ad69c4237991c6e00e841e"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/frontier/enterprise-river.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/frontier/enterprise-river.js",
+    "bytes": 28881,
+    "sha256": "8d3f8481abf0ae655fa7fc18eadc7f2e969458ccd04f0acf16ff5719f1e3e424"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/6g.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/6g.png",
+    "bytes": 239234,
+    "sha256": "90c7d6c1bd69e3118f41d93736a1c2776eadafa58a8a879fee463a209578d539"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/biomanufacturing.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/biomanufacturing.png",
+    "bytes": 306338,
+    "sha256": "e871feb966448c998ade16a1a85509e192d26aed319876335a7053ddab7fb328"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/brain-computer-interface.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/brain-computer-interface.png",
+    "bytes": 201506,
+    "sha256": "65dae60e00b44cdbed0c1d85e205e1cafab693856a47b0ef92b13734e7ae9602"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/coming-soon.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/coming-soon.png",
+    "bytes": 101356,
+    "sha256": "1d26c1dbd6bec25f2bf30d636585649abede062f44e75ddffb097400c07be5a6"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/commercial-spaceflight.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/commercial-spaceflight.png",
+    "bytes": 226106,
+    "sha256": "925a8a2516f33bc61e6faa513c105ee4c3cadd2dcf0b56748250fcf6316f5350"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/controlled-fusion.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/controlled-fusion.png",
+    "bytes": 300644,
+    "sha256": "9513d0c7ef941735ea1d8c7ac42be19cf0338a4af2b0776007aaae97355ed5a4"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/embodied-intelligence.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/embodied-intelligence.png",
+    "bytes": 272731,
+    "sha256": "df7e1ba741608e281105186c0b0c43c7f6302e94a92be3d75f35d85aa7d0d633"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/low-altitude-economy.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/low-altitude-economy.png",
+    "bytes": 330807,
+    "sha256": "afd152b8d97559c9f07627aba15bcbab8bea0a833eb1ff71b6275501f407365d"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/home/domain-icons/quantum-technology.png",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/home/domain-icons/quantum-technology.png",
+    "bytes": 261692,
+    "sha256": "e4279e53dcf923eb2ffd37065b125a04c82a75b8f9fd89de8ed9ffaf40c2fcb2"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/industry/app.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/industry/app.js",
+    "bytes": 19396,
+    "sha256": "1b6ded351af31287f5fdcc8a66ee999f00f6c93463b1c39a0111386738632af4"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/industry/styles.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/industry/styles.css",
+    "bytes": 14655,
+    "sha256": "a6491a58b42989967aa40dd908163eaba0ebacce875071bb80b448b923f370eb"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/intelligence/app.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/intelligence/app.js",
+    "bytes": 11538,
+    "sha256": "ad73c8d4a0c77fa091dc28c502cb6b2e93266ad394526909bd1f2ec6cc4e3e96"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/intelligence/styles.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/assets/intelligence/styles.css",
+    "bytes": 9053,
+    "sha256": "c74503fed0ec71b37fb656b9410dbaa633be8eb2d5a8c683884095fcdb3dbe51"
+  },
+  {
+    "path": "未来产业洞见系统demo/enterprise.html",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/enterprise.html",
+    "bytes": 21726,
+    "sha256": "7409bec4256c40996eeae15a82f54036cae6901fb4d790488ff2b62b51d18e97"
+  },
+  {
+    "path": "未来产业洞见系统demo/frontier.html",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/frontier.html",
+    "bytes": 15277,
+    "sha256": "be155db79cbd3064a2a5b1ee5b79336dafebc805c168a023a963dffc86cd7d4a"
+  },
+  {
+    "path": "未来产业洞见系统demo/home.html",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/home.html",
+    "bytes": 4846,
+    "sha256": "32cbe3c80e81827cb83e589072a6f4d3697215ef7d24ce0ef42fe3ab1be0bf95"
+  },
+  {
+    "path": "未来产业洞见系统demo/index.html",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/index.html",
+    "bytes": 8155,
+    "sha256": "d91688e51d68c3a0a7fab57f5c4f616903821436c06f939cbedd2fa6e0783c2f"
+  },
+  {
+    "path": "未来产业洞见系统demo/industry.html",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/industry.html",
+    "bytes": 4573,
+    "sha256": "a595ff71dfc72006b22c3800c1d54290292b9e9855d13b9a0a03c6495f1ad506"
+  },
+  {
+    "path": "未来产业洞见系统demo/scripts/build_frontier_enterprise_index.py",
+    "purpose": "前沿企业索引构建脚本",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/scripts/build_frontier_enterprise_index.py",
+    "bytes": 10573,
+    "sha256": "a087c10202a2f4c76fc48aa3975dfafef8029c4efab7b1e379a43351fd763488"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/demo-auth.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/demo-auth.css",
+    "bytes": 6065,
+    "sha256": "6f94284dfd08f767a0783a6ac3547cb64cfdb410d6f7a4b611c4d2710340161f"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/demo-auth.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/demo-auth.js",
+    "bytes": 1944,
+    "sha256": "a9d36834a73cbdfcc38bbb4b31897ab29c6ba70605736a5137f7937ed288399c"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/enterprise-name.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/enterprise-name.js",
+    "bytes": 204,
+    "sha256": "9f0308d11f6c298d2745b4a5a61afea033f4ce4db415d6751299583905f3c486"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/fusion-nav.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/fusion-nav.css",
+    "bytes": 6703,
+    "sha256": "d492460d0070ea5805a0af4a54d66a7e89f42fe94080116bcaefcf7fae58a293"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/fusion-nav.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/fusion-nav.js",
+    "bytes": 5616,
+    "sha256": "a2c3a9c35039a5e65175a823d0a3ee9f44f9596d8e5ba5a55c9a34f3817a199b"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/home-redesign.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/home-redesign.css",
+    "bytes": 20963,
+    "sha256": "d68e806a136dee32258f92da3bb76318e08ca983d52c9b3ea75dbcd58520b6c1"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/home-redesign.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/home-redesign.js",
+    "bytes": 5802,
+    "sha256": "f984800fd70afe367d89e5e663e50a80c5f227a08ff6ff4f4812db1728a363db"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/layout-polish.css",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/layout-polish.css",
+    "bytes": 8281,
+    "sha256": "582424a99a157367d8d4df4cc901f59686e6a0b5d5fc430f040c1f69f5c57cb6"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/module-mode.js",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/shared/module-mode.js",
+    "bytes": 1753,
+    "sha256": "c7d3db89b607e445bfbe367c5ce9af5de3265c939e88431a20b4f7017da1cf9f"
+  },
+  {
+    "path": "未来产业洞见系统demo/technology.html",
+    "purpose": "网站源码/运行资源",
+    "source": "/home/jiyang/projects/未来产业洞见系统demo/technology.html",
+    "bytes": 16675,
+    "sha256": "f01aba3ff7ae3213e29cd5cda1674b8390ddfa3f8487ae8dbfd3aced8fb6b822"
+  },
+  {
+    "path": "incopat/build_site.py",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/build_site.py",
+    "bytes": 4431,
+    "sha256": "2ac873e19f6d7881522c3ac73d4b2eea5511ad006aa7fa864f9954733bc23cc9"
+  },
+  {
+    "path": "incopat/build_unified_from_xlsx.py",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/build_unified_from_xlsx.py",
+    "bytes": 28246,
+    "sha256": "655167c223da48ec91b8ac9d228f8cf20dabde9228f62756b009ef9454616a70"
+  },
+  {
+    "path": "incopat/build_atlas_payload.py",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/build_atlas_payload.py",
+    "bytes": 35309,
+    "sha256": "51d017863009f7cd0bcfc8cc538819e4299509cef45264bb1d9bc0c5dff8e59e"
+  },
+  {
+    "path": "incopat/build_derwent_payload_direct.py",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/build_derwent_payload_direct.py",
+    "bytes": 24113,
+    "sha256": "7a13ca8bdcef298a439c1ab515836cc6f5bf7f5c678059467c0ff695d81a9252"
+  },
+  {
+    "path": "incopat/build_enterprise_insights.js",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/build_enterprise_insights.js",
+    "bytes": 9121,
+    "sha256": "a1001a0fb2ba75030a07719eef950b855b0a200b8fa3d549cdfa18e5eaf08f31"
+  },
+  {
+    "path": "incopat/build_enterprise_directory_master.py",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/build_enterprise_directory_master.py",
+    "bytes": 4457,
+    "sha256": "a5d5ae0cc084903e05908230e250ab7764668ae89a24d3b4c695047e7c156d9b"
+  },
+  {
+    "path": "incopat/sync_site_pages.py",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/sync_site_pages.py",
+    "bytes": 1567,
+    "sha256": "98d6393949a298cfa35b8ae6adea80986dba994362cbbdc375ee8af9e06417ac"
+  },
+  {
+    "path": "incopat/export_frontier_input.py",
+    "purpose": "当前静态数据构建代码",
+    "source": "/home/jiyang/projects/incopat/export_frontier_input.py",
+    "bytes": 3627,
+    "sha256": "82cb9f039e3f8cecdba5945df4931214a5066a1bcd6e734f8649cc037da6bbf8"
+  },
+  {
+    "path": "incopat/tools/match_shareholder_patents.py",
+    "purpose": "股东关联构建代码及其导入依赖；交付副本改为包内路径和核验快照日期",
+    "source": "/home/jiyang/projects/incopat/tools/match_shareholder_patents.py",
+    "bytes": 14775,
+    "sha256": "20982fabd391849b7c0b2017fed82aaa191148f90afa76a9de524f219bdc4e6c"
+  },
+  {
+    "path": "incopat/tools/build_shareholder_frontend.py",
+    "purpose": "股东关联构建代码及其导入依赖",
+    "source": "/home/jiyang/projects/incopat/tools/build_shareholder_frontend.py",
+    "bytes": 3086,
+    "sha256": "292e5031ac881240d32b78b8d9a33858c1a1cf81b9c3fb10033627282a801867"
+  },
+  {
+    "path": "incopat/tools/fuzzy_match_unlinked_enterprises.py",
+    "purpose": "股东关联构建代码及其导入依赖",
+    "source": "/home/jiyang/projects/incopat/tools/fuzzy_match_unlinked_enterprises.py",
+    "bytes": 7797,
+    "sha256": "a5506b92a69877bde1c913e8940f38a3635d06845da827828e16a8667193f6e8"
+  },
+  {
+    "path": "incopat/tools/export_unlinked_enterprises.py",
+    "purpose": "股东关联构建代码及其导入依赖",
+    "source": "/home/jiyang/projects/incopat/tools/export_unlinked_enterprises.py",
+    "bytes": 4675,
+    "sha256": "b1d0f36343802f80378869d75a859c72eb7d4d350b7f0ae15b58ea05c8cb34d1"
+  },
+  {
+    "path": "incopat/output/股东发明人专利关联_待核验_20260916.xlsx",
+    "purpose": "股东关联前端构建输入/核验报告",
+    "source": "/home/jiyang/projects/incopat/output/股东发明人专利关联_待核验_20260916.xlsx",
+    "bytes": 195310,
+    "sha256": "77c19e18705fa80b051afa279a5da7811912fd24d71438c613d3718601db704d"
+  },
+  {
+    "path": "incopat/output/股东发明人专利关联_待核验_20260916.json",
+    "purpose": "股东关联前端构建输入/核验报告",
+    "source": "/home/jiyang/projects/incopat/output/股东发明人专利关联_待核验_20260916.json",
+    "bytes": 628,
+    "sha256": "978ea5f7e8be3bb4ca6ee73a4988d26ef622c7f8df519737f3b8cab0726279ec"
+  },
+  {
+    "path": "incopat/output/股东发明人专利关联_待核验_20260916_企业汇总.csv",
+    "purpose": "股东关联前端构建输入/核验报告",
+    "source": "/home/jiyang/projects/incopat/output/股东发明人专利关联_待核验_20260916_企业汇总.csv",
+    "bytes": 21499,
+    "sha256": "bb655969fee05ef9b24c771ed5cf2ea13cdd03d6512e3c7c7e48f29a52e0019a"
+  },
+  {
+    "path": "incopat/output/股东发明人专利关联_待核验_20260916_关联明细.csv",
+    "purpose": "股东关联前端构建输入/核验报告",
+    "source": "/home/jiyang/projects/incopat/output/股东发明人专利关联_待核验_20260916_关联明细.csv",
+    "bytes": 638618,
+    "sha256": "aea7fa85e5d005a267139e67d27a23994cdff3b1696c03a87590e4ef778a56af"
+  },
+  {
+    "path": "incopat/output/暂未关联专利企业名单_20260916.csv",
+    "purpose": "股东匹配所用企业范围及名称校准快照",
+    "source": "/home/jiyang/projects/incopat/output/暂未关联专利企业名单_20260916.csv",
+    "bytes": 46108,
+    "sha256": "e7bb2f5435b65fd90257f54e21fd44bddd76be825ea3371dbc3c10e8a3db0a32"
+  },
+  {
+    "path": "incopat/output/剩余企业名称校准_排除49家_20260916.csv",
+    "purpose": "股东匹配所用企业范围及名称校准快照",
+    "source": "/home/jiyang/projects/incopat/output/剩余企业名称校准_排除49家_20260916.csv",
+    "bytes": 106070,
+    "sha256": "753e7708a1ca7e36039093e089d5534dafa237564f1daf42cec7aff48a90b86e"
+  },
+  {
+    "path": "inputs/IncoPat筛选维度后_已回填企业类型及国家及技术标签.xlsx",
+    "purpose": "正式源数据",
+    "source": "/mnt/d/工作/核聚变卡脖子/IncoPat/incopat核聚变/IncoPat筛选维度后_已回填企业类型及国家及技术标签.xlsx",
+    "bytes": 223658584,
+    "sha256": "0fcc4add8702bcac35cccd8eb726d32422df829ee6b615cd2ebe0c15b96123d4"
+  },
+  {
+    "path": "inputs/中国核聚变相关企业总名单_去重核验版.xlsx",
+    "purpose": "正式源数据",
+    "source": "/mnt/d/工作/核聚变卡脖子/IncoPat/incopat核聚变/中国核聚变相关企业总名单_去重核验版.xlsx",
+    "bytes": 638643,
+    "sha256": "997f0c80acf3a04b397f8f3b6c93707aa44ce13aced06034ce8bbd428160e1df"
+  },
+  {
+    "path": "inputs/股东穿透与历史任职_结果.xlsx",
+    "purpose": "正式源数据",
+    "source": "/mnt/d/工作/核聚变卡脖子/IncoPat/incopat核聚变/股东穿透与历史任职_结果.xlsx",
+    "bytes": 27998,
+    "sha256": "c147142ba087362de08411cc24d4606366f0bb108ba6d438ce9c5af9fae4f52a"
+  },
+  {
+    "path": "fusion_weak_signal/dedup_patentbert_topic_cluster_score.py",
+    "purpose": "前沿主题聚类/指标/原始页面生成代码",
+    "source": "/home/jiyang/projects/fusion_weak_signal/dedup_patentbert_topic_cluster_score.py",
+    "bytes": 87719,
+    "sha256": "5a49ffb088083c3cd36bdaf4a40e8bf2862788c96b959df4609ae011b8974d9b"
+  },
+  {
+    "path": "fusion_weak_signal/make_topic_dashboard.py",
+    "purpose": "前沿主题聚类/指标/原始页面生成代码",
+    "source": "/home/jiyang/projects/fusion_weak_signal/make_topic_dashboard.py",
+    "bytes": 79164,
+    "sha256": "af7992b962ef8dddd85e67ded774bdd32bc63d73359e1d28e306a45d5866e8cb"
+  },
+  {
+    "path": "fusion_weak_signal/src/visualization.py",
+    "purpose": "前沿生成代码的模块依赖",
+    "source": "/home/jiyang/projects/fusion_weak_signal/src/visualization.py",
+    "bytes": 17579,
+    "sha256": "0ff7b743b057c610de3def4bd7eb8b9c8e2521ddd07eb58bc5a5351a1362b0f9"
+  },
+  {
+    "path": "fusion_weak_signal/src/__init__.py",
+    "purpose": "前沿生成代码的模块依赖",
+    "source": "/home/jiyang/projects/fusion_weak_signal/src/__init__.py",
+    "bytes": 1,
+    "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  },
+  {
+    "path": "fusion_weak_signal/src/deepseek_topic_interpreter.py",
+    "purpose": "前沿生成代码的模块依赖",
+    "source": "/home/jiyang/projects/fusion_weak_signal/src/deepseek_topic_interpreter.py",
+    "bytes": 8511,
+    "sha256": "c5042267871b46326d1454284fa48ca216821b196ceadc0d730352ba845857bf"
+  },
+  {
+    "path": "fusion_weak_signal/src/deepseek_direction_summarizer.py",
+    "purpose": "前沿生成代码的模块依赖",
+    "source": "/home/jiyang/projects/fusion_weak_signal/src/deepseek_direction_summarizer.py",
+    "bytes": 7956,
+    "sha256": "451814d1a3a5ef4a3465412669f1eccb4d9b24172be2829dccdab5da88e0c4b3"
+  },
+  {
+    "path": "fusion_weak_signal/incopat_run/incopat_simple_families_topic_indicators.xlsx",
+    "purpose": "当前前沿聚类、主题指标及文档归属输入",
+    "source": "/home/jiyang/projects/fusion_weak_signal/incopat_run/incopat_simple_families_topic_indicators.xlsx",
+    "bytes": 81594862,
+    "sha256": "c85ce4346ed587577c1565c106dd414a404f2e295bad5c7143c7aa0d1296605e"
+  },
+  {
+    "path": "fusion_weak_signal/incopat_run/outputs/deepseek_topic_summaries.json",
+    "purpose": "已生成主题文本，保留结果以免重复模型调用",
+    "source": "/home/jiyang/projects/fusion_weak_signal/incopat_run/outputs/deepseek_topic_summaries.json",
+    "bytes": 851601,
+    "sha256": "f8616fa95380e18fc4ab2dea905a963a0fa7982545e51c8947478830dfb35208"
+  },
+  {
+    "path": "requirements-build.txt",
+    "purpose": "交付启动/可迁移构建/验收说明",
+    "source": "/home/jiyang/projects/incopat/delivery_templates/requirements-build.txt",
+    "bytes": 17,
+    "sha256": "9bba605fd7b6ea23038de15e5a1ae6714b3d3fb14ed2d6e6bedbfb0665ca2122"
+  },
+  {
+    "path": "交付构建.py",
+    "purpose": "交付启动/可迁移构建/验收说明",
+    "source": "/home/jiyang/projects/incopat/delivery_templates/交付构建.py",
+    "bytes": 2192,
+    "sha256": "689440ca6fa232d916c49c5cad437e3df942be069c9f4c16894165d22a84c03d"
+  },
+  {
+    "path": "requirements-frontier.txt",
+    "purpose": "交付启动/可迁移构建/验收说明",
+    "source": "/home/jiyang/projects/incopat/delivery_templates/requirements-frontier.txt",
+    "bytes": 211,
+    "sha256": "65bd8f2b2a8abbb45c4071dc6b7e2f0ca8c94e5166fbedcf300ae580ef00b79e"
+  },
+  {
+    "path": "交付说明.md",
+    "purpose": "交付启动/可迁移构建/验收说明",
+    "source": "/home/jiyang/projects/incopat/delivery_templates/交付说明.md",
+    "bytes": 6032,
+    "sha256": "2e02841a56a5fb88e188d7bf07869cab2fae132c73779622dc8b66712a36878a"
+  },
+  {
+    "path": "启动网站.py",
+    "purpose": "交付启动/可迁移构建/验收说明",
+    "source": "/home/jiyang/projects/incopat/delivery_templates/启动网站.py",
+    "bytes": 600,
+    "sha256": "7012e3c64dbe53bbbcf723f741e7c5707947af23a1669ddd60e2dbf4b6e71942"
+  },
+  {
+    "path": "requirements-server.txt",
+    "purpose": "依赖清单",
+    "source": "requirements-server.txt",
+    "bytes": 56,
+    "sha256": "9ff172265aea531475d8dfc82b6213fd4e7f248f7f1b1342864ce952b0cea5dd"
+  },
+  {
+    "path": "server/__init__.py",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/__init__.py",
+    "bytes": 80,
+    "sha256": "10056b839aef34787480524502fa302e6dab5775d9394bfe642d3d307de407e2"
+  },
+  {
+    "path": "server/app.py",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/app.py",
+    "bytes": 2875,
+    "sha256": "4b6a9ee54fe972dde57d5e1f05f67490d2a366b0af44513ab573b6bbd9ff1e73"
+  },
+  {
+    "path": "server/config.py",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/config.py",
+    "bytes": 721,
+    "sha256": "d2cce69d27bc7798da74f95dd647e09b6ff4702b22f343115cab9387b05d59a4"
+  },
+  {
+    "path": "server/db.py",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/db.py",
+    "bytes": 1625,
+    "sha256": "882089ca272edddfb691943f65e2b0e5f7de1cc393ff03d2517f98d7dc9caff5"
+  },
+  {
+    "path": "server/payloads.py",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/payloads.py",
+    "bytes": 7013,
+    "sha256": "620019ad90bc0e18499c140273ea06d6c80560ef6e608db2fe65be97d2699ef7"
+  },
+  {
+    "path": "server/snapshots/frontier-dashboard.json",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/snapshots/frontier-dashboard.json",
+    "bytes": 3039925,
+    "sha256": "c266b9993a52f8c1d339b4a2cd82199b505bbf2277c525ed6c3d394cb042f382"
+  },
+  {
+    "path": "server/snapshots/verified-events.json",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/snapshots/verified-events.json",
+    "bytes": 1788027,
+    "sha256": "c096a5a57cc31ee79da018b2198b35b37b0e5dc97f81c6a58ac40f7ed4df6d86"
+  },
+  {
+    "path": "server/snapshots/world-map.json",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/snapshots/world-map.json",
+    "bytes": 595445,
+    "sha256": "7873855afda1b7c4dbfd44ce963364c768cee5e643ea27570c1f15aaf122dd09"
+  },
+  {
+    "path": "server/tools/build_enterprise_insights.js",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/tools/build_enterprise_insights.js",
+    "bytes": 9153,
+    "sha256": "a86fe93ecf4b3d2159a8e4703d68d4bd431e544bf7c18170fdff70da836014f3"
+  },
+  {
+    "path": "server/tools/build_shareholder_frontend.py",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/tools/build_shareholder_frontend.py",
+    "bytes": 3366,
+    "sha256": "c5512f860996f3aac9920d1b8159f85e9ab8e9abf88848645b61ba88d6b352f0"
+  },
+  {
+    "path": "server/tools/migrate_snapshots.py",
+    "purpose": "FastAPI服务端代码",
+    "source": "server/tools/migrate_snapshots.py",
+    "bytes": 2486,
+    "sha256": "f5647408b3db160512f15115dbb13da3d5d432e904509047d755749cd0c04752"
+  },
+  {
+    "path": "启动服务.py",
+    "purpose": "可移植构建/运行入口",
+    "source": "启动服务.py",
+    "bytes": 793,
+    "sha256": "acc4bf7e1b565f06892f0dbce952ba46dd79ed15ab4c7bde771bbb944e86bed3"
+  },
+  {
+    "path": "未来产业洞见系统demo/assets/frontier/frontier-app.js",
+    "purpose": "网站源码/运行资源",
+    "source": "未来产业洞见系统demo/assets/frontier/frontier-app.js",
+    "bytes": 37060,
+    "sha256": "3b241ae7fd98739029aa725e3db6c33460db00032a38b311e33c4b23d865696f"
+  },
+  {
+    "path": "未来产业洞见系统demo/shared/api-preload.js",
+    "purpose": "网站源码/运行资源",
+    "source": "未来产业洞见系统demo/shared/api-preload.js",
+    "bytes": 2428,
+    "sha256": "2be86d6631648201226a9dad997fc95c5abed8ccbabdc47412c1dbacc5c28ee4"
+  }
+]

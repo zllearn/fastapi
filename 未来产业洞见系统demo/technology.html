@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN" data-module="technology">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="核聚变专利全球与中国双维度交互分析看板">
+  <title>核聚变专利全球与中国洞察</title>
+  <script>document.documentElement.dataset.module = new URLSearchParams(location.search).get("module") || document.documentElement.dataset.module || "technology";</script>
+  <link rel="stylesheet" href="assets/derwent/styles.css?v=20260904-hide-path-score">
+  <link rel="stylesheet" href="shared/fusion-nav.css?v=20260811-unified1">
+  <link rel="stylesheet" href="shared/layout-polish.css?v=20260812-impeccable2">
+  <script src="shared/fusion-nav.js?v=20260811-unified1" data-active="technology" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+      <div><strong>FUSION / PATH</strong><small>核聚变专利洞察</small></div>
+    </div>
+    <nav class="view-switch" aria-label="分析维度">
+      <button class="view-tab active" data-view="world" type="button"><b>01</b><span>世界维度</span></button>
+      <button class="view-tab" data-view="china" type="button"><b>02</b><span>中国维度</span></button>
+    </nav>
+    <div class="header-meta">
+      <div class="top-scope"><strong id="topCount">-</strong> 个简单专利族</div>
+      <div id="sourceName" class="top-source" hidden></div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <section class="filter-dock" aria-label="全局筛选" hidden>
+      <div class="time-filter">
+        <div class="time-head"><span class="time-label">时间窗口</span><strong><span id="yearStartText">-</span> - <span id="yearEndText">-</span></strong></div>
+        <div class="dual-range"><div class="range-track"><span id="yearFill" class="range-fill"></span></div><input id="yearStart" type="range" aria-label="起始年份"><input id="yearEnd" type="range" aria-label="结束年份"></div>
+      </div>
+      <div class="filter"><label for="techFilter">技术维度</label><select id="techFilter"><option value="">全部技术路线</option></select></div>
+      <div class="filter"><label for="industryFilter">产业链一级</label><select id="industryFilter"><option value="">全部产业环节</option></select></div>
+      <div class="filter"><label for="applicantFilter">当前权利人类型</label><select id="applicantFilter"><option value="">全部当前权利人类型</option></select></div>
+      <div class="filter-actions"><button id="resetFilters" class="reset-button" type="button">重置筛选</button></div>
+    </section>
+
+    <main>
+      <section id="worldView" class="view">
+        <div class="grid">
+          <section class="panel span-12 global-flow-panel knowledge-card-panel">
+            <div class="panel-head">
+              <div><h3>核聚变知识卡片</h3></div>
+              <div class="infographic-panel-count"><strong id="infographicIndex">01</strong><span>/ 05</span></div>
+            </div>
+            <div class="knowledge-card-content">
+              <section class="infographic-carousel" aria-label="核聚变知识卡片轮播">
+                <div id="infographicViewport" class="infographic-viewport" tabindex="0">
+                  <div id="infographicTrack" class="infographic-track"></div>
+                  <button id="infographicPrev" class="infographic-arrow prev" type="button" aria-label="上一张">←</button>
+                  <button id="infographicNext" class="infographic-arrow next" type="button" aria-label="下一张">→</button>
+                </div>
+                <div class="infographic-carousel-foot">
+                  <div><span id="infographicKicker">终极能源</span><h5 id="infographicTitle">人造太阳</h5></div>
+                  <div id="infographicDots" class="infographic-dots" aria-label="轮播卡片选择"></div>
+                  <div class="infographic-actions">
+                    <button id="infographicPlay" type="button">暂停轮播</button>
+                    <button id="infographicEnlarge" class="primary" type="button">放大查看 ↗</button>
+                  </div>
+                </div>
+              </section>
+
+              <aside class="hot-news-panel" aria-label="核聚变热点新闻">
+                <div class="hot-news-head"><span>FUSION NEWS / 2026</span><h4>热点新闻</h4><p>权威机构公开信息 · 静态快照</p></div>
+                <div class="hot-news-list">
+                  <a href="https://lasers.llnl.gov/science/achieving-fusion-ignition" target="_blank" rel="noopener noreferrer">
+                    <span><time datetime="2026-06-20">2026.06.20</time><em>惯性约束</em></span>
+                    <h5>NIF 第11次实现聚变点火</h5>
+                    <p>实验测得7.9 MJ聚变产额，靶增益约3.8。</p>
+                    <b>LLNL / NIF ↗</b>
+                  </a>
+                  <a href="https://www.iter.org/whatsnew/501" target="_blank" rel="noopener noreferrer">
+                    <span><time datetime="2026-05-27">2026.05.27</time><em>工程装置</em></span>
+                    <h5>ITER磁体测试设施投入运行</h5>
+                    <p>面向大型磁体系统的测试与验证能力进一步完善。</p>
+                    <b>ITER Organization ↗</b>
+                  </a>
+                  <a href="https://lasers.llnl.gov/news/target-breakthrough-enabled-fusion-record-nif" target="_blank" rel="noopener noreferrer">
+                    <span><time datetime="2026-04-15">2026.04.15</time><em>靶丸技术</em></span>
+                    <h5>连续梯度掺杂靶丸支撑NIF纪录</h5>
+                    <p>新型高密度碳靶丸推动产额提升至8.6 MJ。</p>
+                    <b>LLNL / NIF ↗</b>
+                  </a>
+                  <a href="https://english.cas.cn/newsroom/cas_media/202501/t20250121_899052.shtml" target="_blank" rel="noopener noreferrer">
+                    <span><time datetime="2025-01-20">2025.01.20</time><em>磁约束</em></span>
+                    <h5>EAST实现1,066秒高约束模运行</h5>
+                    <p>长脉冲稳态运行能力取得新的实验突破。</p>
+                    <b>中国科学院 ↗</b>
+                  </a>
+                </div>
+                <div class="hot-news-foot"><span>更新至 2026.08</span><strong>点击新闻查看来源</strong></div>
+              </aside>
+            </div>
+          </section>
+
+          <div class="fusion-module-section-head technology-overview-heading span-12"><div><span>02 · TECHNOLOGY OVERVIEW</span><h2>技术概览</h2></div></div>
+
+          <section class="panel span-12 taxonomy-guide-panel">
+            <div class="technology-overview-band">
+              <div id="worldActiveFilters" class="active-filters" hidden></div>
+              <div id="worldKpis" class="kpi-band"></div>
+            </div>
+            <div class="map-classification-layout">
+              <section class="embedded-world-map" aria-label="全球技术竞争与知识流动">
+                <div class="panel-head"><div><h3>全球技术竞争与知识流动</h3><p>专利族数量 / 定向引用次数 / 申请人国家</p></div><div class="layer-control"><button class="layer-button active" data-world-layer="flows">引用流</button><button class="layer-button active" data-world-layer="bubbles">专利量</button><button class="layer-button active" data-world-layer="labels">标签</button></div></div>
+                <div id="worldMap" class="chart tall"></div>
+              </section>
+
+              <aside id="classificationBrowser" class="classification-browser" data-mode="industry">
+                <div class="classification-mode-switch" role="tablist" aria-label="分类视角">
+                  <button class="active" type="button" role="tab" aria-selected="true" data-classification-mode="industry"><span>01</span>产业链</button>
+                  <button type="button" role="tab" aria-selected="false" data-classification-mode="technology"><span>02</span>技术路线</button>
+                </div>
+                <div class="classification-browser-head">
+                  <span id="classificationEyebrow">INDUSTRY CHAIN</span>
+                  <h4 id="classificationModeTitle">产业链分类</h4>
+                  <p id="classificationModeDescription">从上游基础供给、中游装置集成到下游能源应用。</p>
+                </div>
+                <div id="classificationList" class="classification-list" role="tablist" aria-label="分类列表"></div>
+                <div id="classificationDetail" class="classification-detail" aria-live="polite"></div>
+              </aside>
+            </div>
+          </section>
+
+          <div id="infographicLightbox" class="infographic-lightbox" hidden role="dialog" aria-modal="true" aria-label="知识卡片大图">
+            <button id="infographicLightboxClose" type="button" aria-label="关闭">×</button>
+    <img id="infographicLightboxImage" src="assets/derwent/knowledge-cards/01_artificial_sun.png" alt="核聚变知识卡片放大预览">
+            <div><span id="infographicLightboxKicker"></span><strong id="infographicLightboxTitle"></strong></div>
+          </div>
+
+          <section class="panel span-12 citation-network-panel"><div class="panel-head compact-head"><div><h3>引文网络与关键路径</h3></div></div><div id="citationNetwork" class="chart network"></div></section>
+
+          <section class="panel span-12 path-archive-panel">
+            <div class="panel-head compact-head"><div><h3>关键技术路径档案</h3></div><span class="metric-badge">专利族代表 PN</span></div>
+            <div class="path-layout"><div id="pathGroups" class="path-groups"></div><div class="path-content"><div id="pathSummary" class="path-summary"></div><div id="pathList" class="path-list"></div></div></div>
+          </section>
+
+          <section class="panel span-12 country-trend-panel"><div class="panel-head compact-head"><div><h3 id="worldTrendTitle">国家专利年度趋势</h3><p id="worldTrendSubtitle" hidden></p></div><div class="river-head-tools"><span id="countrySelection" class="metric-badge">全球</span><div class="layer-control world-trend-switch" role="group" aria-label="年度趋势维度"><button class="layer-button active" type="button" data-world-trend-mode="country">国家</button><button class="layer-button" type="button" data-world-trend-mode="industry">上中下游</button><button class="layer-button" type="button" data-world-trend-mode="applicant">机构类型</button></div></div></div><div id="countryRanking" class="chart tall"></div></section>
+
+          <section class="matrix-stage span-12">
+            <div class="matrix-stage-head compact-head">
+              <div><h3>产业三维动态对比分析</h3></div>
+              <div class="matrix-stage-tools">
+                <div class="matrix-color-key" aria-label="柱体颜色含义">
+                  <span>颜色 · 当前权利人类型</span>
+                  <div id="matrixColorLegend" class="matrix-color-legend"></div>
+                </div>
+                <span id="compositionScope" class="metric-badge"></span>
+                <button id="matrixResetView" class="matrix-reset-view" type="button">重置视角</button>
+                <div class="matrix-view-switch" role="group" aria-label="矩阵视角">
+                  <button class="matrix-view-button active" type="button" data-matrix-view="3d">3D</button>
+                  <button class="matrix-view-button" type="button" data-matrix-view="z">Z 俯视</button>
+                  <button class="matrix-view-button" type="button" data-matrix-view="x">X 侧视</button>
+                  <button class="matrix-view-button" type="button" data-matrix-view="y">Y 侧视</button>
+                </div>
+              </div>
+            </div>
+            <div id="matrixViewport" class="matrix-viewport">
+              <div id="matrixThree" class="matrix-layer matrix-three"></div>
+              <div id="matrix2D" class="matrix-layer matrix-2d"></div>
+              <div id="matrixTooltip" class="matrix-tooltip"></div>
+              <div id="matrixModeReadout" class="matrix-mode-readout">自由 3D 视角</div>
+            </div>
+            <div class="matrix-timeline">
+              <button id="matrixPlay" class="play-button" type="button" title="播放时间切片" aria-label="播放时间切片"></button>
+              <button id="matrixAllYears" class="matrix-all-button active" type="button">全期</button>
+              <strong id="matrixYearValue" class="matrix-year-value">全期</strong>
+              <div class="matrix-time-track">
+                <canvas id="matrixTimelineCanvas" aria-hidden="true"></canvas>
+                <input id="matrixYearRange" type="range" aria-label="矩阵五年时间切片">
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <section id="chinaView" class="view" hidden>
+        <div class="view-heading"><div><h2>中国产业技术与区域演进</h2><p>省市格局、产业层级、主体类型与年度变化</p></div><div id="chinaActiveFilters" class="active-filters"></div></div>
+        <div id="chinaKpis" class="kpi-band"></div>
+        <div class="grid">
+          <section class="panel span-12"><div class="panel-head"><div><h3>省市创新版图</h3><p>省级专利族数量与重点城市</p></div><span id="provinceSelection" class="metric-badge">全国</span></div><div id="chinaMap" class="chart tall"></div></section>
+          <section class="panel span-12"><div class="panel-head"><div><h3>技术路线年度演进</h3><p>按当前双边时间窗口与区域筛选</p></div><button id="playYears" class="play-button" type="button" title="播放年度变化" aria-label="播放年度变化"></button></div><div id="chinaTrend" class="chart tall"></div></section>
+          <section class="panel span-12"><div class="panel-head"><div><h3>上中下游产业年度演进</h3><p id="industryRiverNote">面积表示产业结构 · 深色折线表示年度总量 · 点击查看产业二级指标详情</p></div><div class="river-head-tools"><span id="industryRiverScope" class="metric-badge">全国</span><div class="layer-control" role="group" aria-label="产业年度图显示模式"><button class="layer-button active" type="button" data-river-mode="count">数量</button><button class="layer-button" type="button" data-river-mode="share">占比</button><button class="layer-button" type="button" data-river-mode="growth">增长率</button></div></div></div><div id="chinaIndustryRiver" class="chart tall"></div></section>
+
+          <section class="panel span-12"><div class="panel-head"><div><h3>技术路线与当前权利人类型</h3><p>专利族交叉分布</p></div></div><div id="chinaHeatmap" class="chart medium"></div></section>
+
+          <section class="panel span-6"><div class="panel-head"><div><h3>省份专利族排名</h3></div></div><div id="provinceRanking" class="chart"></div></section>
+          <section class="panel span-6"><div class="panel-head"><div><h3>城市专利族排名</h3><p>随省份与维度筛选联动</p></div></div><div id="cityRanking" class="chart"></div></section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside id="nodeInspector" class="inspector" aria-label="专利信息">
+    <div class="inspector-head"><h3 id="inspectorTitle">专利详情</h3><p id="inspectorSubtitle"></p><button id="inspectorClose" class="close-button" type="button" aria-label="关闭">×</button></div>
+    <div id="inspectorBody" class="inspector-body"></div>
+  </aside>
+
+  <div id="pathDrawer" class="drawer-backdrop" role="dialog" aria-modal="true" aria-label="路径专利详情"><aside class="drawer"><div class="drawer-head"><div><h2 id="drawerTitle">路径详情</h2><p id="drawerSummary"></p></div><button id="drawerClose" class="close-button" type="button" aria-label="关闭">×</button></div><div id="drawerBody" class="drawer-body"></div></aside></div>
+  <script src="assets/derwent/vendor/echarts.min.js"></script>
+  <script src="assets/derwent/vendor/three.min.js"></script>
+  <script src="assets/derwent/vendor/china.js"></script>
+  <script type="module">
+    import { loadPayloads } from "./shared/api-preload.js?v=20260921-api2";
+    await loadPayloads(["derwent-dashboard", "world-map"], [
+      "assets/derwent/app.js?v=20260904-hide-path-score",
+      "shared/module-mode.js?v=20260828-matrix-tools1",
+    ]);
+  </script>
+</body>
+</html>

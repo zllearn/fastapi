@@ -1,0 +1,346 @@
+/*
+ * Cross-module layout polish
+ * Keeps each dashboard's visual language and document order intact while
+ * normalising page rhythm, alignment and narrow-screen behaviour.
+ */
+
+:root {
+  --fusion-page-width: min(1520px, calc(100% - clamp(32px, 7vw, 112px)));
+  --fusion-section-space: 40px;
+  --fusion-panel-gap: 20px;
+}
+
+/* Shared editorial hierarchy */
+.fusion-module-hero {
+  min-height: 272px;
+  padding-block: 32px 40px;
+}
+
+.fusion-module-copy > span {
+  max-width: 70ch;
+  line-height: 1.75;
+}
+
+.fusion-module-index { bottom: 40px; }
+
+.fusion-module-section-head {
+  min-height: 70px;
+  padding-bottom: 14px;
+}
+
+html[data-module="technology"] .shell > main {
+  padding-block: 36px 50px !important;
+}
+
+html[data-module="technology"] .fusion-module-section-head {
+  margin-bottom: 18px;
+}
+
+html[data-module="technology"] .grid {
+  gap: var(--fusion-panel-gap);
+}
+
+html[data-module="technology"] .grid > .technology-overview-heading {
+  margin-top: 16px;
+  margin-bottom: -2px;
+}
+
+html[data-module="technology"] .technology-overview-band {
+  padding-top: 20px;
+}
+
+html[data-module="technology"] .knowledge-card-content {
+  grid-template-columns: minmax(0, 1.55fr) minmax(340px, .65fr);
+}
+
+html[data-module="technology"] .knowledge-card-panel .infographic-carousel {
+  padding-block: 22px;
+}
+
+html[data-module="technology"] .hot-news-panel {
+  padding: 26px 24px 20px;
+}
+
+html[data-module="technology"] .hot-news-head p,
+html[data-module="technology"] .hot-news-list p {
+  font-size: 12.5px;
+}
+
+html[data-module="technology"] .hot-news-list h5 {
+  font-size: 16.5px;
+}
+
+/* Industry page uses the same proportions as the injected module headers. */
+html[data-module="industry"] .industry-hero {
+  min-height: 272px;
+  padding-block: 32px 40px;
+}
+
+/* The embedded patent matrix belongs directly to the industry section; its
+   technology-page subheading would create a duplicate, misleading level. */
+html[data-module="industry"] .technology-overview-heading {
+  display: none !important;
+}
+
+html[data-module="industry"] .hero-copy > span {
+  max-width: 70ch;
+  line-height: 1.75;
+}
+
+html[data-module="industry"] .hero-index { bottom: 40px; }
+
+html[data-module="industry"] main { padding-block: 36px; }
+
+html[data-module="industry"] .module-section { margin-bottom: var(--fusion-section-space); }
+
+html[data-module="industry"] .section-head {
+  min-height: 70px;
+  padding-bottom: 14px;
+}
+
+html[data-module="industry"] .embed-shell,
+html[data-module="industry"] .benchmark-grid {
+  margin-top: 18px;
+}
+
+html[data-module="industry"] .benchmark-grid { gap: var(--fusion-panel-gap); }
+
+html[data-module="industry"] .benchmark-head {
+  padding-inline: 24px;
+}
+
+/* Enterprise cards and chart blocks now follow one consistent vertical beat. */
+html[data-module="enterprise"] .fusion-module-section-head {
+  margin-block: 36px 18px;
+}
+
+html[data-module="enterprise"] #enterpriseView {
+  --enterprise-gap: var(--fusion-panel-gap);
+}
+
+html[data-module="enterprise"] .enterprise-panel-head {
+  min-height: 70px;
+  padding: 15px 22px;
+}
+
+html[data-module="enterprise"] .enterprise-metrics .metric {
+  padding-block: 20px;
+}
+
+html[data-module="enterprise"] .enterprise-route-legend {
+  gap: 9px 20px;
+  padding-block: 9px;
+}
+
+html[data-module="enterprise"] .enterprise-note {
+  padding-bottom: 18px;
+  line-height: 1.75;
+}
+
+/* Frontier: preserve the main-then-aside order, but stop the fixed-width grid
+   from forcing horizontal overflow on laptops and phones. */
+html[data-module="frontier"] .fusion-module-section-head {
+  margin-block: 36px 18px;
+}
+
+html[data-module="frontier"] body > .shell {
+  gap: var(--fusion-panel-gap) !important;
+  margin-bottom: 50px !important;
+}
+
+html[data-module="frontier"] body > .shell > *,
+html[data-module="frontier"] .main,
+html[data-module="frontier"] .side,
+html[data-module="frontier"] .trend-panel,
+html[data-module="frontier"] .route-panel {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 1180px) {
+  html[data-module="technology"] .knowledge-card-content {
+    grid-template-columns: minmax(0, 1.34fr) minmax(320px, .66fr);
+  }
+
+  html[data-module="frontier"] body > .shell {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 360px) !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .fusion-module-index,
+  html[data-module="industry"] .hero-index {
+    display: none;
+  }
+
+  html[data-module="frontier"] body > .shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html[data-module="frontier"] .side {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  html[data-module="technology"] .knowledge-card-content,
+  html[data-module="technology"] .map-classification-layout {
+    display: block;
+  }
+
+  html[data-module="technology"] .knowledge-card-panel .infographic-carousel,
+  html[data-module="technology"] .embedded-world-map {
+    border-right: 0;
+    border-bottom: 1px solid rgba(18, 45, 73, .12);
+  }
+
+  html[data-module="technology"] .classification-browser {
+    min-height: 680px;
+    border-top: 0;
+    border-left: 0;
+  }
+
+  html[data-module="industry"] .industry-hero,
+  .fusion-module-hero {
+    min-height: 232px;
+    padding-block: 26px 32px;
+  }
+
+  html[data-module="industry"] .section-head,
+  .fusion-module-section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-module="technology"] body,
+  html[data-module="industry"] body,
+  html[data-module="enterprise"] body,
+  html[data-module="frontier"] body {
+    padding-bottom: 70px;
+  }
+
+  .fusion-site-nav,
+  .fusion-site-nav:hover,
+  .fusion-site-nav:focus-within,
+  .fusion-site-nav.is-open {
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 4px;
+  }
+
+  .fusion-nav-link {
+    min-width: 0;
+    height: 48px;
+  }
+
+  .fusion-nav-link[aria-current="page"]::before {
+    right: 16px;
+    bottom: -4px;
+    left: 16px;
+  }
+
+  .fusion-module-hero,
+  html[data-module="industry"] .industry-hero {
+    min-height: 220px;
+    padding-block: 24px 29px;
+  }
+
+  .fusion-module-copy h1,
+  html[data-module="industry"] .hero-copy h1 {
+    font-size: clamp(38px, 12vw, 46px);
+  }
+
+  .fusion-module-copy > span,
+  html[data-module="industry"] .hero-copy > span {
+    max-width: none;
+    margin-top: 13px;
+    font-size: 12px;
+  }
+
+  .fusion-module-section-head {
+    min-height: 62px;
+    padding-bottom: 12px;
+  }
+
+  html[data-module="technology"] .shell > main {
+    padding-block: 24px 38px !important;
+  }
+
+  html[data-module="technology"] .grid {
+    gap: 14px;
+  }
+
+  html[data-module="technology"] .grid > .technology-overview-heading {
+    margin-top: 12px;
+  }
+
+  html[data-module="technology"] .knowledge-card-panel .infographic-carousel {
+    padding-block: 18px;
+  }
+
+  html[data-module="technology"] .hot-news-panel {
+    padding: 22px 18px 18px;
+  }
+
+  html[data-module="industry"] main { padding-block: 26px; }
+
+  html[data-module="industry"] .module-section { margin-bottom: 34px; }
+
+  html[data-module="industry"] .benchmark-grid { gap: 14px; }
+
+  html[data-module="enterprise"] .fusion-module-section-head,
+  html[data-module="frontier"] .fusion-module-section-head {
+    margin-block: 26px 14px;
+  }
+
+  html[data-module="enterprise"] #enterpriseView {
+    --enterprise-gap: 14px;
+  }
+
+  html[data-module="enterprise"] .enterprise-panel-head {
+    padding-inline: 16px;
+  }
+
+  html[data-module="enterprise"] .enterprise-strategy {
+    height: 500px;
+  }
+
+  html[data-module="frontier"] body > .shell {
+    gap: 14px !important;
+    margin-bottom: 34px !important;
+  }
+
+  html[data-module="frontier"] .route-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  :root { --fusion-panel-gap: 12px; }
+
+  html[data-module="industry"] .industry-hero,
+  html[data-module="industry"] main,
+  html[data-module="industry"] footer {
+    width: calc(100% - 24px);
+  }
+
+  html[data-module="industry"] .benchmark-head {
+    padding-inline: 16px;
+  }
+
+  html[data-module="industry"] .advantage-matrix,
+  html[data-module="industry"] .chain-gap-analysis {
+    padding-inline: 12px;
+  }
+
+  html[data-module="frontier"] .topic-header,
+  html[data-module="frontier"] .trend-panel,
+  html[data-module="frontier"] .route-panel {
+    padding-inline: 14px !important;
+  }
+}
