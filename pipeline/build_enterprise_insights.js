@@ -5,9 +5,9 @@ const path = require("path");
 const vm = require("vm");
 const crypto = require("crypto");
 
-const projectRoot = path.join(__dirname, "..", "未来产业洞见系统demo");
-const dataPath = path.join(projectRoot, "assets/atlas/data/dashboard-data.js");
-const outputPath = path.join(projectRoot, "assets/atlas/data/enterprise-insights.js");
+const outputRoot = path.join(__dirname, "output", "site-payloads");
+const dataPath = path.join(outputRoot, "dashboard-data.js");
+const outputPath = path.join(outputRoot, "enterprise-insights.js");
 const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(dataPath, "utf8"), context, { filename: dataPath });

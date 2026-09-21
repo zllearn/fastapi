@@ -38,10 +38,11 @@ def build(stamp):
     for c in companies.values():
         c['patents'] = sorted(c['patents'].values(), key=lambda p:(p['date'],p['family']), reverse=True)
     result = dict(date=f'{stamp[:4]}-{stamp[4:6]}-{stamp[6:]}',
-                  source='股东穿透与历史任职_结果.xlsx',
-                  patentSource='IncoPat筛选维度后_已回填企业类型及国家及技术标签.xlsx',
+                  source='data/shareholder_review.xlsx（股东穿透与历史任职_结果）',
+                  patentSource='data/incopat_patent_families.xlsx（IncoPat简单专利族合并）',
                   stats=json.loads(base.with_suffix('.json').read_text()), companies=list(companies.values()))
-    target = ROOT.parent/'未来产业洞见系统demo/assets/atlas/data/shareholder-leads.js'
+    target = ROOT/'output/site-payloads/shareholder-leads.js'
+    target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text('window.SHAREHOLDER_LEADS = '+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n')
     assert len(companies) == result['stats']['source_companies']
     assert sum(len(c['patents'])>0 for c in companies.values()) == result['stats']['all_source_companies_with_hits']

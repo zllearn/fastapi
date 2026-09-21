@@ -13,14 +13,14 @@ from pathlib import Path
 from openpyxl import load_workbook
 
 
-SITE_ROOT = Path(__file__).resolve().parents[1]
-PROJECTS_ROOT = SITE_ROOT.parent
+PIPELINE_ROOT = Path(__file__).resolve().parent
+PROJECTS_ROOT = PIPELINE_ROOT.parent
 DEFAULT_WORKBOOK = (
     PROJECTS_ROOT
-    / "fusion_weak_signal/incopat_run/incopat_simple_families_topic_indicators.xlsx"
+    / "analytics/incopat_run/incopat_simple_families_topic_indicators.xlsx"
 )
-DEFAULT_DATABASE = PROJECTS_ROOT / "incopat/output/统一专利族数据.sqlite3"
-DEFAULT_OUTPUT = SITE_ROOT / "assets/frontier/topic-enterprise-index.js"
+DEFAULT_DATABASE = PIPELINE_ROOT / "output/unified_patent_families.sqlite3"
+DEFAULT_OUTPUT = PIPELINE_ROOT / "output/site-payloads/topic-enterprise-index.js"
 
 
 def clean(value: object) -> str:

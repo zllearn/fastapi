@@ -16,12 +16,9 @@ from zipfile import ZipFile
 
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_DB = ROOT / "output" / "统一专利族数据.sqlite3"
-DEFAULT_OUTPUT = ROOT.parent / "未来产业洞见系统demo" / "assets" / "atlas" / "data" / "dashboard-data.js"
-DEFAULT_ENTERPRISE_DIRECTORY = Path(
-    "/mnt/d/工作/核聚变卡脖子/IncoPat/incopat核聚变/"
-    "中国核聚变相关企业总名单_去重核验版.xlsx"
-)
+DEFAULT_DB = ROOT / "output" / "unified_patent_families.sqlite3"
+DEFAULT_OUTPUT = ROOT / "output" / "site-payloads" / "dashboard-data.js"
+DEFAULT_ENTERPRISE_DIRECTORY = ROOT.parent / "data" / "enterprise_directory.xlsx"
 
 TYPES = ["私企", "国企", "高校", "研究所", "政府", "个人", "待核验"]
 WORLD_MAP_NAMES = {

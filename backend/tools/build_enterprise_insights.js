@@ -5,7 +5,7 @@ const path = require("path");
 const vm = require("vm");
 const crypto = require("crypto");
 
-// Server copy of incopat/build_enterprise_insights.js; takes explicit input/output paths.
+// Backend copy of pipeline/build_enterprise_insights.js; takes explicit input/output paths.
 const dataPath = process.argv[2];
 const outputPath = process.argv[3];
 if (!dataPath || !outputPath) throw new Error("usage: build_enterprise_insights.js <dashboard-data.js> <output.js>");

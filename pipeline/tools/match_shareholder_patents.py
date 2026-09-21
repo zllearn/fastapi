@@ -14,9 +14,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from build_atlas_payload import read_xlsx_rows
 from fuzzy_match_unlinked_enterprises import ROOT, norm, xlsx
 
-SOURCE = ROOT.parent / 'inputs'
-BOOK = SOURCE / '股东穿透与历史任职_结果.xlsx'
-PATENTS = SOURCE / 'IncoPat筛选维度后_已回填企业类型及国家及技术标签.xlsx'
+SOURCE = ROOT.parent / 'data'
+BOOK = SOURCE / 'shareholder_review.xlsx'
+PATENTS = SOURCE / 'incopat_patent_families.xlsx'
 NS = '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}'
 
 def records(sheet):
@@ -100,7 +100,7 @@ def main():
                  row.get('股东退出日期', ''), set())
     persons = {norm(p['person']) for p in paths}
     hits = defaultdict(dict)
-    conn = sqlite3.connect(f'file:{output / "统一专利族数据.sqlite3"}?mode=ro', uri=True)
+    conn = sqlite3.connect(f'file:{output / "unified_patent_families.sqlite3"}?mode=ro', uri=True)
     family_ids = {str(r[0]) for r in conn.execute('select family_id from families')}
     conn.close()
     scanned = 0

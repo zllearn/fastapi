@@ -1,15 +1,15 @@
-"""Shareholder payload builder writing to an explicit output path (server copy)."""
+"""Shareholder payload builder writing to an explicit output path (backend copy)."""
 import argparse
 import csv
 import json
 import sys
 from pathlib import Path
 
-TOOLS_DIR = Path(__file__).resolve().parents[2] / "incopat" / "tools"
+TOOLS_DIR = Path(__file__).resolve().parents[2] / "pipeline" / "tools"
 sys.path.insert(0, str(TOOLS_DIR))
 sys.path.insert(0, str(TOOLS_DIR.parent))
 
-from fuzzy_match_unlinked_enterprises import ROOT  # noqa: E402  (incopat/)
+from fuzzy_match_unlinked_enterprises import ROOT  # noqa: E402  (pipeline/)
 from build_atlas_payload import read_xlsx_rows  # noqa: E402
 
 
@@ -44,8 +44,8 @@ def build(stamp, target):
     for c in companies.values():
         c["patents"] = sorted(c["patents"].values(), key=lambda p: (p["date"], p["family"]), reverse=True)
     result = dict(date=f"{stamp[:4]}-{stamp[4:6]}-{stamp[6:]}",
-                  source="股东穿透与历史任职_结果.xlsx",
-                  patentSource="IncoPat筛选维度后_已回填企业类型及国家及技术标签.xlsx",
+                  source="data/shareholder_review.xlsx（股东穿透与历史任职_结果）",
+                  patentSource="data/incopat_patent_families.xlsx（IncoPat简单专利族合并）",
                   stats=json.loads(base.with_suffix(".json").read_text()), companies=list(companies.values()))
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text("window.SHAREHOLDER_LEADS = " + json.dumps(result, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")

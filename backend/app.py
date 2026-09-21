@@ -76,7 +76,7 @@ def db_family(family_id: str):
 
 
 # Static hosting last so /api/* wins. Only the public site directory is exposed.
-app.mount("/", __import__("fastapi.staticfiles", fromlist=["StaticFiles"]).StaticFiles(directory=str(config.SITE), html=True), name="site")
+app.mount("/", __import__("fastapi.staticfiles", fromlist=["StaticFiles"]).StaticFiles(directory=str(config.FRONTEND), html=True), name="site")
 
 
 def main() -> None:
@@ -87,4 +87,4 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
     print(f"打开 http://{args.host}:{args.port}/index.html ；Ctrl+C停止", flush=True)
-    uvicorn.run("server.app:app", host=args.host, port=args.port, app_dir=str(config.ROOT))
+    uvicorn.run("backend.app:app", host=args.host, port=args.port, app_dir=str(config.ROOT))

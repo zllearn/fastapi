@@ -14,12 +14,13 @@ from pathlib import Path
 
 INCOPAT_ROOT = Path(__file__).resolve().parent
 PROJECTS_ROOT = INCOPAT_ROOT.parent
-SITE_ROOT = PROJECTS_ROOT / "未来产业洞见系统demo"
-WINDOWS_DATA_ROOT = Path("/mnt/d/工作/核聚变卡脖子/IncoPat/incopat核聚变")
-SOURCE_XLSX = WINDOWS_DATA_ROOT / "IncoPat筛选维度后_已回填企业类型及国家及技术标签.xlsx"
-ENTERPRISE_XLSX = WINDOWS_DATA_ROOT / "中国核聚变相关企业总名单_去重核验版.xlsx"
-TOPIC_WORKBOOK = PROJECTS_ROOT / "fusion_weak_signal/incopat_run/incopat_simple_families_topic_indicators.xlsx"
-UNIFIED_DB = INCOPAT_ROOT / "output/统一专利族数据.sqlite3"
+SITE_ROOT = PROJECTS_ROOT / "frontend"
+DATA_ROOT = PROJECTS_ROOT / "data"
+SOURCE_XLSX = DATA_ROOT / "incopat_patent_families.xlsx"
+ENTERPRISE_XLSX = DATA_ROOT / "enterprise_directory.xlsx"
+TOPIC_WORKBOOK = PROJECTS_ROOT / "analytics/incopat_run/incopat_simple_families_topic_indicators.xlsx"
+UNIFIED_DB = INCOPAT_ROOT / "output/unified_patent_families.sqlite3"
+STATIC_PAYLOADS = INCOPAT_ROOT / "output/site-payloads"
 
 
 def sha256(path: Path) -> str:
@@ -41,7 +42,7 @@ def validate_inputs() -> None:
         "核验企业总名单": ENTERPRISE_XLSX,
         "前沿主题指标工作簿": TOPIC_WORKBOOK,
         "网站目录": SITE_ROOT,
-        "前沿企业索引构建脚本": SITE_ROOT / "scripts/build_frontier_enterprise_index.py",
+        "前沿企业索引构建脚本": INCOPAT_ROOT / "build_frontier_enterprise_index.py",
     }
     missing = [f"{label}: {path}" for label, path in required.items() if not path.exists()]
     if shutil.which("node") is None:
@@ -81,19 +82,20 @@ def main() -> None:
         return
 
     python = sys.executable
+    STATIC_PAYLOADS.mkdir(parents=True, exist_ok=True)
     if not args.skip_unified:
         run("统一专利族数据库", [python, "build_unified_from_xlsx.py", "--input", str(SOURCE_XLSX), "--output", str(UNIFIED_DB)])
     run("企业与地理载荷", [
         python, "build_atlas_payload.py",
         "--database", str(UNIFIED_DB),
         "--enterprise-directory", str(ENTERPRISE_XLSX),
-        "--output", str(SITE_ROOT / "assets/atlas/data/dashboard-data.js"),
+        "--output", str(STATIC_PAYLOADS / "dashboard-data.js"),
     ])
-    run("技术演进载荷", [python, "build_derwent_payload_direct.py", "--database", str(UNIFIED_DB), "--output", str(SITE_ROOT / "assets/derwent/data/dashboard-data.js")])
+    run("技术演进载荷", [python, "build_derwent_payload_direct.py", "--database", str(UNIFIED_DB), "--output", str(STATIC_PAYLOADS / "derwent-dashboard-data.js")])
     run("企业分析载荷", ["node", "build_enterprise_insights.js"])
-    run("核验企业名录", [python, "build_enterprise_directory_master.py", str(ENTERPRISE_XLSX), str(SITE_ROOT / "assets/atlas/data/enterprise-directory-master.js")])
+    run("核验企业名录", [python, "build_enterprise_directory_master.py", str(ENTERPRISE_XLSX), str(STATIC_PAYLOADS / "enterprise-directory-master.js")])
     if not args.skip_frontier:
-        run("前沿主题企业索引", [python, str(SITE_ROOT / "scripts/build_frontier_enterprise_index.py"), "--workbook", str(TOPIC_WORKBOOK), "--database", str(UNIFIED_DB), "--output", str(SITE_ROOT / "assets/frontier/topic-enterprise-index.js")])
+        run("前沿主题企业索引", [python, str(INCOPAT_ROOT / "build_frontier_enterprise_index.py"), "--workbook", str(TOPIC_WORKBOOK), "--database", str(UNIFIED_DB), "--output", str(STATIC_PAYLOADS / "topic-enterprise-index.js")])
     run("独立页面校验", [python, "sync_site_pages.py", "--site", str(SITE_ROOT)])
     print("\n网站静态数据构建完成。")
 

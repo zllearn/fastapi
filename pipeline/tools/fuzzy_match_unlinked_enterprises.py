@@ -11,7 +11,7 @@ from xml.sax.saxutils import escape
 from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parents[1]
-SITE = ROOT.parent / '未来产业洞见系统demo'
+SITE = ROOT.parent / 'frontend'
 
 def load(name):
     return json.loads((SITE / 'assets/atlas/data' / name).read_text().split('=', 1)[1].strip().rstrip(';'))

@@ -1,8 +1,8 @@
 """Payload registry: run the delivered builders into a server-side JSON cache.
 
-Each payload is served from ``server/cache/<name>.json`` (builder-derived) or
-``server/snapshots/<name>.json`` (upstream snapshot data without build code).
-Builder-derived caches are produced by re-running the original incopat
+Each payload is served from ``backend/cache/<name>.json`` (builder-derived) or
+``backend/snapshots/<name>.json`` (upstream snapshot data without build code).
+Builder-derived caches are produced by re-running the original pipeline
 builders against the unified SQLite database, then stripping the
 ``window.GLOBAL=...;`` wrapper.
 """
@@ -57,48 +57,48 @@ BUILDERS: dict[str, dict] = {
     "atlas-dashboard": {
         "global": "DASHBOARD_DATA",
         "js": config.CACHE / "atlas-dashboard.js",
-        "command": [PY, str(config.INCOPAT / "build_atlas_payload.py"),
+        "command": [PY, str(config.PIPELINE / "build_atlas_payload.py"),
                     "--database", DB,
                     "--enterprise-directory", str(config.ENTERPRISE_XLSX),
                     "--output", "{js}"],
-        "cwd": str(config.INCOPAT),
+        "cwd": str(config.PIPELINE),
     },
     "derwent-dashboard": {
         "global": "FUSION_DASHBOARD_DATA",
         "js": config.CACHE / "derwent-dashboard.js",
-        "command": [PY, str(config.INCOPAT / "build_derwent_payload_direct.py"),
+        "command": [PY, str(config.PIPELINE / "build_derwent_payload_direct.py"),
                     "--database", DB, "--output", "{js}"],
-        "cwd": str(config.INCOPAT),
+        "cwd": str(config.PIPELINE),
     },
     "enterprise-insights": {
         "global": "ENTERPRISE_INSIGHTS",
         "js": config.CACHE / "enterprise-insights.js",
-        "command": ["node", str(config.ROOT / "server/tools/build_enterprise_insights.js"),
+        "command": ["node", str(config.ROOT / "backend/tools/build_enterprise_insights.js"),
                     str(config.CACHE / "atlas-dashboard.js"), "{js}"],
-        "cwd": str(config.INCOPAT),
+        "cwd": str(config.PIPELINE),
         "depends_on": ["atlas-dashboard"],
     },
     "enterprise-directory": {
         "global": "ENTERPRISE_DIRECTORY_MASTER",
         "js": config.CACHE / "enterprise-directory.js",
-        "command": [PY, str(config.INCOPAT / "build_enterprise_directory_master.py"),
+        "command": [PY, str(config.PIPELINE / "build_enterprise_directory_master.py"),
                     str(config.ENTERPRISE_XLSX), "{js}"],
-        "cwd": str(config.INCOPAT),
+        "cwd": str(config.PIPELINE),
     },
     "shareholder-leads": {
         "global": "SHAREHOLDER_LEADS",
         "js": config.CACHE / "shareholder-leads.js",
-        "command": [PY, str(config.ROOT / "server/tools/build_shareholder_frontend.py"),
+        "command": [PY, str(config.ROOT / "backend/tools/build_shareholder_frontend.py"),
                     "--date", config.SHAREHOLDER_STAMP, "--output", "{js}"],
-        "cwd": str(config.INCOPAT),
+        "cwd": str(config.PIPELINE),
     },
     "frontier-index": {
         "global": "FRONTIER_ENTERPRISE_INDEX",
         "js": config.CACHE / "frontier-index.js",
-        "command": [PY, str(config.SITE / "scripts/build_frontier_enterprise_index.py"),
+        "command": [PY, str(config.PIPELINE / "build_frontier_enterprise_index.py"),
                     "--workbook", str(config.TOPIC_WORKBOOK),
                     "--database", DB, "--output", "{js}"],
-        "cwd": str(config.INCOPAT),
+        "cwd": str(config.PIPELINE),
     },
 }
 

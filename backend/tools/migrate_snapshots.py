@@ -1,6 +1,6 @@
 """One-off migration: extract upstream snapshot payloads out of the static site.
 
-Produces server/snapshots/{frontier-dashboard,verified-events,world-map}.json
+Produces backend/snapshots/{frontier-dashboard,verified-events,world-map}.json
 from the current delivery files. Run before the HTML pages are switched to the
 API; afterwards the original files remain as the archival source of these
 snapshot datasets (they have no builder code in this package).
@@ -12,12 +12,12 @@ import re
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from server import config, payloads  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from backend import config, payloads  # noqa: E402
 
 
 def frontier_dashboard() -> None:
-    html = (config.SITE / "frontier.html").read_text(encoding="utf-8")
+    html = (config.FRONTEND / "frontier.html").read_text(encoding="utf-8")
     match = re.search(r'<script id="dashboard-data" type="application/json">(.*?)</script>', html, re.S)
     if not match:
         found = (config.SNAPSHOTS / "frontier-dashboard.json").is_file()
@@ -41,7 +41,7 @@ def from_js(js_file: Path, out_name: str) -> None:
 
 
 def world_map() -> None:
-    globals_ = payloads.extract_globals((config.SITE / "assets/derwent/data/map-data.js").read_text(encoding="utf-8"))
+    globals_ = payloads.extract_globals((config.FRONTEND / "assets/derwent/data/map-data.js").read_text(encoding="utf-8"))
     out = config.SNAPSHOTS / "world-map.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(globals_, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
@@ -50,5 +50,5 @@ def world_map() -> None:
 
 if __name__ == "__main__":
     frontier_dashboard()
-    from_js(config.SITE / "assets/intelligence/verified-events.js", "verified-events")
+    from_js(config.FRONTEND / "assets/intelligence/verified-events.js", "verified-events")
     world_map()

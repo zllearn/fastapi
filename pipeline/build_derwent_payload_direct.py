@@ -10,8 +10,8 @@ from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent
-DATABASE = BASE_DIR / "output" / "统一专利族数据.sqlite3"
-OUTPUT = BASE_DIR.parent / "未来产业洞见系统demo" / "assets" / "derwent" / "data" / "dashboard-data.js"
+DATABASE = BASE_DIR / "output" / "unified_patent_families.sqlite3"
+OUTPUT = BASE_DIR / "output" / "site-payloads" / "derwent-dashboard-data.js"
 
 TECHNOLOGY_ORDER = [f"B{index}" for index in range(10)]
 TECHNOLOGY_LABELS = {

@@ -23,11 +23,8 @@ from openpyxl import load_workbook
 
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_INPUT = Path(
-    "/mnt/d/工作/核聚变卡脖子/IncoPat/incopat核聚变/"
-    "IncoPat筛选维度后_已回填企业类型及国家及技术标签.xlsx"
-)
-DEFAULT_OUTPUT = ROOT / "output" / "统一专利族数据.sqlite3"
+DEFAULT_INPUT = ROOT.parent / "data" / "incopat_patent_families.xlsx"
+DEFAULT_OUTPUT = ROOT / "output" / "unified_patent_families.sqlite3"
 
 FAMILY_SOURCE_FIELDS = (
     "序号", "家族ID", "家族代表公开（公告）号", "完整简单同族成员数",

@@ -12,8 +12,9 @@ from pathlib import Path
 from openpyxl import load_workbook
 
 
-DEFAULT_SOURCE = Path("/mnt/d/工作/核聚变卡脖子/IncoPat/incopat核聚变/中国核聚变相关企业总名单_去重核验版.xlsx")
-DEFAULT_OUTPUT = Path("/home/jiyang/projects/未来产业洞见系统demo/assets/atlas/data/enterprise-directory-master.js")
+ROOT = Path(__file__).resolve().parent
+DEFAULT_SOURCE = ROOT.parent / "data" / "enterprise_directory.xlsx"
+DEFAULT_OUTPUT = ROOT / "output" / "site-payloads" / "enterprise-directory-master.js"
 
 
 def normalize_name(value: str) -> str:

@@ -8,7 +8,7 @@ from xml.sax.saxutils import escape
 from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parents[1]
-SITE = ROOT.parent / '未来产业洞见系统demo'
+SITE = ROOT.parent / 'frontend'
 script = r'''
 const fs=require('fs'),vm=require('vm');
 const c={window:{echarts:{}}};vm.createContext(c);
