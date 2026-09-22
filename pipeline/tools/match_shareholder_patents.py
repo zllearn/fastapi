@@ -2,7 +2,6 @@
 import csv
 import json
 import re
-import sqlite3
 import sys
 from collections import defaultdict
 from datetime import date
@@ -11,6 +10,8 @@ from zipfile import ZipFile
 import xml.etree.ElementTree as ET
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from backend.database import connect  # noqa: E402
 from build_atlas_payload import read_xlsx_rows
 from fuzzy_match_unlinked_enterprises import ROOT, norm, xlsx
 
@@ -100,9 +101,9 @@ def main():
                  row.get('股东退出日期', ''), set())
     persons = {norm(p['person']) for p in paths}
     hits = defaultdict(dict)
-    conn = sqlite3.connect(f'file:{output / "unified_patent_families.sqlite3"}?mode=ro', uri=True)
-    family_ids = {str(r[0]) for r in conn.execute('select family_id from families')}
-    conn.close()
+    connection = connect()
+    family_ids = {str(row[0]) for row in connection.execute('SELECT family_id FROM families')}
+    connection.close()
     scanned = 0
     for row in patent_rows():
         scanned += 1

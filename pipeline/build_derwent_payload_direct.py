@@ -3,14 +3,17 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import sqlite3
+import sys
 from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent
-DATABASE = BASE_DIR / "output" / "unified_patent_families.sqlite3"
+sys.path.insert(0, str(BASE_DIR.parent))
+
+from backend.database import Connection, connect  # noqa: E402
+
 OUTPUT = BASE_DIR / "output" / "site-payloads" / "derwent-dashboard-data.js"
 
 TECHNOLOGY_ORDER = [f"B{index}" for index in range(10)]
@@ -56,35 +59,38 @@ def parse_date(value: object, fallback_year: int | None = None) -> date | None:
     return date(int(fallback_year), 1, 1) if fallback_year else None
 
 
-def aggregate(connection: sqlite3.Connection, table: str, column: str) -> dict[str, str]:
+def aggregate(connection: Connection, table: str, column: str) -> dict[str, str]:
+    # MySQL needs a derived-table alias, GROUP_CONCAT takes SEPARATOR rather
+    # than a second argument, and ORDER BY inside the aggregate keeps the joined
+    # tag list stable across runs (SQLite relied on the subquery's scan order).
     query = f"""
-        SELECT family_id, group_concat(value, '；')
+        SELECT family_id, GROUP_CONCAT(value ORDER BY value SEPARATOR '；')
         FROM (
-            SELECT family_id, trim({column}) value
+            SELECT family_id, TRIM(`{column}`) value
             FROM {table}
-            WHERE trim(coalesce({column}, '')) <> ''
-            GROUP BY family_id, trim({column})
-            ORDER BY family_id
-        ) GROUP BY family_id
+            WHERE TRIM(COALESCE(`{column}`, '')) <> ''
+            GROUP BY family_id, TRIM(`{column}`)
+        ) AS picked
+        GROUP BY family_id
     """
     return {str(row[0]): str(row[1] or "") for row in connection.execute(query)}
 
 
-def aggregate_owner_types(connection: sqlite3.Connection) -> dict[str, str]:
+def aggregate_owner_types(connection: Connection) -> dict[str, str]:
     """Aggregate current-owner types without treating absent owners as unreviewed entities."""
     query = """
-        SELECT family_id, group_concat(value, '；')
+        SELECT family_id, GROUP_CONCAT(value ORDER BY value SEPARATOR '；')
         FROM (
             SELECT family_id,
                    CASE
                      WHEN entity_name = '主体未识别' THEN '主体信息缺失'
-                     ELSE trim(enterprise_type)
+                     ELSE TRIM(enterprise_type)
                    END value
             FROM family_entities
-            WHERE trim(coalesce(enterprise_type, '')) <> ''
+            WHERE TRIM(COALESCE(enterprise_type, '')) <> ''
             GROUP BY family_id, value
-            ORDER BY family_id
-        ) GROUP BY family_id
+        ) AS picked
+        GROUP BY family_id
     """
     return {str(row[0]): str(row[1] or "") for row in connection.execute(query)}
 
@@ -229,15 +235,14 @@ def path_rows(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--database", type=Path, default=DATABASE)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
-    database = args.database.resolve()
     output = args.output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
-    connection = sqlite3.connect(database)
-    connection.row_factory = sqlite3.Row
-    metadata = dict(connection.execute("SELECT key,value FROM metadata"))
+    connection = connect()
+    # 会话默认 group_concat_max_len=1024，会静默截断聚合结果。
+    connection.execute("SET SESSION group_concat_max_len = 4194304")
+    metadata = dict(connection.execute("SELECT `key`, `value` FROM metadata"))
     applicant_names = aggregate(connection, "family_applicants", "applicant_name")
     # Enterprise type follows the confirmed current-owner entity convention.
     # Geography and displayed applicant names remain applicant-based.
@@ -453,13 +458,13 @@ def main() -> None:
     edges.sort(key=lambda item: (-item["spc"], item["source"], item["target"]))
     dated_nodes = [node for node in nodes if node["timeValue"] is not None]
     stats = {
-        "sourceFile": Path(metadata.get("source_xlsx", database.name)).name,
-        "sourceSize": database.stat().st_size,
-        "sourceMtime": datetime.fromtimestamp(database.stat().st_mtime).isoformat(timespec="seconds"),
+        "sourceFile": Path(metadata.get("source_xlsx", "")).name,
+        "sourceSha256": metadata.get("source_xlsx_sha256", ""),
+        "unifiedBuiltAt": metadata.get("generated_at_utc", ""),
         "records": len(records),
         "rawPn": sum(len(value) for value in family_members.values()),
         "rawCp": raw_cp,
-        "sourcePnFile": Path(metadata.get("source_xlsx", database.name)).name,
+        "sourcePnFile": Path(metadata.get("source_xlsx", "")).name,
         "sourcePnRows": len(records),
         "families": len(records),
         "sourceFamilies": len(records),
@@ -521,7 +526,7 @@ def main() -> None:
         "technologyLabels": TECHNOLOGY_LABELS,
         "dashboardMeta": {
             "title": "核聚变专利技术演进洞察",
-            "inputFile": Path(metadata.get("source_xlsx", database.name)).name,
+            "inputFile": Path(metadata.get("source_xlsx", "")).name,
             "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "dataScope": "IncoPat；简单专利族口径；引文方向为被引专利族到引用专利族；全量分析展示 B0–B9，引文网络不计 B0 与技术路线缺失产业二级节点",
             "cyclePolicy": "逆时间引用及同日成环方向边不进入主路径计算",

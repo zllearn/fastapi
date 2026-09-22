@@ -3,7 +3,7 @@
 Each payload is served from ``backend/cache/<name>.json`` (builder-derived) or
 ``backend/snapshots/<name>.json`` (upstream snapshot data without build code).
 Builder-derived caches are produced by re-running the original pipeline
-builders against the unified SQLite database, then stripping the
+builders against the unified MySQL database, then stripping the
 ``window.GLOBAL=...;`` wrapper.
 """
 from __future__ import annotations
@@ -50,15 +50,14 @@ def write_json_from_js(js_path: Path, json_path: Path) -> list[str]:
 
 
 PY = sys.executable
-DB = str(config.UNIFIED_DB)
 
 # name -> {command producing the .js, dependencies, primary global for docs}
+# The builders read the unified MySQL database from backend/config.py (.env).
 BUILDERS: dict[str, dict] = {
     "atlas-dashboard": {
         "global": "DASHBOARD_DATA",
         "js": config.CACHE / "atlas-dashboard.js",
         "command": [PY, str(config.PIPELINE / "build_atlas_payload.py"),
-                    "--database", DB,
                     "--enterprise-directory", str(config.ENTERPRISE_XLSX),
                     "--output", "{js}"],
         "cwd": str(config.PIPELINE),
@@ -67,7 +66,7 @@ BUILDERS: dict[str, dict] = {
         "global": "FUSION_DASHBOARD_DATA",
         "js": config.CACHE / "derwent-dashboard.js",
         "command": [PY, str(config.PIPELINE / "build_derwent_payload_direct.py"),
-                    "--database", DB, "--output", "{js}"],
+                    "--output", "{js}"],
         "cwd": str(config.PIPELINE),
     },
     "enterprise-insights": {
@@ -97,7 +96,7 @@ BUILDERS: dict[str, dict] = {
         "js": config.CACHE / "frontier-index.js",
         "command": [PY, str(config.PIPELINE / "build_frontier_enterprise_index.py"),
                     "--workbook", str(config.TOPIC_WORKBOOK),
-                    "--database", DB, "--output", "{js}"],
+                    "--output", "{js}"],
         "cwd": str(config.PIPELINE),
     },
 }

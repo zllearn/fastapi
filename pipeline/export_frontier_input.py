@@ -6,9 +6,14 @@ from __future__ import annotations
 import argparse
 import csv
 import re
-import sqlite3
+import sys
 from pathlib import Path
 
+
+PIPELINE_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(PIPELINE_ROOT.parent))
+
+from backend.database import connect  # noqa: E402
 
 TOKEN_RE = re.compile(r"[;\n\r|]+")
 
@@ -27,26 +32,24 @@ def citation_count(value: object) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--db", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
-    connection = sqlite3.connect(args.db)
-    connection.row_factory = sqlite3.Row
+    connection = connect()
     rows = connection.execute(
         '''
         SELECT f.family_id,
-               "家族代表公开（公告）号" AS publication_number,
-               "标题 (中文)" AS title_zh,
-               "标题 (英文)" AS title_en,
-               "摘要 (中文)" AS abstract_zh,
-               "摘要 (英文)" AS abstract_en,
-               "首次公开日" AS publication_date,
-               "最早优先权日" AS priority_date,
+               `家族代表公开（公告）号` AS publication_number,
+               `标题 (中文)` AS title_zh,
+               `标题 (英文)` AS title_en,
+               `摘要 (中文)` AS abstract_zh,
+               `摘要 (英文)` AS abstract_en,
+               `首次公开日` AS publication_date,
+               `最早优先权日` AS priority_date,
                priority_year,
-               "IPC" AS ipc,
-               "家族被引证" AS cited_by,
+               `IPC` AS ipc,
+               `家族被引证` AS cited_by,
                t.technical_feature,
                t.technology_code,
                t.technology_label,

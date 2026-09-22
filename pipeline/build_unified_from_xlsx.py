@@ -11,9 +11,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import re
-import sqlite3
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -23,25 +22,16 @@ from openpyxl import load_workbook
 
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_INPUT = ROOT.parent / "data" / "incopat_patent_families.xlsx"
-DEFAULT_OUTPUT = ROOT / "output" / "unified_patent_families.sqlite3"
+sys.path.insert(0, str(ROOT.parent))
 
-FAMILY_SOURCE_FIELDS = (
-    "序号", "家族ID", "家族代表公开（公告）号", "完整简单同族成员数",
-    "家族国家/地区数量", "家族IPC数量", "家族申请人数", "家族发明人数",
-    "家族是否有效", "标题 (中文)", "标题 (英文)", "摘要 (中文)",
-    "摘要 (英文)", "首项权利要求-中文", "独立权利要求", "技术功效句",
-    "用途", "IPC", "IPC主分类-小类", "IPC主分类-小类(释义)",
-    "国民经济分类", "国民经济行业(主)", "新兴产业分类", "新兴产业(主)",
-    "申请人", "标准化申请人", "当前权利人", "标准化当前权利人",
-    "申请人终属母公司(中文)", "申请人终属母公司(英文)", "申请人类型",
-    "申请人国家/地区", "申请人省市代码", "中国申请人地市", "中国申请人区县",
-    "当前专利权人地址", "家族引证", "家族被引证", "简单同族",
-    "同族国家/地区", "优先权日", "最早优先权日", "优先权国别",
-    "首次公开日", "合享价值度", "技术稳定性", "技术先进性", "保护范围",
-    "DWPI标题", "DWPI用途", "DWPI优势", "DWPI新颖性", "DWPI详细描述",
-    "DWPI技术要点", "DWPI分类号",
-)
+from backend import config, schema  # noqa: E402
+from backend.database import Connection, connect  # noqa: E402
+
+DEFAULT_INPUT = ROOT.parent / "data" / "incopat_patent_families.xlsx"
+
+# Column names are identical to the upstream workbook headers, so the canonical
+# list lives with the MySQL DDL and is re-exported here.
+FAMILY_SOURCE_FIELDS = schema.FAMILY_SOURCE_FIELDS
 
 TECH_SOURCE_FIELDS = (
     "技术特征", "技术分类代码", "技术分类", "具体技术路线代码",
@@ -145,119 +135,29 @@ def choose_mode(counter: Counter[str], default: str) -> str:
     return sorted(counter.items(), key=lambda item: (-item[1], item[0]))[0][0]
 
 
-def create_schema(connection: sqlite3.Connection) -> None:
-    family_columns = ",\n".join(f'"{field}" TEXT' for field in FAMILY_SOURCE_FIELDS)
-    connection.executescript(f'''
-        PRAGMA journal_mode=OFF;
-        PRAGMA synchronous=OFF;
-        PRAGMA temp_store=MEMORY;
-        PRAGMA foreign_keys=ON;
-        CREATE TABLE metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL) WITHOUT ROWID;
-        CREATE TABLE families(
-            family_id TEXT PRIMARY KEY,
-            source_patent_id INTEGER NOT NULL UNIQUE,
-            priority_year INTEGER,
-            {family_columns}
-        );
-        CREATE TABLE family_tech(
-            family_id TEXT PRIMARY KEY REFERENCES families(family_id),
-            processing_status TEXT NOT NULL,
-            technical_feature TEXT NOT NULL,
-            technology_code TEXT NOT NULL,
-            technology_label TEXT NOT NULL,
-            route_code TEXT NOT NULL,
-            route_label TEXT NOT NULL,
-            chain_level3_code TEXT NOT NULL,
-            chain_level1 TEXT NOT NULL,
-            chain_level2 TEXT NOT NULL,
-            chain_level3 TEXT NOT NULL,
-            rationale TEXT NOT NULL,
-            confidence TEXT NOT NULL,
-            error_message TEXT
-        );
-        CREATE TABLE entities(
-            entity_id INTEGER PRIMARY KEY,
-            representative_name TEXT NOT NULL UNIQUE,
-            enterprise_type TEXT NOT NULL,
-            source_part TEXT,
-            source_row INTEGER
-        );
-        CREATE TABLE family_entities(
-            family_id TEXT NOT NULL REFERENCES families(family_id),
-            entity_order INTEGER NOT NULL,
-            entity_id INTEGER REFERENCES entities(entity_id),
-            entity_name TEXT NOT NULL,
-            entity_source TEXT NOT NULL,
-            enterprise_type TEXT NOT NULL,
-            match_status TEXT NOT NULL,
-            PRIMARY KEY(family_id, entity_order)
-        ) WITHOUT ROWID;
-        CREATE TABLE family_applicants(
-            family_id TEXT NOT NULL REFERENCES families(family_id),
-            applicant_order INTEGER NOT NULL,
-            applicant_name TEXT NOT NULL,
-            entity_id INTEGER REFERENCES entities(entity_id),
-            enterprise_type TEXT NOT NULL,
-            match_status TEXT NOT NULL,
-            PRIMARY KEY(family_id, applicant_order)
-        ) WITHOUT ROWID;
-        CREATE TABLE owner_name_locations(
-            owner_name TEXT PRIMARY KEY,
-            entity_id INTEGER REFERENCES entities(entity_id),
-            raw_country TEXT,
-            country TEXT NOT NULL,
-            province TEXT,
-            city TEXT,
-            location_source TEXT NOT NULL,
-            confidence TEXT,
-            evidence_count INTEGER NOT NULL
-        ) WITHOUT ROWID;
-        CREATE TABLE entity_locations(
-            entity_id INTEGER PRIMARY KEY REFERENCES entities(entity_id),
-            raw_country TEXT,
-            country TEXT NOT NULL,
-            province TEXT,
-            city TEXT,
-            location_source TEXT NOT NULL,
-            evidence_count INTEGER NOT NULL
-        ) WITHOUT ROWID;
-        CREATE TABLE family_applicant_geographies(
-            family_id TEXT NOT NULL REFERENCES families(family_id),
-            geo_order INTEGER NOT NULL,
-            raw_country TEXT,
-            country TEXT NOT NULL,
-            province TEXT,
-            city TEXT,
-            district TEXT,
-            PRIMARY KEY(family_id, geo_order)
-        ) WITHOUT ROWID;
-        CREATE TABLE family_entity_comparison(
-            family_id TEXT PRIMARY KEY REFERENCES families(family_id),
-            applicant_entities TEXT,
-            current_owner_entities TEXT,
-            both_present INTEGER NOT NULL,
-            raw_sets_equal INTEGER NOT NULL
-        ) WITHOUT ROWID;
-        CREATE TABLE quality_metrics(
-            metric TEXT PRIMARY KEY,
-            value TEXT NOT NULL,
-            status TEXT NOT NULL,
-            note TEXT
-        ) WITHOUT ROWID;
-    ''')
+def placeholders(count: int) -> str:
+    return ", ".join(["%s"] * count)
+
+
+def create_schema(connection: Connection) -> None:
+    """Recreate the unified schema in place; the dataset is rebuilt wholesale.
+
+    Foreign keys stay off during the load so insert order cannot fail on a
+    partially built table; schema.find_orphans() re-checks integrity after.
+    """
+    connection.run(["SET SESSION FOREIGN_KEY_CHECKS = 0"])
+    connection.run(schema.drop_statements())
+    connection.run(schema.create_statements())
+    connection.commit()
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     source = args.input.resolve()
-    output = args.output.resolve()
-    output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = output.with_suffix(output.suffix + ".building")
-    if temporary.exists():
-        temporary.unlink()
+    if not source.is_file():
+        raise SystemExit(f"找不到源表: {source}")
 
     workbook = load_workbook(source, read_only=True, data_only=True)
     sheet = workbook["简单专利族合并"]
@@ -268,12 +168,10 @@ def main() -> None:
         raise ValueError(f"输入表缺少字段: {missing}")
     position = {name: headers.index(name) for name in required}
 
-    connection = sqlite3.connect(temporary)
+    connection = connect()
     create_schema(connection)
-    family_sql = (
-        f'INSERT INTO families VALUES ({",".join("?" for _ in range(3 + len(FAMILY_SOURCE_FIELDS)))})'
-    )
-    tech_sql = f'INSERT INTO family_tech VALUES ({",".join("?" for _ in range(14))})'
+    family_sql = f"INSERT INTO families VALUES ({placeholders(3 + len(FAMILY_SOURCE_FIELDS))})"
+    tech_sql = f"INSERT INTO family_tech VALUES ({placeholders(14)})"
 
     families_batch: list[tuple] = []
     tech_batch: list[tuple] = []
@@ -407,15 +305,17 @@ def main() -> None:
         if len(families_batch) >= 1000:
             connection.executemany(family_sql, families_batch)
             connection.executemany(tech_sql, tech_batch)
-            connection.executemany("INSERT INTO family_applicant_geographies VALUES (?,?,?,?,?,?,?)", applicant_geo_batch)
-            connection.executemany("INSERT INTO family_entity_comparison VALUES (?,?,?,?,?)", comparison_batch)
+            connection.executemany("INSERT INTO family_applicant_geographies VALUES (%s,%s,%s,%s,%s,%s,%s)", applicant_geo_batch)
+            connection.executemany("INSERT INTO family_entity_comparison VALUES (%s,%s,%s,%s,%s)", comparison_batch)
             families_batch.clear(); tech_batch.clear(); applicant_geo_batch.clear(); comparison_batch.clear()
+            # 每个批次落盘，避免整库构建堆积成单个巨型事务。
+            connection.commit()
 
     if families_batch:
         connection.executemany(family_sql, families_batch)
         connection.executemany(tech_sql, tech_batch)
-        connection.executemany("INSERT INTO family_applicant_geographies VALUES (?,?,?,?,?,?,?)", applicant_geo_batch)
-        connection.executemany("INSERT INTO family_entity_comparison VALUES (?,?,?,?,?)", comparison_batch)
+        connection.executemany("INSERT INTO family_applicant_geographies VALUES (%s,%s,%s,%s,%s,%s,%s)", applicant_geo_batch)
+        connection.executemany("INSERT INTO family_entity_comparison VALUES (%s,%s,%s,%s,%s)", comparison_batch)
 
     # Stable entity IDs are assigned by normalized grouping key.
     entity_ids: dict[str, int] = {}
@@ -433,8 +333,8 @@ def main() -> None:
         entity_ids[key] = entity_id
         entity_rows.append((entity_id, representative, enterprise_type, "合并Excel标准化当前权利人归并", None))
         location_rows.append((entity_id, raw_country, country, province, city, "Excel回填字段", sum(entity_locations[key].values())))
-    connection.executemany("INSERT INTO entities VALUES (?,?,?,?,?)", entity_rows)
-    connection.executemany("INSERT INTO entity_locations VALUES (?,?,?,?,?,?,?)", location_rows)
+    connection.executemany("INSERT INTO entities VALUES (%s,%s,%s,%s,%s)", entity_rows)
+    connection.executemany("INSERT INTO entity_locations VALUES (%s,%s,%s,%s,%s,%s,%s)", location_rows)
 
     family_entity_rows = []
     for item in pending_entities:
@@ -443,7 +343,7 @@ def main() -> None:
                 item["family_id"], order, entity_ids[key], owner, source_name, enterprise_type,
                 "Excel字段直接归并" if source_name == "当前权利人" else "Excel回退链",
             ))
-    connection.executemany("INSERT INTO family_entities VALUES (?,?,?,?,?,?,?)", family_entity_rows)
+    connection.executemany("INSERT INTO family_entities VALUES (%s,%s,%s,%s,%s,%s,%s)", family_entity_rows)
 
     owner_location_rows = []
     for owner, evidence in sorted(owner_locations.items()):
@@ -452,7 +352,7 @@ def main() -> None:
             owner, entity_ids.get(key), raw_country, country, province, city,
             "Excel回填字段", "已回填", sum(evidence.values()),
         ))
-    connection.executemany("INSERT INTO owner_name_locations VALUES (?,?,?,?,?,?,?,?,?)", owner_location_rows)
+    connection.executemany("INSERT INTO owner_name_locations VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)", owner_location_rows)
 
     applicant_rows = []
     key_by_normalized_display = {normalized(row[1]): row[0] for row in entity_rows}
@@ -464,7 +364,7 @@ def main() -> None:
                 family_id, order, entity_id and applicant or applicant, entity_id,
                 type_by_id.get(entity_id, "待核验"), "当前权利人实体同名匹配" if entity_id else "未匹配",
             ))
-    connection.executemany("INSERT INTO family_applicants VALUES (?,?,?,?,?,?)", applicant_rows)
+    connection.executemany("INSERT INTO family_applicants VALUES (%s,%s,%s,%s,%s,%s)", applicant_rows)
 
     generated = datetime.now(timezone.utc).isoformat(timespec="seconds")
     metadata = {
@@ -479,7 +379,7 @@ def main() -> None:
         "source_xlsx": str(source),
         "source_xlsx_sha256": sha256(source),
     }
-    connection.executemany("INSERT INTO metadata VALUES (?,?)", metadata.items())
+    connection.executemany("INSERT INTO metadata VALUES (%s,%s)", metadata.items())
 
     quality = [
         ("简单专利族数", str(len(family_ids)), "通过" if len(family_ids) == 68151 else "异常", "家族ID唯一"),
@@ -488,50 +388,31 @@ def main() -> None:
         ("权利人实体数", str(len(entity_rows)), "信息", "标准化字段后台归并，页面展示当前权利人"),
         ("当前权利人名称数", str(len(owner_location_rows)), "信息", "含地理回填"),
     ]
-    connection.executemany("INSERT INTO quality_metrics VALUES (?,?,?,?)", quality)
-    connection.executescript('''
-        CREATE INDEX idx_family_priority_year ON families(priority_year);
-        CREATE INDEX idx_tech_code ON family_tech(technology_code);
-        CREATE INDEX idx_tech_chain1 ON family_tech(chain_level1);
-        CREATE INDEX idx_family_entity_entity ON family_entities(entity_id, family_id);
-        CREATE INDEX idx_family_entity_type ON family_entities(enterprise_type, family_id);
-        CREATE INDEX idx_family_applicant_entity ON family_applicants(entity_id, family_id);
-        CREATE INDEX idx_family_applicant_type ON family_applicants(enterprise_type, family_id);
-        CREATE INDEX idx_owner_location_country ON owner_name_locations(country);
-        CREATE INDEX idx_entity_location_country ON entity_locations(country);
-        CREATE INDEX idx_applicant_geo_country ON family_applicant_geographies(country, family_id);
-        CREATE INDEX idx_applicant_geo_china ON family_applicant_geographies(province, city, family_id);
-        CREATE VIEW v_family_complete AS
-            SELECT f.*, t.technical_feature, t.technology_code, t.technology_label,
-                   t.route_code, t.route_label, t.chain_level3_code,
-                   t.chain_level1, t.chain_level2, t.chain_level3,
-                   t.rationale AS classification_rationale,
-                   t.confidence AS classification_confidence
-            FROM families f JOIN family_tech t USING(family_id);
-        CREATE VIEW v_family_current_owner_geography AS
-            SELECT fe.family_id, fe.entity_order, fe.entity_id, fe.entity_name,
-                   fe.enterprise_type, el.raw_country, el.country, el.province,
-                   el.city, el.location_source
-            FROM family_entities fe LEFT JOIN entity_locations el USING(entity_id);
-        PRAGMA optimize;
-    ''')
+    connection.executemany("INSERT INTO quality_metrics VALUES (%s,%s,%s,%s)", quality)
     connection.commit()
 
+    # Indexes and views were created up front by create_schema(); re-enable the
+    # foreign keys and prove the load left no orphans, replacing sqlite's
+    # "PRAGMA integrity_check" gate.
+    connection.run(["SET SESSION FOREIGN_KEY_CHECKS = 1"])
+    connection.commit()
+    orphans = schema.find_orphans(connection)
+
     checks = {
+        "database": config.describe_mysql(),
         "families": connection.execute("SELECT COUNT(*) FROM families").fetchone()[0],
         "tech": connection.execute("SELECT COUNT(*) FROM family_tech").fetchone()[0],
         "entities": connection.execute("SELECT COUNT(*) FROM entities").fetchone()[0],
         "current_owner_families": connection.execute(
             "SELECT COUNT(DISTINCT family_id) FROM family_entities WHERE entity_source='当前权利人'"
         ).fetchone()[0],
-        "integrity": connection.execute("PRAGMA integrity_check").fetchone()[0],
+        "orphans": orphans,
     }
     connection.close()
     workbook.close()
-    if checks["families"] != 68151 or checks["tech"] != checks["families"] or checks["integrity"] != "ok":
+    if checks["families"] != 68151 or checks["tech"] != checks["families"] or orphans:
         raise RuntimeError(f"构建校验失败: {checks}")
-    os.replace(temporary, output)
-    print(json.dumps({"output": str(output), "source": str(source), **checks}, ensure_ascii=False, indent=2))
+    print(json.dumps({"source": str(source), **checks}, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

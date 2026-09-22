@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import sqlite3
+import sys
 import unicodedata
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
@@ -16,7 +16,11 @@ from zipfile import ZipFile
 
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_DB = ROOT / "output" / "unified_patent_families.sqlite3"
+sys.path.insert(0, str(ROOT.parent))
+
+from backend import config  # noqa: E402
+from backend.database import connect  # noqa: E402
+
 DEFAULT_OUTPUT = ROOT / "output" / "site-payloads" / "dashboard-data.js"
 DEFAULT_ENTERPRISE_DIRECTORY = ROOT.parent / "data" / "enterprise_directory.xlsx"
 
@@ -161,24 +165,22 @@ def empty_type_counts() -> dict[str, int]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--database", type=Path, default=DEFAULT_DB)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--enterprise-directory", type=Path, default=DEFAULT_ENTERPRISE_DIRECTORY)
     args = parser.parse_args()
 
-    connection = sqlite3.connect(args.database)
-    connection.row_factory = sqlite3.Row
-    metadata = dict(connection.execute("SELECT key,value FROM metadata"))
+    connection = connect()
+    metadata = dict(connection.execute("SELECT `key`, `value` FROM metadata"))
 
     families: dict[str, dict] = {}
     query = '''
-        SELECT family_id,priority_year,"最早优先权日" AS date,
-               "家族代表公开（公告）号" AS publication,
-               "标题 (中文)" AS title_cn,"标题 (英文)" AS title_en,
-               "IPC主分类-小类" AS ipc_subclass,
-               "家族引证" AS cites,"家族被引证" AS cited_by,
-               "合享价值度" AS value_score,"技术稳定性" AS stability_score,
-               "技术先进性" AS advanced_score,"保护范围" AS scope_score,
+        SELECT family_id,priority_year,`最早优先权日` AS date,
+               `家族代表公开（公告）号` AS publication,
+               `标题 (中文)` AS title_cn,`标题 (英文)` AS title_en,
+               `IPC主分类-小类` AS ipc_subclass,
+               `家族引证` AS cites,`家族被引证` AS cited_by,
+               `合享价值度` AS value_score,`技术稳定性` AS stability_score,
+               `技术先进性` AS advanced_score,`保护范围` AS scope_score,
                technical_feature,technology_code,technology_label,
                route_code,route_label,chain_level1,chain_level2,chain_level3
         FROM v_family_complete ORDER BY source_patent_id
@@ -238,8 +240,8 @@ def main() -> None:
     # groups entities by these names, but representative_name intentionally
     # remains a frequently occurring raw owner name for display.
     for row in connection.execute(
-        'SELECT fe.entity_id,fe.entity_order,f."当前权利人" AS raw_owners,'
-        'f."标准化当前权利人" AS standardized_owners '
+        'SELECT fe.entity_id,fe.entity_order,f.`当前权利人` AS raw_owners,'
+        'f.`标准化当前权利人` AS standardized_owners '
         'FROM family_entities fe JOIN families f USING(family_id) '
         "WHERE fe.entity_source='当前权利人' AND fe.entity_id IS NOT NULL"
     ):
@@ -521,8 +523,8 @@ def main() -> None:
     applicant_families: dict[str, set[str]] = defaultdict(set)
     parent_families: dict[str, set[str]] = defaultdict(set)
     for row in connection.execute('''
-        SELECT family_id,"申请人" AS applicant_raw,"标准化申请人" AS applicant_standardized,
-               "申请人终属母公司(中文)" AS parent_cn,"申请人终属母公司(英文)" AS parent_en
+        SELECT family_id,`申请人` AS applicant_raw,`标准化申请人` AS applicant_standardized,
+               `申请人终属母公司(中文)` AS parent_cn,`申请人终属母公司(英文)` AS parent_en
         FROM families
     '''):
         for name in split_values(row["applicant_raw"]) + split_values(row["applicant_standardized"]):
@@ -592,7 +594,7 @@ def main() -> None:
         china_types[enterprise_type] = len({fid for fid in china_ids if enterprise_type in family_types.get(fid, set())})
     payload = {
         "meta": {
-            "source": Path(metadata.get("source_xlsx", metadata.get("source_db", args.database.name))).name,
+            "source": Path(metadata.get("source_xlsx", config.MYSQL["database"])).name,
             "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "rows": len(families), "families": len(families), "yearMin": year_min, "yearMax": year_max,
             "countryCount": len(world_countries), "provinceCount": len(china_provinces), "cityCount": len(china_cities),

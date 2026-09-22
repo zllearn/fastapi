@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import sqlite3
+import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,11 +15,14 @@ from openpyxl import load_workbook
 
 PIPELINE_ROOT = Path(__file__).resolve().parent
 PROJECTS_ROOT = PIPELINE_ROOT.parent
+sys.path.insert(0, str(PROJECTS_ROOT))
+
+from backend.database import connect  # noqa: E402
+
 DEFAULT_WORKBOOK = (
     PROJECTS_ROOT
     / "analytics/incopat_run/incopat_simple_families_topic_indicators.xlsx"
 )
-DEFAULT_DATABASE = PIPELINE_ROOT / "output/unified_patent_families.sqlite3"
 DEFAULT_OUTPUT = PIPELINE_ROOT / "output/site-payloads/topic-enterprise-index.js"
 
 
@@ -62,14 +65,15 @@ def load_topic_patents(workbook_path: Path) -> tuple[dict[str, dict], dict[int, 
     return patents, topic_families
 
 
-def load_current_owners(
-    database_path: Path, family_ids: list[str]
-) -> dict[str, list[dict]]:
-    connection = sqlite3.connect(database_path)
-    connection.row_factory = sqlite3.Row
-    connection.execute("CREATE TEMP TABLE wanted_family (family_id TEXT PRIMARY KEY)")
+def load_current_owners(family_ids: list[str]) -> dict[str, list[dict]]:
+    # MySQL temporary tables are session-scoped, so one connection spans the
+    # create -> populate -> join sequence below.
+    connection = connect()
+    connection.execute(
+        "CREATE TEMPORARY TABLE wanted_family (family_id VARCHAR(64) PRIMARY KEY)"
+    )
     connection.executemany(
-        "INSERT OR IGNORE INTO wanted_family VALUES (?)",
+        "INSERT IGNORE INTO wanted_family VALUES (%s)",
         ((family_id,) for family_id in family_ids),
     )
     rows = connection.execute(
@@ -126,11 +130,13 @@ def load_current_owners(
     return owners_by_family
 
 
-def load_chain_dimensions(database_path: Path, family_ids: list[str]) -> dict[str, dict[str, str]]:
-    connection = sqlite3.connect(database_path)
-    connection.execute("CREATE TEMP TABLE wanted_chain_family (family_id TEXT PRIMARY KEY)")
+def load_chain_dimensions(family_ids: list[str]) -> dict[str, dict[str, str]]:
+    connection = connect()
+    connection.execute(
+        "CREATE TEMPORARY TABLE wanted_chain_family (family_id VARCHAR(64) PRIMARY KEY)"
+    )
     connection.executemany(
-        "INSERT OR IGNORE INTO wanted_chain_family VALUES (?)",
+        "INSERT IGNORE INTO wanted_chain_family VALUES (%s)",
         ((family_id,) for family_id in family_ids),
     )
     rows = connection.execute(
@@ -151,12 +157,10 @@ def load_chain_dimensions(database_path: Path, family_ids: list[str]) -> dict[st
     return chain_dimensions
 
 
-def build_payload(
-    workbook_path: Path, database_path: Path
-) -> dict:
+def build_payload(workbook_path: Path) -> dict:
     patents, topic_families = load_topic_patents(workbook_path)
-    owners_by_family = load_current_owners(database_path, list(patents))
-    chain_dimensions = load_chain_dimensions(database_path, list(patents))
+    owners_by_family = load_current_owners(list(patents))
+    chain_dimensions = load_chain_dimensions(list(patents))
     topics: dict[str, dict] = {}
     all_owner_families = 0
     all_mapped_families = 0
@@ -264,10 +268,9 @@ def build_payload(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workbook", type=Path, default=DEFAULT_WORKBOOK)
-    parser.add_argument("--database", type=Path, default=DEFAULT_DATABASE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
-    payload = build_payload(args.workbook, args.database)
+    payload = build_payload(args.workbook)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     args.output.write_text(

@@ -1,10 +1,17 @@
 [
  {
+  "path": ".env.example",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 202,
+  "sha256": "3fe0409519b4d5a4371b726bc688383f89153b0766734b8d7180a50c208ec4cc"
+ },
+ {
   "path": ".gitignore",
   "purpose": "项目文件",
   "source": "包内相对路径",
-  "bytes": 388,
-  "sha256": "1e7e3b8f6f962da1ea6cb1b1f574cd6f9a46fd3b1ad1adff9c20bafeea3b1f43"
+  "bytes": 440,
+  "sha256": "fc5974ea89a7f2767233f36efcdfa0dbce894b15e5a2701f077290f69200777d"
  },
  {
   "path": "analytics/dedup_patentbert_topic_cluster_score.py",
@@ -73,29 +80,43 @@
   "path": "backend/app.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 2880,
-  "sha256": "7901cf13592cbec2a0dd128d73fd0a5f4b34dca7c850d7b003afc3274fdd08db"
+  "bytes": 3019,
+  "sha256": "9c1a3fac70ee4e9ad44eda36f7dff3694fce6b6f3cd0170a4c260ded6a5d9c2f"
  },
  {
   "path": "backend/config.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 666,
-  "sha256": "d1e22cce225b0df16a2c37ad4a48aa340d22fac43b20c632294072c37f5f2220"
+  "bytes": 1714,
+  "sha256": "fd992f5b13d36e15465399d8ad01dde5bc399b44a10572147330c03c45918dac"
+ },
+ {
+  "path": "backend/database.py",
+  "purpose": "后端服务代码",
+  "source": "包内相对路径",
+  "bytes": 7051,
+  "sha256": "23321efb760f5f740ebdf9b9ab5a4a66b8f4b9c9792530eeac6fb921e1fc32eb"
  },
  {
   "path": "backend/db.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 1625,
-  "sha256": "882089ca272edddfb691943f65e2b0e5f7de1cc393ff03d2517f98d7dc9caff5"
+  "bytes": 1480,
+  "sha256": "0ef2d88455d590f01fb4a6e547ad15ef1f036460a855c90f2b13f7856db3d960"
  },
  {
   "path": "backend/payloads.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 7023,
-  "sha256": "43db434c451729177b900dba8150d7809f09fbb897d84b22bc277f734cf4a37a"
+  "bytes": 6998,
+  "sha256": "9cac3508a5026ed163dcb412a117a200970484a28694ccda6ef5868ff8d21fe2"
+ },
+ {
+  "path": "backend/schema.py",
+  "purpose": "后端服务代码",
+  "source": "包内相对路径",
+  "bytes": 12057,
+  "sha256": "fa2c8b97eb5ae9e469f940e4fb3deade33251039517bc78b4cfa11269c450861"
  },
  {
   "path": "backend/snapshots/frontier-dashboard.json",
@@ -164,8 +185,8 @@
   "path": "docs/DELIVERY.md",
   "purpose": "文档",
   "source": "包内相对路径",
-  "bytes": 6017,
-  "sha256": "24aeb8b2318fe2668d8729f5d5013ba64abecd6c6b6213a5295a4f0152afa19d"
+  "bytes": 6810,
+  "sha256": "a8b5ba01ef77ac46881c5e1384ec91e0f55510e5267fae536c4d25f01fa7ab22"
  },
  {
   "path": "frontend/assets/atlas/app.js",
@@ -535,8 +556,8 @@
   "path": "frontend/PRODUCT.md",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 3797,
-  "sha256": "ffcaa77ff1ff0b620db566dfaf58b1dc7e9bbb7d80a7d3025f0c49824f823f77"
+  "bytes": 3796,
+  "sha256": "ddfd6066075d8cbab631f970918623914c871cc1bcbccda8cf0b0cd404ae7f9e"
  },
  {
   "path": "frontend/shared/api-preload.js",
@@ -626,15 +647,15 @@
   "path": "pipeline/build_atlas_payload.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 35184,
-  "sha256": "5368fdff0a8414492899d9b27bf819ccb34627cbd55e4508d30bd962ba70c58b"
+  "bytes": 35099,
+  "sha256": "0cb781d4cf77e5b1f90037f243e0660dc56e2bb9075d5f572d6d04064dd0aaa7"
  },
  {
   "path": "pipeline/build_derwent_payload_direct.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 24080,
-  "sha256": "e3fd466f794cf70e95e64b21d67cb2d6356644e65856589304397834b3436d54"
+  "bytes": 24299,
+  "sha256": "4c9d10375249825b2e54ab277f80cc1c95328a2dea19c20907dd49c5a64b0b3c"
  },
  {
   "path": "pipeline/build_enterprise_directory_master.py",
@@ -654,29 +675,71 @@
   "path": "pipeline/build_frontier_enterprise_index.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 10571,
-  "sha256": "022a79dd44fce1b0e04cf963417d97064c37b6a84f38821166bea90851f6064c"
+  "bytes": 10479,
+  "sha256": "75f04461b562e3dc2a3b1e4ace379e0bb8b646302fc5dd0c7b6172d5a32b413f"
  },
  {
   "path": "pipeline/build_site.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 4321,
-  "sha256": "63235508aaa655dda95485877d9238025801744032cc06723b1692ee02ee9e17"
+  "bytes": 4597,
+  "sha256": "53fe0421bf4d72d71b58de240c18974d2f2e44b705c1d2ecc600d931d7e9a639"
  },
  {
   "path": "pipeline/build_unified_from_xlsx.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 28149,
-  "sha256": "37fdfc5ffdd62c1b6fc4d563039c9f96461d12bff76a9a77e4f7f07f62359281"
+  "bytes": 22513,
+  "sha256": "bc6e2a9706ea41279c2369e0394f3c8d4a18e6f61d19f457c15ebf0091790af9"
  },
  {
   "path": "pipeline/export_frontier_input.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 3627,
-  "sha256": "82cb9f039e3f8cecdba5945df4931214a5066a1bcd6e734f8649cc037da6bbf8"
+  "bytes": 3656,
+  "sha256": "1769e65cecfddbc3ac2b015f5aefc87fe9542d30b18da01a4cc4d4db53cfddcc"
+ },
+ {
+  "path": "pipeline/output/site-payloads/dashboard-data.js",
+  "purpose": "构建脚本",
+  "source": "包内相对路径",
+  "bytes": 81105911,
+  "sha256": "033b368deaff75acf0dca591691f27ac95e053dfa70893d56ad1a093078c506f"
+ },
+ {
+  "path": "pipeline/output/site-payloads/derwent-dashboard-data.js",
+  "purpose": "构建脚本",
+  "source": "包内相对路径",
+  "bytes": 108834856,
+  "sha256": "c68db11bdf37c5d736a4fcc9049d5eef3f4b1bf70e668a75e34ab65ce30e19be"
+ },
+ {
+  "path": "pipeline/output/site-payloads/enterprise-directory-master.js",
+  "purpose": "构建脚本",
+  "source": "包内相对路径",
+  "bytes": 2686100,
+  "sha256": "56f8416860358bd54eca0833e406e758e78991241ed6d38f7c2b4c1a3ffba36e"
+ },
+ {
+  "path": "pipeline/output/site-payloads/enterprise-insights.js",
+  "purpose": "构建脚本",
+  "source": "包内相对路径",
+  "bytes": 8708211,
+  "sha256": "9c878270bc65f17b092d0e758459897983021010edc1b9c4bbaaf99193c57d7c"
+ },
+ {
+  "path": "pipeline/output/site-payloads/shareholder-leads.js",
+  "purpose": "构建脚本",
+  "source": "包内相对路径",
+  "bytes": 594994,
+  "sha256": "e7136384ead7249292515ac86e8618e7eba7ebd9d9f35a5f0d3fb84cac7e7612"
+ },
+ {
+  "path": "pipeline/output/site-payloads/topic-enterprise-index.js",
+  "purpose": "构建脚本",
+  "source": "包内相对路径",
+  "bytes": 22442878,
+  "sha256": "d0642bf37c904068b004f5c719d2b37c51fc70c65b3c362846618a038e13e1eb"
  },
  {
   "path": "pipeline/output/剩余企业名称校准_排除49家_20260916.csv",
@@ -731,8 +794,8 @@
   "path": "pipeline/tools/build_shareholder_frontend.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 3129,
-  "sha256": "99ebd1b40236b3240b423983e18a88a6c0aca2aee0a50c814753c69658e65e89"
+  "bytes": 3163,
+  "sha256": "a4d884221bb205d0f9b68a1685c3a22c6c7e1931d64f6ecfadb43b38c957656a"
  },
  {
   "path": "pipeline/tools/export_unlinked_enterprises.py",
@@ -752,50 +815,57 @@
   "path": "pipeline/tools/match_shareholder_patents.py",
   "purpose": "构建脚本",
   "source": "包内相对路径",
-  "bytes": 14714,
-  "sha256": "f70f7e95643126227ab8e5b605f9e91f9a66b499c99e7225623a4b90fc4673df"
+  "bytes": 14755,
+  "sha256": "1f5f9f1cec2295c2d906cbdccdf3b5212c36245ed285e884940258791b02aa90"
  },
  {
   "path": "README.md",
   "purpose": "文档",
   "source": "包内相对路径",
-  "bytes": 2215,
-  "sha256": "72244765af785420f44008b7adcf2514a7bf9b9e7d68e4bc7fcad306c872e1db"
+  "bytes": 3014,
+  "sha256": "0d878131319c8b4c3b001f59ce11ae7d08ff3c0417ec89e0e5077b4b14ac13cd"
  },
  {
   "path": "requirements/build.txt",
   "purpose": "依赖清单",
   "source": "包内相对路径",
-  "bytes": 17,
-  "sha256": "9bba605fd7b6ea23038de15e5a1ae6714b3d3fb14ed2d6e6bedbfb0665ca2122"
+  "bytes": 33,
+  "sha256": "e1ee34bdff318d105e113eb8361b23bbcd6cf91c47ea539ef688791d4a32f379"
  },
  {
   "path": "requirements/frontier.txt",
   "purpose": "依赖清单",
   "source": "包内相对路径",
-  "bytes": 211,
-  "sha256": "65bd8f2b2a8abbb45c4071dc6b7e2f0ca8c94e5166fbedcf300ae580ef00b79e"
+  "bytes": 198,
+  "sha256": "19123753bb27a13a8cc016c542737a6d38d7c851984a9c855a006a99e6ec5fc1"
  },
  {
   "path": "requirements/server.txt",
   "purpose": "依赖清单",
   "source": "包内相对路径",
-  "bytes": 56,
-  "sha256": "9ff172265aea531475d8dfc82b6213fd4e7f248f7f1b1342864ce952b0cea5dd"
+  "bytes": 72,
+  "sha256": "4f639e9706a6bd765b7ca3a58a3d69f4c1a5b0d2e4499ea31a7e2e581d564248"
  },
  {
   "path": "scripts/build.py",
   "purpose": "构建/服务代码",
   "source": "包内相对路径",
-  "bytes": 1914,
-  "sha256": "1761d47b5022e33f83b3b6775e5047839228cc1a69babe2138fc9b686a104546"
+  "bytes": 2002,
+  "sha256": "152a078694fcdf207980aebfb49488230996297b1717ddbf460cfaa59ffdb7ae"
  },
  {
   "path": "scripts/make_manifest.py",
   "purpose": "构建/服务代码",
   "source": "包内相对路径",
-  "bytes": 2558,
-  "sha256": "7de55a8776c5d465313245de849a272e7135436a8e2ac01d2cadba1a2b6c98e4"
+  "bytes": 2703,
+  "sha256": "3cc18f59aaa244e89dbb67f448cb2efc1695a550ce70992a3454fad51499512c"
+ },
+ {
+  "path": "scripts/migrate_sqlite_to_mysql.py",
+  "purpose": "构建/服务代码",
+  "source": "包内相对路径",
+  "bytes": 6826,
+  "sha256": "7700ffd293f068ecb28319a39b533d4183982cdcaa47107c85ccdd60af172fd6"
  },
  {
   "path": "scripts/serve.py",

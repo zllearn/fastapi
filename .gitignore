@@ -11,9 +11,11 @@ inputs/
 data/
 incopat/output/
 pipeline/output/
-*.sqlite3
 fusion_weak_signal/incopat_run/*.xlsx
 analytics/incopat_run/*.xlsx
+
+# 本机 MySQL 连接凭据（只提交 .env.example）
+.env
 
 # 操作系统杂项
 Thumbs.db

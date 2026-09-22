@@ -40,10 +40,10 @@ def build(stamp):
     result = dict(date=f'{stamp[:4]}-{stamp[4:6]}-{stamp[6:]}',
                   source='data/shareholder_review.xlsx（股东穿透与历史任职_结果）',
                   patentSource='data/incopat_patent_families.xlsx（IncoPat简单专利族合并）',
-                  stats=json.loads(base.with_suffix('.json').read_text()), companies=list(companies.values()))
+                  stats=json.loads(base.with_suffix('.json').read_text(encoding='utf-8')), companies=list(companies.values()))
     target = ROOT/'output/site-payloads/shareholder-leads.js'
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text('window.SHAREHOLDER_LEADS = '+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n')
+    target.write_text('window.SHAREHOLDER_LEADS = '+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n', encoding='utf-8')
     assert len(companies) == result['stats']['source_companies']
     assert sum(len(c['patents'])>0 for c in companies.values()) == result['stats']['all_source_companies_with_hits']
     print(json.dumps(dict(file=str(target),companies=len(companies),bytes=target.stat().st_size),ensure_ascii=False))

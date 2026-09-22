@@ -23,7 +23,8 @@ if args.verify_files:
     if bad: raise SystemExit('文件缺失或变化：' + str(bad))
     print(f'完整性校验通过：{len(records)}项')
 if args.rebuild:
-    if importlib.util.find_spec('openpyxl') is None: raise SystemExit('请先执行 python -m pip install -r requirements/build.txt')
+    missing = [name for name in ('openpyxl', 'pymysql') if importlib.util.find_spec(name) is None]
+    if missing: raise SystemExit(f'缺少依赖 {missing}，请先执行 python -m pip install -r requirements/build.txt')
     sys.argv = ['build_site.py'] + (['--skip-unified'] if args.skip_unified else [])
     builder.main()
 if args.rebuild or args.shareholders_only:

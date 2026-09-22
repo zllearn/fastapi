@@ -30,7 +30,7 @@ web
 - 中国信息地图下方的横向机构类型年度趋势按当前权利人—专利族关联数堆叠；统计范围随全国、省份和城市选区同步切换。
 - 河流固定展示“时间区间 → 中国主体 → 产业链二级指标”；主体键使用 `entities.representative_name`，仅限定国家为中国，不限制主体类型。
 - 产业链二级指标使用 `family_tech.chain_level2`，完整展示当前主题中有效指标，“不适用”不进入河流。
-- 静态交付不依赖 Excel、SQLite、Python 或 Node.js；索引在构建时生成。
+- 静态交付不依赖 Excel、MySQL、Python 或 Node.js；索引在构建时生成。
 - 独立页面和统一入口 iframe 均必须支持企业画像跳转。
 
 ## Evidence on Hand

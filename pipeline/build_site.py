@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import shutil
-import sqlite3
 import subprocess
 import sys
 from pathlib import Path
@@ -14,12 +13,15 @@ from pathlib import Path
 
 INCOPAT_ROOT = Path(__file__).resolve().parent
 PROJECTS_ROOT = INCOPAT_ROOT.parent
+sys.path.insert(0, str(PROJECTS_ROOT))
+
+from backend import config, database  # noqa: E402
+
 SITE_ROOT = PROJECTS_ROOT / "frontend"
 DATA_ROOT = PROJECTS_ROOT / "data"
 SOURCE_XLSX = DATA_ROOT / "incopat_patent_families.xlsx"
 ENTERPRISE_XLSX = DATA_ROOT / "enterprise_directory.xlsx"
 TOPIC_WORKBOOK = PROJECTS_ROOT / "analytics/incopat_run/incopat_simple_families_topic_indicators.xlsx"
-UNIFIED_DB = INCOPAT_ROOT / "output/unified_patent_families.sqlite3"
 STATIC_PAYLOADS = INCOPAT_ROOT / "output/site-payloads"
 
 
@@ -36,6 +38,23 @@ def run(label: str, command: list[str]) -> None:
     subprocess.run(command, cwd=INCOPAT_ROOT, check=True)
 
 
+def recorded_source_sha256() -> str | None:
+    """SHA256 recorded in the unified database, or None when it cannot be read."""
+    try:
+        connection = database.connect()
+    except database.Error:
+        return None
+    try:
+        row = connection.execute(
+            "SELECT `value` FROM metadata WHERE `key`='source_xlsx_sha256'"
+        ).fetchone()
+    except database.Error:
+        return None
+    finally:
+        connection.close()
+    return "" if row is None else str(row[0])
+
+
 def validate_inputs() -> None:
     required = {
         "正式合并专利数据": SOURCE_XLSX,
@@ -50,19 +69,16 @@ def validate_inputs() -> None:
     if missing:
         raise SystemExit("缺少网站构建依赖：\n- " + "\n- ".join(missing))
 
-    if UNIFIED_DB.is_file():
-        connection = sqlite3.connect(UNIFIED_DB)
-        row = connection.execute(
-            "SELECT value FROM metadata WHERE key='source_xlsx_sha256'"
-        ).fetchone()
-        connection.close()
-        recorded = str(row[0]) if row else ""
-        actual = sha256(SOURCE_XLSX)
-        if recorded and recorded != actual:
-            raise SystemExit(
-                "正式合并专利数据与当前统一数据库来源不一致：\n"
-                f"- 数据库记录：{recorded}\n- 当前文件：{actual}"
-            )
+    recorded = recorded_source_sha256()
+    actual = sha256(SOURCE_XLSX)
+    if recorded is None:
+        print(f"统一库不可达或无 metadata，跳过来源一致性校验（{config.describe_mysql()}）。")
+    elif recorded and recorded != actual:
+        raise SystemExit(
+            "正式合并专利数据与当前统一数据库来源不一致：\n"
+            f"- 数据库记录：{recorded}\n- 当前文件：{actual}"
+        )
+    elif recorded:
         print(f"主数据校验通过：{actual}")
     print("网站构建依赖检查通过。")
 
@@ -84,18 +100,17 @@ def main() -> None:
     python = sys.executable
     STATIC_PAYLOADS.mkdir(parents=True, exist_ok=True)
     if not args.skip_unified:
-        run("统一专利族数据库", [python, "build_unified_from_xlsx.py", "--input", str(SOURCE_XLSX), "--output", str(UNIFIED_DB)])
+        run("统一专利族数据库", [python, "build_unified_from_xlsx.py", "--input", str(SOURCE_XLSX)])
     run("企业与地理载荷", [
         python, "build_atlas_payload.py",
-        "--database", str(UNIFIED_DB),
         "--enterprise-directory", str(ENTERPRISE_XLSX),
         "--output", str(STATIC_PAYLOADS / "dashboard-data.js"),
     ])
-    run("技术演进载荷", [python, "build_derwent_payload_direct.py", "--database", str(UNIFIED_DB), "--output", str(STATIC_PAYLOADS / "derwent-dashboard-data.js")])
+    run("技术演进载荷", [python, "build_derwent_payload_direct.py", "--output", str(STATIC_PAYLOADS / "derwent-dashboard-data.js")])
     run("企业分析载荷", ["node", "build_enterprise_insights.js"])
     run("核验企业名录", [python, "build_enterprise_directory_master.py", str(ENTERPRISE_XLSX), str(STATIC_PAYLOADS / "enterprise-directory-master.js")])
     if not args.skip_frontier:
-        run("前沿主题企业索引", [python, str(INCOPAT_ROOT / "build_frontier_enterprise_index.py"), "--workbook", str(TOPIC_WORKBOOK), "--database", str(UNIFIED_DB), "--output", str(STATIC_PAYLOADS / "topic-enterprise-index.js")])
+        run("前沿主题企业索引", [python, str(INCOPAT_ROOT / "build_frontier_enterprise_index.py"), "--workbook", str(TOPIC_WORKBOOK), "--output", str(STATIC_PAYLOADS / "topic-enterprise-index.js")])
     run("独立页面校验", [python, "sync_site_pages.py", "--site", str(SITE_ROOT)])
     print("\n网站静态数据构建完成。")
 

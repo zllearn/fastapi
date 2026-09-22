@@ -1,5 +1,5 @@
 # Optional: only needed to rerun topic clustering or the upstream dashboard generator.
--r requirements-build.txt
+-r build.txt
 numpy
 pandas
 scikit-learn

@@ -8,10 +8,11 @@
 
 ```sh
 python -m pip install -r requirements/server.txt
+cp .env.example .env           # 填入本机 MySQL 账号密码
 python scripts/serve.py            # http://127.0.0.1:8000/index.html
 ```
 
-网站数据由 `backend/` 的 FastAPI 服务从统一 SQLite 库派生的载荷缓存经 `/api/payload/*` 提供给前端，不再以内联 JS 随页面分发。首次启动自动校验 `data/` 源表并在后台补齐缺失的载荷缓存（`backend/cache/`；页面右下角显示"数据构建中"直至就绪）。`python scripts/serve.py --rebuild-payloads` 强制重建全部载荷。API 一览见 `http://127.0.0.1:8000/docs`：`/api/payload/<名称>`（9 个页面载荷）、`/api/db/meta|stats|families/<家族ID>`（统一库实时查询）、`/api/health`。
+网站数据由 `backend/` 的 FastAPI 服务从 MySQL 统一库派生的载荷缓存经 `/api/payload/*` 提供给前端，不再以内联 JS 随页面分发。MySQL 连接只从 `.env`（或同名环境变量）读取，密码不入仓库；库内表结构由 `backend/schema.py` 单点定义。首次启动自动校验 `data/` 源表并在后台补齐缺失的载荷缓存（`backend/cache/`；页面右下角显示"数据构建中"直至就绪）。`python scripts/serve.py --rebuild-payloads` 强制重建全部载荷。API 一览见 `http://127.0.0.1:8000/docs`：`/api/payload/<名称>`（9 个页面载荷）、`/api/db/meta|stats|families/<家族ID>`（统一库实时查询）、`/api/health`。
 
 frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/frontier-dashboard.json`、`frontend/assets/frontier/frontier-app.js`）。旧的纯静态直开方式（原 `启动网站.py`）已随静态载荷一并移除。注意：页面是演示形态，前端登录不等于服务端鉴权；公网部署需自行加访问控制，且只发布必要接口。
 
@@ -20,20 +21,20 @@ frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/
 | 路径 | 用途 |
 | --- | --- |
 | frontend/ | HTML、CSS、JS、图片、地图/图表库；含最新精简版股东可能关联专利展示 |
-| backend/ | FastAPI 服务：app/config/db/payloads + snapshots（随包快照数据）+ tools；cache 为可再生载荷缓存 |
+| backend/ | FastAPI 服务：app/config/database（MySQL 兼容层）/schema（建表与外键）/db/payloads + snapshots（随包快照数据）+ tools；cache 为可再生载荷缓存 |
 | pipeline/ | 全部构建脚本（统一库、图谱、技术演进、企业画像/名录、主题索引）；tools 为股东关联所需脚本；output 为生成产物与核验报告 |
 | data/ | 正式专利（incopat_patent_families.xlsx）、企业名单（enterprise_directory.xlsx）、股东结果（shareholder_review.xlsx）三个源表，仅维护端使用 |
 | analytics/ | 主题聚类/指标和上游页面生成代码、当前主题工作簿、已生成主题文本 |
-| scripts/ | 入口：serve.py（起服务）、build.py（交付校验/重建） |
+| scripts/ | 入口：serve.py（起服务）、build.py（交付校验/重建）、migrate_sqlite_to_mysql.py（把旧版 SQLite 统一库导入 MySQL） |
 | docs/ | 本交付说明 |
 | manifest/ | delivery_manifest.json/.csv（每文件用途与 SHA256）、dependency_check.json（本地资源核验） |
 | requirements/ | build.txt / server.txt / frontier.txt 三套依赖 |
 
-数据文件（data/、统一库、载荷缓存、pipeline/output）不入 Git，见 `.gitignore`；代码与前端资源由 Git 跟踪。
+数据文件（data/、载荷缓存、pipeline/output）不入 Git，`.env` 凭据同样不入 Git（只提交 `.env.example`），见 `.gitignore`；代码与前端资源由 Git 跟踪。统一库存放在 MySQL 中，不是包内文件。
 
 ## 重建与检查
 
-Python 3.10+、Node.js（当前构建代码不需要 npm 安装）。建议创建新虚拟环境，不复制开发机虚拟环境。
+Python 3.10+、Node.js（当前构建代码不需要 npm 安装）、MySQL 8.0+（已在 8.4.9 验证，需 utf8mb4）。建议创建新虚拟环境，不复制开发机虚拟环境。
 
 ```sh
 python -m pip install -r requirements/build.txt
@@ -41,7 +42,7 @@ python scripts/build.py --verify-files
 python scripts/build.py --rebuild
 ```
 
-不带 `--rebuild` 默认只检查。完整重建会覆盖生成数据；Git 基线提交可作为恢复点。约 500MB 的统一 SQLite（`pipeline/output/unified_patent_families.sqlite3`）是由正式专利 Excel 生成的中间产物，不入 Git 也不打包分发；首次完整重建会生成它，以后可用 `--rebuild --skip-unified` 复用。
+不带 `--rebuild` 默认只检查。完整重建会覆盖生成数据；Git 基线提交可作为恢复点。统一库现在是 MySQL 中的 11 张表加 2 个视图（约 6.8 万专利族、56 万行），`--rebuild` 会先 `DROP` 再重建这些表并入库，因此**只对可丢弃的开发库执行**；已交付的旧版 SQLite 库（`pipeline/output/unified_patent_families.sqlite3`，约 500MB，中间产物、不入 Git）可用 `python scripts/migrate_sqlite_to_mysql.py --reset` 原样导入，导入脚本会逐表比对行数、外键孤儿与中文字段往返。入库完成后 `--rebuild --skip-unified` 可复用 MySQL 数据只重建载荷。
 
 股东前端单独刷新：`python scripts/build.py --shareholders-only`。它从 20260916 核验报告生成，不会自动核验人员身份、校准企业名或确认权属迁移。报告中 XLSX、两个 CSV 和 JSON 是现有构建脚本的实际输入，不是旧版本备份。
 

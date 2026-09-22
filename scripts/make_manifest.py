@@ -6,11 +6,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCLUDE_DIRS = {".git", "__pycache__", "cache"}
-EXCLUDE_FILES = {Path("manifest/delivery_manifest.json"), Path("manifest/delivery_manifest.csv")}
+EXCLUDE_FILES = {Path("manifest/delivery_manifest.json"), Path("manifest/delivery_manifest.csv"), Path(".env")}
+# 统一库已迁至 MySQL，遗留的 .sqlite3 中间产物不属于交付内容
+EXCLUDE_SUFFIXES = {".sqlite3", ".tmp", ".pyc"}
 PURPOSES = [
     (".html", "前端页面"), (".css", "前端样式"), (".js", "前端/构建代码"),
     (".py", "构建/服务代码"), (".md", "文档"), (".json", "数据或配置"),
-    (".csv", "核验报告"), (".xlsx", "源数据"), (".sqlite3", "统一数据库"),
+    (".csv", "核验报告"), (".xlsx", "源数据"),
     (".txt", "依赖清单"), (".png", "图片资源"), (".jpg", "图片资源"),
     (".svg", "图片资源"), (".woff2", "字体资源"), (".woff", "字体资源"),
 ]
@@ -44,7 +46,7 @@ def sha256(path: Path) -> str:
 records = []
 for path in sorted(ROOT.rglob("*")):
     rel = path.relative_to(ROOT)
-    if not path.is_file() or set(rel.parts[:-1]) & EXCLUDE_DIRS or rel in EXCLUDE_FILES:
+    if not path.is_file() or set(rel.parts[:-1]) & EXCLUDE_DIRS or rel in EXCLUDE_FILES or rel.suffix in EXCLUDE_SUFFIXES:
         continue
     records.append({
         "path": rel.as_posix(),
