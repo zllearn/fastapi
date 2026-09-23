@@ -5,8 +5,8 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse, Response
 
 from . import config, database, db, payloads
 
@@ -39,7 +39,7 @@ def health():
 
 
 @app.get("/api/payload/{name}")
-def payload(name: str):
+def payload(name: str, request: Request):
     if name not in PAYLOAD_NAMES:
         raise HTTPException(404, f"未知载荷: {name}")
     state = payloads.ensure(name)
@@ -47,8 +47,20 @@ def payload(name: str):
         return JSONResponse({"detail": f"载荷正在构建中: {name}"}, status_code=503, headers={"Retry-After": "10"})
     path = payloads.json_path(name)
     stat = path.stat()
-    etag = f'"{name}-{stat.st_mtime_ns:x}-{stat.st_size:x}"'
-    return FileResponse(path, media_type="application/json", headers={"ETag": etag})
+    base = f"{name}-{stat.st_mtime_ns:x}-{stat.st_size:x}"
+    headers = {"Vary": "Accept-Encoding"}
+    serve_gzip = "gzip" in request.headers.get("accept-encoding", "").lower()
+    if serve_gzip:
+        etag = f'"{base}-gz"'
+        body = payloads.ensure_gzip(path)
+        headers["Content-Encoding"] = "gzip"
+    else:
+        etag = f'"{base}"'
+        body = path
+    headers["ETag"] = etag
+    if request.headers.get("if-none-match") == etag:
+        return Response(status_code=304, headers=headers)
+    return FileResponse(body, media_type="application/json", headers=headers)
 
 
 @app.get("/api/db/meta")

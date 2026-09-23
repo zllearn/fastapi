@@ -10,8 +10,8 @@
   "path": ".gitignore",
   "purpose": "项目文件",
   "source": "包内相对路径",
-  "bytes": 440,
-  "sha256": "fc5974ea89a7f2767233f36efcdfa0dbce894b15e5a2701f077290f69200777d"
+  "bytes": 517,
+  "sha256": "310c1dcd5e8d317370cd081fb18d29d1d3382bb95f7ccd34cb21ab180491275e"
  },
  {
   "path": "analytics/dedup_patentbert_topic_cluster_score.py",
@@ -80,8 +80,8 @@
   "path": "backend/app.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 3019,
-  "sha256": "9c1a3fac70ee4e9ad44eda36f7dff3694fce6b6f3cd0170a4c260ded6a5d9c2f"
+  "bytes": 3498,
+  "sha256": "552724aec6dd84684609595c05025b1097e272f7a381fe674b00f76b29b8db52"
  },
  {
   "path": "backend/config.py",
@@ -108,8 +108,8 @@
   "path": "backend/payloads.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 6998,
-  "sha256": "9cac3508a5026ed163dcb412a117a200970484a28694ccda6ef5868ff8d21fe2"
+  "bytes": 8024,
+  "sha256": "f73d827186df751e1412788f5601b0cce46dc70edbfd4c2e7b9a85818ba72510"
  },
  {
   "path": "backend/schema.py",
@@ -185,8 +185,8 @@
   "path": "docs/DELIVERY.md",
   "purpose": "文档",
   "source": "包内相对路径",
-  "bytes": 6810,
-  "sha256": "a8b5ba01ef77ac46881c5e1384ec91e0f55510e5267fae536c4d25f01fa7ab22"
+  "bytes": 7120,
+  "sha256": "a7fe289b7df7eed48feedf0af2eaa53c5acd5257e27a167e9223b64776c94cee"
  },
  {
   "path": "frontend/assets/atlas/app.js",
@@ -857,8 +857,8 @@
   "path": "scripts/make_manifest.py",
   "purpose": "构建/服务代码",
   "source": "包内相对路径",
-  "bytes": 2703,
-  "sha256": "3cc18f59aaa244e89dbb67f448cb2efc1695a550ce70992a3454fad51499512c"
+  "bytes": 2710,
+  "sha256": "3effc83c24e7e71ddc5f84d356b941ecbaeb43755818d326e887037cb8a25659"
  },
  {
   "path": "scripts/migrate_sqlite_to_mysql.py",

@@ -16,6 +16,8 @@ python scripts/serve.py            # http://127.0.0.1:8000/index.html
 
 frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/frontier-dashboard.json`、`frontend/assets/frontier/frontier-app.js`）。旧的纯静态直开方式（原 `启动网站.py`）已随静态载荷一并移除。注意：页面是演示形态，前端登录不等于服务端鉴权；公网部署需自行加访问控制，且只发布必要接口。
 
+`/api/payload/*` 按 `Accept-Encoding` 协商返回预压缩旁路文件（构建/写入载荷时自动生成同名 `.json.gz`，全量 229MB 约压至 41MB），并带 ETag + `Vary: Accept-Encoding`，二次访问命中 304 不再传体。旁路 `.gz` 属可再生产物，不入 Git、不入交付清单。
+
 ## 目录结构（2026-09-21 重组后）
 
 | 路径 | 用途 |

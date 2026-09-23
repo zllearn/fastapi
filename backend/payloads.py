@@ -8,8 +8,11 @@ builders against the unified MySQL database, then stripping the
 """
 from __future__ import annotations
 
+import gzip
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import threading
@@ -46,7 +49,33 @@ def write_json_from_js(js_path: Path, json_path: Path) -> list[str]:
     tmp = json_path.with_suffix(".tmp")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     tmp.replace(json_path)
+    ensure_gzip(json_path)
     return list(values)
+
+
+def gzip_path(json_path: Path) -> Path:
+    return json_path.with_name(json_path.name + ".gz")
+
+
+def ensure_gzip(json_path: Path) -> Path:
+    """Return the pre-compressed sidecar, (re)generating it when stale.
+
+    Bandwidth is the bottleneck for remote access; payloads compress ~4:1.
+    Compression happens at build time so no request ever pays it, and the
+    atomic replace keeps concurrent readers on either the old or new file.
+    """
+    gz = gzip_path(json_path)
+    source = json_path.stat()
+    if gz.is_file():
+        compressed = gz.stat()
+        if compressed.st_size > 0 and int(compressed.st_mtime) >= int(source.st_mtime):
+            return gz
+    tmp = gz.with_name(gz.name + ".tmp")
+    with json_path.open("rb") as src, tmp.open("wb") as dst:
+        with gzip.GzipFile(filename="", mode="wb", compresslevel=9, fileobj=dst) as out:
+            shutil.copyfileobj(src, out, length=16 * 1024 * 1024)
+    os.replace(tmp, gz)
+    return gz
 
 
 PY = sys.executable

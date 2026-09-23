@@ -6,6 +6,9 @@ __pycache__/
 server/cache/
 backend/cache/
 
+# 载荷预压缩旁路文件（服务端构建时自动生成）
+*.json.gz
+
 # 大体积数据文件：不进版本历史，靠 manifest+SHA256 核验完整性
 inputs/
 data/
