@@ -3,8 +3,8 @@
   "path": ".env.example",
   "purpose": "项目文件",
   "source": "包内相对路径",
-  "bytes": 202,
-  "sha256": "3fe0409519b4d5a4371b726bc688383f89153b0766734b8d7180a50c208ec4cc"
+  "bytes": 607,
+  "sha256": "3430fe644cdd3b39e8b358c362a8a5f1cb220b5bb97c02bcc9efefca4645ad62"
  },
  {
   "path": ".gitignore",
@@ -80,15 +80,22 @@
   "path": "backend/app.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 3498,
-  "sha256": "552724aec6dd84684609595c05025b1097e272f7a381fe674b00f76b29b8db52"
+  "bytes": 5623,
+  "sha256": "8de13311011ec40f644a7edd67a5a96f253ce9331476603fd3ff5654e1744e3f"
+ },
+ {
+  "path": "backend/auth.py",
+  "purpose": "后端服务代码",
+  "source": "包内相对路径",
+  "bytes": 3680,
+  "sha256": "6bad4d2d0126d5052aa6d119662b315a516a1802540c7d7209bde8445a602d38"
  },
  {
   "path": "backend/config.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 1714,
-  "sha256": "fd992f5b13d36e15465399d8ad01dde5bc399b44a10572147330c03c45918dac"
+  "bytes": 2120,
+  "sha256": "ad5bdd4ea0f65379810f7150962bdbda1627991cc193ecebf266c25e71692fda"
  },
  {
   "path": "backend/database.py",
@@ -185,8 +192,8 @@
   "path": "docs/DELIVERY.md",
   "purpose": "文档",
   "source": "包内相对路径",
-  "bytes": 7120,
-  "sha256": "a7fe289b7df7eed48feedf0af2eaa53c5acd5257e27a167e9223b64776c94cee"
+  "bytes": 7959,
+  "sha256": "743ecd511c826fd73a549f66c568c6e4ee325e7a82e675f18b632496d3b52344"
  },
  {
   "path": "frontend/assets/atlas/app.js",
@@ -521,15 +528,15 @@
   "path": "frontend/enterprise.html",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 21726,
-  "sha256": "7409bec4256c40996eeae15a82f54036cae6901fb4d790488ff2b62b51d18e97"
+  "bytes": 21727,
+  "sha256": "9e02c256b1aeaed407216f02687d340e53f72bb8dd2c8ba01eb34f17a2530cc5"
  },
  {
   "path": "frontend/frontier.html",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 15277,
-  "sha256": "be155db79cbd3064a2a5b1ee5b79336dafebc805c168a023a963dffc86cd7d4a"
+  "bytes": 14656,
+  "sha256": "f58155d1069af2b672c296c399051bfbfc697e3bc173b79aa339a5566d2b8670"
  },
  {
   "path": "frontend/home.html",
@@ -542,15 +549,15 @@
   "path": "frontend/index.html",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 8155,
-  "sha256": "d91688e51d68c3a0a7fab57f5c4f616903821436c06f939cbedd2fa6e0783c2f"
+  "bytes": 8142,
+  "sha256": "6b242093237e02dd1b80f5bc3e6f93f11496a43da4db6a3a35b272bdd4061f02"
  },
  {
   "path": "frontend/industry.html",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 4573,
-  "sha256": "a595ff71dfc72006b22c3800c1d54290292b9e9855d13b9a0a03c6495f1ad506"
+  "bytes": 4574,
+  "sha256": "99029d42ef80b87a63607766e60455a5aa85019b1cf90cb5ec266d3298918598"
  },
  {
   "path": "frontend/PRODUCT.md",
@@ -563,8 +570,8 @@
   "path": "frontend/shared/api-preload.js",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 2428,
-  "sha256": "2be86d6631648201226a9dad997fc95c5abed8ccbabdc47412c1dbacc5c28ee4"
+  "bytes": 2626,
+  "sha256": "7cffb780bfa17e3c9342ebc36335638d2ff39296ccd0d10d9d7b6c91b8762171"
  },
  {
   "path": "frontend/shared/demo-auth.css",
@@ -577,8 +584,8 @@
   "path": "frontend/shared/demo-auth.js",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 1944,
-  "sha256": "a9d36834a73cbdfcc38bbb4b31897ab29c6ba70605736a5137f7937ed288399c"
+  "bytes": 2895,
+  "sha256": "6d9221f6d5d3c4c9782eda0b59a20248d31a2257348fb80993215e49226bdd27"
  },
  {
   "path": "frontend/shared/enterprise-name.js",
@@ -633,8 +640,8 @@
   "path": "frontend/technology.html",
   "purpose": "前端代码/页面",
   "source": "包内相对路径",
-  "bytes": 16675,
-  "sha256": "f01aba3ff7ae3213e29cd5cda1674b8390ddfa3f8487ae8dbfd3aced8fb6b822"
+  "bytes": 16676,
+  "sha256": "23fe10dbb51671dd6872ace75aa9bb47bf7c2f9808bb537c93dcbdeab36a7d4f"
  },
  {
   "path": "manifest/dependency_check.json",
@@ -822,8 +829,8 @@
   "path": "README.md",
   "purpose": "文档",
   "source": "包内相对路径",
-  "bytes": 3014,
-  "sha256": "0d878131319c8b4c3b001f59ce11ae7d08ff3c0417ec89e0e5077b4b14ac13cd"
+  "bytes": 3456,
+  "sha256": "8a44c4317ce06630c29a6bf69da9b99d0af52521584760e99aaf3e74aa506e41"
  },
  {
   "path": "requirements/build.txt",

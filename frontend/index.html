@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="未来产业洞见系统统一入口">
   <title>未来产业洞见系统</title>
-  <link rel="stylesheet" href="shared/demo-auth.css?v=20260826-no-logout1">
+  <link rel="stylesheet" href="shared/demo-auth.css?v=20260928-auth2">
   <style>
     :root {
       color-scheme: light;
@@ -86,18 +86,18 @@
         <div class="demo-login-scope"><span>01 技术演进</span><span>02 地理版图</span><span>03 企业画像</span><span>04 前沿技术</span></div>
       </div>
       <form id="demoLoginForm" class="demo-login-form" novalidate>
-        <div class="demo-login-form-head"><span>AUTHORIZED ACCESS</span><h2>系统登录</h2><p>请输入演示账号与密码</p></div>
+        <div class="demo-login-form-head"><span>AUTHORIZED ACCESS</span><h2>系统登录</h2><p>请输入账号与密码</p></div>
         <label for="demoUsername"><span>用户名</span><input id="demoUsername" name="username" type="text" autocomplete="username" required></label>
         <label for="demoPassword"><span>密码</span><span class="demo-password-field"><input id="demoPassword" name="password" type="password" autocomplete="current-password" required><button id="demoPasswordToggle" type="button" aria-label="显示密码">显示</button></span></label>
         <p id="demoLoginError" class="demo-login-error" role="alert" aria-live="polite"></p>
         <button class="demo-login-submit" type="submit"><span>进入系统</span><b>→</b></button>
-        <small>DEMO ACCESS · 本地会话验证</small>
+        <small>SERVER AUTH · 服务端会话验证</small>
       </form>
     </div>
   </section>
   <main id="views" aria-live="polite"></main>
   <div id="loading" class="loading" role="status">正在载入分析模块</div>
-  <script src="shared/demo-auth.js?v=20260826-no-logout1"></script>
+  <script src="shared/demo-auth.js?v=20260928-auth2"></script>
   <script>
     (() => {
       const PAGE_URLS = {

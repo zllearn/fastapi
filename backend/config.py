@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import secrets
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,3 +49,13 @@ MYSQL = {
 
 def describe_mysql() -> str:
     return f"mysql://{MYSQL['user']}@{MYSQL['host']}:{MYSQL['port']}/{MYSQL['database']}"
+
+
+AUTH_USERNAME = os.environ.get("AUTH_USERNAME", "")
+AUTH_PASSWORD = os.environ.get("AUTH_PASSWORD", "")
+AUTH_TTL_HOURS = int(os.environ.get("AUTH_TTL_HOURS", "12"))
+AUTH_COOKIE_SECURE = os.environ.get("AUTH_COOKIE_SECURE", "") == "1"
+
+_secret = os.environ.get("AUTH_SECRET", "")
+AUTH_SECRET_SOURCE = "env" if _secret else "random"
+AUTH_SECRET = (_secret or secrets.token_hex(32)).encode()

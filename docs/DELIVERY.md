@@ -12,9 +12,11 @@ cp .env.example .env           # 填入本机 MySQL 账号密码
 python scripts/serve.py            # http://127.0.0.1:8000/index.html
 ```
 
-网站数据由 `backend/` 的 FastAPI 服务从 MySQL 统一库派生的载荷缓存经 `/api/payload/*` 提供给前端，不再以内联 JS 随页面分发。MySQL 连接只从 `.env`（或同名环境变量）读取，密码不入仓库；库内表结构由 `backend/schema.py` 单点定义。首次启动自动校验 `data/` 源表并在后台补齐缺失的载荷缓存（`backend/cache/`；页面右下角显示"数据构建中"直至就绪）。`python scripts/serve.py --rebuild-payloads` 强制重建全部载荷。API 一览见 `http://127.0.0.1:8000/docs`：`/api/payload/<名称>`（9 个页面载荷）、`/api/db/meta|stats|families/<家族ID>`（统一库实时查询）、`/api/health`。
+网站数据由 `backend/` 的 FastAPI 服务从 MySQL 统一库派生的载荷缓存经 `/api/payload/*` 提供给前端，不再以内联 JS 随页面分发。MySQL 连接只从 `.env`（或同名环境变量）读取，密码不入仓库；库内表结构由 `backend/schema.py` 单点定义。首次启动自动校验 `data/` 源表并在后台补齐缺失的载荷缓存（`backend/cache/`；页面右下角显示"数据构建中"直至就绪）。`python scripts/serve.py --rebuild-payloads` 强制重建全部载荷。API 一览见 `http://127.0.0.1:8000/docs`：`/api/auth/login|logout|session`（服务端会话鉴权）、`/api/payload/<名称>`（9 个页面载荷）、`/api/db/meta|stats|families/<家族ID>`（统一库实时查询）、`/api/health`。
 
-frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/frontier-dashboard.json`、`frontend/assets/frontier/frontier-app.js`）。旧的纯静态直开方式（原 `启动网站.py`）已随静态载荷一并移除。注意：页面是演示形态，前端登录不等于服务端鉴权；公网部署需自行加访问控制，且只发布必要接口。
+frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/frontier-dashboard.json`、`frontend/assets/frontier/frontier-app.js`）。旧的纯静态直开方式（原 `启动网站.py`）已随静态载荷一并移除。
+
+站点已启用服务端会话鉴权：`/api/payload/*` 与 `/api/db/*` 均需登录（否则 401），登录后由 HttpOnly Cookie 承载 HMAC 签名令牌（默认有效期 12h）。账号密码只在 `.env` 配置（`AUTH_USERNAME`/`AUTH_PASSWORD`），任一为空则鉴权关闭并放行全部请求（仅供本地无凭据调试，公网部署前必须设置，并务必改掉演示口令）。会话签名密钥 `AUTH_SECRET` 建议固定（`openssl rand -hex 32`），留空则每次启动随机生成、重启后所有会话失效、多进程部署不可用。登录接口对同一来源连续失败 5 次锁定 5 分钟（429）。静态页面（HTML/JS/CSS）不含授权数据、不单独鉴权，未登录直接打开子页面时 `api-preload.js` 会提示"等待登录"并轮询重试，登录成功后自动续跑。`AUTH_COOKIE_SECURE=1` 用于 HTTPS 部署（Cookie 仅经加密连接下发）。
 
 `/api/payload/*` 按 `Accept-Encoding` 协商返回预压缩旁路文件（构建/写入载荷时自动生成同名 `.json.gz`，全量 229MB 约压至 41MB），并带 ETag + `Vary: Accept-Encoding`，二次访问命中 304 不再传体。旁路 `.gz` 属可再生产物，不入 Git、不入交付清单。
 

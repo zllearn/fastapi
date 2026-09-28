@@ -36,6 +36,11 @@ async function fetchPayload(name) {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       continue;
     }
+    if (response.status === 401) {
+      showStatus("等待登录…请在首页完成登录后自动继续");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      continue;
+    }
     if (response.status === 503) {
       showStatus("服务端正在从统一数据库构建数据，请稍候…");
       await new Promise((resolve) => setTimeout(resolve, 5000));
