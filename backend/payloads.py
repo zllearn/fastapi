@@ -16,6 +16,8 @@ import shutil
 import subprocess
 import sys
 import threading
+import time
+from contextlib import contextmanager
 from pathlib import Path
 
 from . import config
@@ -46,11 +48,16 @@ def write_json_from_js(js_path: Path, json_path: Path) -> list[str]:
     else:
         payload = values  # multi-global snapshot (e.g. world map GeoJSONs)
     json_path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = json_path.with_suffix(".tmp")
+    tmp = _unique_tmp(json_path)
     tmp.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     tmp.replace(json_path)
     ensure_gzip(json_path)
     return list(values)
+
+
+def _unique_tmp(path: Path) -> Path:
+    """Per-process temp name so concurrent workers never share a .tmp target."""
+    return path.with_name(f"{path.name}.{os.getpid()}.tmp")
 
 
 def gzip_path(json_path: Path) -> Path:
@@ -70,7 +77,7 @@ def ensure_gzip(json_path: Path) -> Path:
         compressed = gz.stat()
         if compressed.st_size > 0 and int(compressed.st_mtime) >= int(source.st_mtime):
             return gz
-    tmp = gz.with_name(gz.name + ".tmp")
+    tmp = _unique_tmp(gz)
     with json_path.open("rb") as src, tmp.open("wb") as dst:
         with gzip.GzipFile(filename="", mode="wb", compresslevel=9, fileobj=dst) as out:
             shutil.copyfileobj(src, out, length=16 * 1024 * 1024)
@@ -142,6 +149,50 @@ _locks: dict[str, threading.Lock] = {name: threading.Lock() for name in _ALL_NAM
 _building: set[str] = set()
 _building_guard = threading.Lock()
 
+# 跨进程构建锁：多 worker（uvicorn --workers N）下，进程内 threading 锁不足以
+# 防止各进程重复构建同一载荷。用 backend/cache/.<name>.lock 的原子独占创建串行化，
+# 兼容 Windows/POSIX。生产建议先 `build.py --rebuild` 预构建再起服务，令运行态不再触发构建。
+_LOCK_STALE_SECONDS = 1800  # 超过此时长视为持锁进程已死，可破锁（须大于最长单次构建耗时）
+_LOCK_TIMEOUT_SECONDS = 1800  # 等待锁的上限
+
+
+@contextmanager
+def _cross_process_lock(name: str):
+    config.CACHE.mkdir(parents=True, exist_ok=True)
+    lock_path = config.CACHE / f".{name}.lock"
+    deadline = time.monotonic() + _LOCK_TIMEOUT_SECONDS
+    while True:
+        try:
+            fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            try:
+                age = time.time() - lock_path.stat().st_mtime
+            except FileNotFoundError:
+                continue  # 锁刚被释放，立即重试
+            if age > _LOCK_STALE_SECONDS:
+                try:
+                    os.unlink(str(lock_path))
+                except FileNotFoundError:
+                    pass
+                continue
+            if time.monotonic() > deadline:
+                raise TimeoutError(f"等待载荷构建锁超时: {name}")
+            time.sleep(0.2)
+    try:
+        os.write(fd, f"{os.getpid()}\n{time.time():.0f}\n".encode())
+        yield
+    finally:
+        try:
+            os.close(fd)
+        except OSError:
+            pass
+        try:
+            os.unlink(str(lock_path))
+        except FileNotFoundError:
+            pass
+
+
 
 def json_path(name: str) -> Path:
     if name in BUILDERS:
@@ -188,8 +239,8 @@ def ensure(name: str) -> str:
         return "missing"  # snapshots ship with the server; never built here
     if is_building(name):
         return "building"
-    with _locks[name]:
-        if not is_ready(name):
+    with _locks[name], _cross_process_lock(name):
+        if not is_ready(name):  # 另一进程可能在等锁期间已构建完成
             build(name)
     return "ready"
 

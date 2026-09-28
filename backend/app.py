@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import sys
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -27,6 +28,35 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="未来产业洞见系统 API", version="1.0", lifespan=lifespan)
+
+# 静态资源缓存策略：带版本查询参数(?v=)的资源长期 immutable 缓存（前端每次改动都换 ?v=）；
+# HTML/无版本资源走 no-cache 再验证。载荷(/api/payload/*)因需鉴权且随重建变化，单独用 ETag 再验证。
+_STATIC_ASSET_EXTS = (".js", ".css", ".png", ".jpg", ".jpeg", ".svg", ".webp", ".ico", ".woff", ".woff2", ".map", ".gif")
+
+
+@app.middleware("http")
+async def access_log_and_static_cache(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration_ms = (time.perf_counter() - start) * 1000.0
+    path = request.url.path
+
+    if not path.startswith("/api/"):
+        if request.query_params.get("v"):
+            response.headers.setdefault("Cache-Control", "public, max-age=31536000, immutable")
+        else:
+            response.headers.setdefault("Cache-Control", "no-cache")
+
+    is_asset = path.endswith(_STATIC_ASSET_EXTS)
+    if config.ACCESS_LOG and path != "/api/health" and not is_asset:
+        forwarded = request.headers.get("x-forwarded-for", "")
+        client = forwarded.split(",")[0].strip() or (request.client.host if request.client else "-")
+        length = response.headers.get("content-length", "-")
+        query = f"?{request.url.query}" if request.url.query else ""
+        agent = request.headers.get("user-agent", "-")
+        print(f'[access] {client} "{request.method} {path}{query}" {response.status_code} '
+              f'{duration_ms:.0f}ms {length}B "{agent}"', flush=True)
+    return response
 
 
 @app.get("/api/health")
@@ -107,7 +137,7 @@ def payload(name: str, request: Request):
     path = payloads.json_path(name)
     stat = path.stat()
     base = f"{name}-{stat.st_mtime_ns:x}-{stat.st_size:x}"
-    headers = {"Vary": "Accept-Encoding"}
+    headers = {"Vary": "Accept-Encoding", "Cache-Control": "private, max-age=0, must-revalidate"}
     serve_gzip = "gzip" in request.headers.get("accept-encoding", "").lower()
     if serve_gzip:
         etag = f'"{base}-gz"'
@@ -164,4 +194,4 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
     print(f"打开 http://{args.host}:{args.port}/index.html ；Ctrl+C停止", flush=True)
-    uvicorn.run("backend.app:app", host=args.host, port=args.port, app_dir=str(config.ROOT))
+    uvicorn.run("backend.app:app", host=args.host, port=args.port, app_dir=str(config.ROOT), access_log=False)

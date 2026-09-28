@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXCLUDE_DIRS = {".git", "__pycache__", "cache"}
+EXCLUDE_DIRS = {".git", "__pycache__", "cache", "backups"}
 EXCLUDE_FILES = {Path("manifest/delivery_manifest.json"), Path("manifest/delivery_manifest.csv"), Path(".env")}
 # 统一库已迁至 MySQL，遗留的 .sqlite3 中间产物不属于交付内容
 EXCLUDE_SUFFIXES = {".sqlite3", ".tmp", ".pyc", ".gz"}

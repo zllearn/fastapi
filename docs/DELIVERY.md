@@ -20,6 +20,17 @@ frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/
 
 `/api/payload/*` 按 `Accept-Encoding` 协商返回预压缩旁路文件（构建/写入载荷时自动生成同名 `.json.gz`，全量 229MB 约压至 41MB），并带 ETag + `Vary: Accept-Encoding`，二次访问命中 304 不再传体。旁路 `.gz` 属可再生产物，不入 Git、不入交付清单。
 
+## 部署前置改进
+
+以下能力已在服务内实现，便于后续上云服务器（nginx + 多 worker uvicorn）：
+
+- **访问日志中间件**：`backend/app.py` 对每个请求打印一行 `IP "方法 路径?查询" 状态 耗时ms 字节B "UA"`。客户端 IP 优先取 `X-Forwarded-For` 首跳（经 nginx/cpolar 反代时才是真实来源），否则取直连 IP。为降噪，静态资源（`.js/.css/.png/.woff2` 等）与 `/api/health` 不记录；页面 `.html` 与所有 `/api/*`（含载荷下载）会记录，可据此排查远程/手机端"谁下了多少数据、耗时多久"。`serve.py` 已关闭 uvicorn 自带访问日志避免重复；设 `.env` 的 `ACCESS_LOG=0` 可整体关闭（如改用 nginx 日志）。
+- **缓存策略（Cache-Control）**：带版本查询参数（`?v=...`，前端每次改动都换）的静态资源返回 `public, max-age=31536000, immutable`，浏览器长期缓存不再回源；HTML 与无版本资源返回 `no-cache`（每次经 ETag 再验证）；`/api/payload/*` 返回 `private, max-age=0, must-revalidate`（因需鉴权、且随重建变化，只允许私有缓存并每次再验证，命中 304 不重传大体积载荷）。生产用 nginx 时，可对 `.json.gz` 开 `gzip_static` 复用旁路文件，静态资源的 immutable 头也可交由 nginx 下发。
+- **多 worker 构建锁**：`backend/payloads.py` 原用进程内 `threading.Lock`，多 worker（`uvicorn --workers N`）下各进程会重复构建同一载荷、并可能因共享 `.tmp` 目标而互相踩踏。现改为跨进程文件锁（`backend/cache/.<name>.lock`，`O_CREAT|O_EXCL` 原子独占 + 陈旧锁破除，兼容 Windows/POSIX），且临时文件改为按进程号唯一（`<name>.json.<pid>.tmp`），即便锁被破也不会写坏产物。**上线建议：先 `python scripts/build.py --rebuild`（或 `serve.py --rebuild-payloads` 跑一次）把载荷预构建好，再启动多 worker 服务**，令运行态不再触发构建、彻底规避锁竞争。
+- **MySQL 专用低权限账号**：`scripts/mysql_provision_user.sql` 建两个库级账号取代 root——`fii_runtime`（只读 + 允许 mysqldump，服务运行与备份用）与 `fii_build`（库级 DDL/DML，仅构建/迁移时用）。改好占位口令后 `mysql -u root -p < scripts/mysql_provision_user.sql`，再把 `.env` 的 `MYSQL_USER/MYSQL_PASSWORD` 指向 `fii_runtime`；跑构建脚本时临时切到 `fii_build`。root 不再被应用持有。
+- **数据库备份**：`python scripts/backup_mysql.py [--keep N] [--output-dir DIR]` 调 `mysqldump --single-transaction` 导出为 gzip 的 `backups/<库>_<UTC时间>.sql.gz`（约 118MB，含建库建表与数据），口令经临时 defaults 文件传入不进命令行。`mysqldump` 不在 PATH 时用环境变量 `MYSQLDUMP_PATH` 指定。恢复：`gunzip -c backups/<file>.sql.gz | mysql -u root -p`。`backups/` 已 gitignore。上线后建议配 cron/计划任务定期备份并异地留存。
+
+
 ## 目录结构（2026-09-21 重组后）
 
 | 路径 | 用途 |

@@ -59,3 +59,6 @@ AUTH_COOKIE_SECURE = os.environ.get("AUTH_COOKIE_SECURE", "") == "1"
 _secret = os.environ.get("AUTH_SECRET", "")
 AUTH_SECRET_SOURCE = "env" if _secret else "random"
 AUTH_SECRET = (_secret or secrets.token_hex(32)).encode()
+
+# 访问日志中间件开关（设为 0 关闭；生产若改用 nginx 日志可关）
+ACCESS_LOG = os.environ.get("ACCESS_LOG", "1") != "0"

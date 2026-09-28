@@ -20,6 +20,9 @@ analytics/incopat_run/*.xlsx
 # 本机 MySQL 连接凭据（只提交 .env.example）
 .env
 
+# 数据库备份产物（scripts/backup_mysql.py 生成）
+backups/
+
 # 操作系统杂项
 Thumbs.db
 Desktop.ini

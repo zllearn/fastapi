@@ -46,7 +46,18 @@ requirements build/server/frontier 三套依赖
 | 完整性校验 | `python scripts/build.py --verify-files` |
 | 全量重建数据 | `python scripts/build.py --rebuild`（Excel 未变时自动跳过入库；入库会重建 MySQL 表） |
 | 导入旧 SQLite 库 | `python scripts/migrate_sqlite_to_mysql.py --reset` |
+| 备份数据库 | `python scripts/backup_mysql.py [--keep 7]`（mysqldump→gzip 到 `backups/`） |
 | API 文档 | http://127.0.0.1:8000/docs |
+
+## 部署前置
+
+面向后续上云服务器（nginx + 多 worker uvicorn）已内建，细节见 `docs/DELIVERY.md`：
+
+- **访问日志**：每个请求打印 `IP 方法 路径 状态 耗时 字节 UA`（IP 取 `X-Forwarded-For` 首跳），静态资源与 `/api/health` 不记；`ACCESS_LOG=0` 可关。
+- **缓存头**：带 `?v=` 的静态资源 `immutable` 长缓存，HTML `no-cache`，载荷 `private, must-revalidate`（配 ETag 命中 304）。nginx 可对 `.json.gz` 开 `gzip_static`。
+- **多 worker 构建锁**：`payloads.py` 已换跨进程文件锁 + 按进程号唯一临时文件；上线**先 `build.py --rebuild` 预构建再起多 worker**，避免重复构建。
+- **数据库账号**：`scripts/mysql_provision_user.sql` 建只读运行账号 `fii_runtime` 与库级构建账号 `fii_build` 取代 root。
+- **备份**：`scripts/backup_mysql.py` 逻辑备份为 `.sql.gz`，建议配计划任务定期执行。
 
 ## Git 约定
 
