@@ -1,0 +1,12 @@
+[Unit]
+Description=Daily backup timer for Future Industry Insight database
+
+[Timer]
+OnCalendar=*-*-* 02:30:00
+# 随机延后，避免与同期其它维护任务撞车
+RandomizedDelaySec=900
+# 关机期间错过的任务，开机后立刻补跑
+Persistent=true
+
+[Install]
+WantedBy=timers.target

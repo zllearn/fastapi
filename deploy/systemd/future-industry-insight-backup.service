@@ -1,0 +1,19 @@
+# 统一库每日逻辑备份（mysqldump -> gzip -> backups/）
+# 与 timer 搭配：future-industry-insight-backup.timer
+
+[Unit]
+Description=Backup Future Industry Insight MySQL database
+Wants=network-online.target
+After=network-online.target mysqld.service
+
+[Service]
+Type=oneshot
+User=fii
+Group=fii
+WorkingDirectory=/opt/future-industry-insight
+Environment=PYTHONUNBUFFERED=1
+# 依赖 .env 里的 MYSQL_USER/MYSQL_PASSWORD：用 fii_runtime 即可（已授 SELECT + LOCK TABLES）
+# 首次执行请手动跑一次确认成功，再启用 timer
+ExecStart=/opt/future-industry-insight/.venv/bin/python scripts/backup_mysql.py --keep 14
+# mysqldump 不在 PATH 时（如自建/非标安装目录）取消注释：
+# Environment=MYSQLDUMP_PATH=/usr/bin/mysqldump

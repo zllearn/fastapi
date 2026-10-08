@@ -62,3 +62,7 @@ AUTH_SECRET = (_secret or secrets.token_hex(32)).encode()
 
 # 访问日志中间件开关（设为 0 关闭；生产若改用 nginx 日志可关）
 ACCESS_LOG = os.environ.get("ACCESS_LOG", "1") != "0"
+
+# 反向代理（nginx）后置 1：客户端 IP 取 X-Forwarded-For 首跳。
+# 直连/本机调试保持 0——彼时 XFF 由客户端自报，可伪造，会让登录失败锁定形同虚设。
+TRUST_PROXY_HEADERS = os.environ.get("TRUST_PROXY_HEADERS", "") == "1"

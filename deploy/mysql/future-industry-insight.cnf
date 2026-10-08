@@ -1,0 +1,34 @@
+# 统一库（MySQL 8.4）服务端参数片段，适配"单机跑本项目、907 MB 数据全进内存"的场景。
+#
+# 安装：
+#   sudo cp deploy/mysql/future-industry-insight.cnf /etc/mysql/conf.d/
+#   sudo systemctl restart mysql
+#   mysql -u root -p -e "SHOW VARIABLES LIKE 'innodb_buffer_pool_size';"
+#
+# 若这台机器上还跑别的库，请按需下调 buffer pool，并删掉 collation_server 那两行
+# （本项目建库/建表已显式指定 utf8mb4_bin，不依赖服务器级默认值）。
+
+[mysqld]
+# 数据+索引实测约 907 MB。4 GB 机型给 1G，8 GB 机型可给 2G，让整库驻留缓冲池。
+innodb_buffer_pool_size = 1G
+innodb_buffer_pool_instances = 1
+# 重做日志容量（8.0.30+ 用它取代已废弃的 innodb_log_file_size）
+innodb_redo_log_capacity = 256M
+
+# 连接数：uvicorn 每 worker 一条长连接 + mysqldump/构建脚本，100 足够
+max_connections = 100
+
+character_set_server = utf8mb4
+collation_server = utf8mb4_bin
+
+# 跳过反解，避免 DNS 慢导致的连接卡顿
+skip-name-resolve
+
+# 本机单实例、无复制：关掉 binlog 省磁盘。
+# 需要时间点恢复/主从就注释掉下一行，并配 binlog 保留期。
+skip-log-bin
+
+# 慢查询定位用（默认注释，避免磁盘与日志噪音）
+# slow_query_log = 1
+# long_query_time = 1
+# slow_query_log_file = /var/log/mysql/slow.log

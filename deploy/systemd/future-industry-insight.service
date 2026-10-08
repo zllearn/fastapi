@@ -1,0 +1,46 @@
+# 未来产业洞见系统 · 应用服务
+#
+# 前置（见 deploy/SERVER_SETUP.md）：
+#   - 代码在 /opt/future-industry-insight，已建 .venv 并装好 requirements/server.txt
+#   - .env 已填：MySQL 账号（建议 fii_runtime）、AUTH_USERNAME/AUTH_PASSWORD、固定 AUTH_SECRET
+#   - 已执行过一次 `python scripts/build.py --rebuild`，backend/cache 里载荷齐备
+#
+# 安装：
+#   sudo useradd --system --home /opt/future-industry-insight --shell /usr/sbin/nologin fii
+#   sudo chown -R fii:fii /opt/future-industry-insight
+#   sudo cp deploy/systemd/future-industry-insight.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now future-industry-insight
+#   systemctl status future-industry-insight ; journalctl -u future-industry-insight -f
+
+[Unit]
+Description=Future Industry Insight (FastAPI payload APIs + static site)
+Documentation=file:///opt/future-industry-insight/deploy/SERVER_SETUP.md
+After=network-online.target mysqld.service
+Wants=network-online.target
+# MySQL 与应用同机时取消下行注释；数据库在别的机器就删掉这行
+Requires=mysqld.service
+
+[Service]
+Type=simple
+User=fii
+Group=fii
+WorkingDirectory=/opt/future-industry-insight
+Environment=PYTHONUNBUFFERED=1
+# worker 数取 CPU 核数的一半到全部（2C 用 2，4C 用 3-4）。
+# 多 worker 必须固定 .env 的 AUTH_SECRET，否则各进程密钥不同，登录会在进程间来回失效。
+ExecStart=/opt/future-industry-insight/.venv/bin/python scripts/serve.py --host 127.0.0.1 --port 8000 --workers 2
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+
+# 只绑定 127.0.0.1：对外由 nginx 提供，防火墙不要放行 8000
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/future-industry-insight/backend/cache /opt/future-industry-insight/backend/snapshots /opt/future-industry-insight/backups
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

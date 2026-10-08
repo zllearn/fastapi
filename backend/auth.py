@@ -3,6 +3,11 @@
 凭据来自 .env（AUTH_USERNAME / AUTH_PASSWORD）；两者任一为空即视为未启用鉴权，
 所有请求放行（便于本地无凭据调试），生产部署必须配置。
 令牌不依赖服务端存储，多 worker / 重启后依然有效（需固定 AUTH_SECRET）。
+
+登录失败计数是进程内的、按客户端 IP 分桶：
+- 置于 nginx 之后须置 TRUST_PROXY_HEADERS=1，否则所有用户都记在 127.0.0.1 一个桶里；
+- 多 worker 下各进程独立计数（实际阈值约为 worker 数 × 5 次），所以暴力破解的兜底
+  交给 nginx 的 limit_req（见 deploy/nginx/）。
 """
 from __future__ import annotations
 

@@ -34,6 +34,21 @@ app = FastAPI(title="未来产业洞见系统 API", version="1.0", lifespan=life
 _STATIC_ASSET_EXTS = (".js", ".css", ".png", ".jpg", ".jpeg", ".svg", ".webp", ".ico", ".woff", ".woff2", ".map", ".gif")
 
 
+def client_ip(request: Request) -> str:
+    """Best available client address: socket peer, or X-Forwarded-For first hop behind nginx.
+
+    Only trusts the proxy header when ``TRUST_PROXY_HEADERS=1``. Kept for both the access
+    log and the login lockout counter: behind a reverse proxy the socket peer is always
+    127.0.0.1, which would otherwise make one user's failures lock everyone out.
+    """
+    if config.TRUST_PROXY_HEADERS:
+        forwarded = request.headers.get("x-forwarded-for", "")
+        first = forwarded.split(",")[0].strip()
+        if first:
+            return first
+    return request.client.host if request.client else "-"
+
+
 @app.middleware("http")
 async def access_log_and_static_cache(request: Request, call_next):
     start = time.perf_counter()
@@ -49,12 +64,10 @@ async def access_log_and_static_cache(request: Request, call_next):
 
     is_asset = path.endswith(_STATIC_ASSET_EXTS)
     if config.ACCESS_LOG and path != "/api/health" and not is_asset:
-        forwarded = request.headers.get("x-forwarded-for", "")
-        client = forwarded.split(",")[0].strip() or (request.client.host if request.client else "-")
         length = response.headers.get("content-length", "-")
         query = f"?{request.url.query}" if request.url.query else ""
         agent = request.headers.get("user-agent", "-")
-        print(f'[access] {client} "{request.method} {path}{query}" {response.status_code} '
+        print(f'[access] {client_ip(request)} "{request.method} {path}{query}" {response.status_code} '
               f'{duration_ms:.0f}ms {length}B "{agent}"', flush=True)
     return response
 
@@ -76,15 +89,11 @@ class LoginRequest(BaseModel):
     password: str
 
 
-def _client_key(request: Request) -> str:
-    return request.client.host if request.client else "unknown"
-
-
 @app.post("/api/auth/login")
 def login(body: LoginRequest, request: Request, response: Response):
     if not auth.enabled():
         return {"authenticated": True, "username": None, "authEnabled": False}
-    client = _client_key(request)
+    client = client_ip(request)
     remaining = auth.locked_remaining(client)
     if remaining:
         raise HTTPException(429, f"失败次数过多，请 {remaining} 秒后重试", headers={"Retry-After": str(remaining)})
@@ -192,6 +201,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--workers", type=int, default=1,
+                        help="进程数；多进程需固定 .env 的 AUTH_SECRET，且建议先预构建载荷")
     args = parser.parse_args()
     print(f"打开 http://{args.host}:{args.port}/index.html ；Ctrl+C停止", flush=True)
-    uvicorn.run("backend.app:app", host=args.host, port=args.port, app_dir=str(config.ROOT), access_log=False)
+    uvicorn.run("backend.app:app", host=args.host, port=args.port, app_dir=str(config.ROOT),
+                access_log=False, workers=max(1, args.workers))

@@ -3,8 +3,8 @@
   "path": ".env.example",
   "purpose": "项目文件",
   "source": "包内相对路径",
-  "bytes": 744,
-  "sha256": "a4a1dc915fccdb8d3dc254e824b732b5ed58dba881cdb7c8c57c66de8af998fd"
+  "bytes": 986,
+  "sha256": "a0f1d58dfc91f1dd37f99c2d8f5c44f3f87a00e5dae9f4544190372d5d5728fe"
  },
  {
   "path": ".gitignore",
@@ -80,22 +80,22 @@
   "path": "backend/app.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 7247,
-  "sha256": "7025e55854950ffd0d468f014e147cdec1c1b013afb86903e21ad78bd8686c72"
+  "bytes": 7854,
+  "sha256": "f22e19f3fa5cadf5b4e56e81a8825ae5c17296d4201928f4dd0b18dee61cb8ba"
  },
  {
   "path": "backend/auth.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 3680,
-  "sha256": "6bad4d2d0126d5052aa6d119662b315a516a1802540c7d7209bde8445a602d38"
+  "bytes": 4016,
+  "sha256": "8922f5c53e91b6560b9d1dbef880b230949bf2754c45661ad271dbfe1e9c5ea8"
  },
  {
   "path": "backend/config.py",
   "purpose": "后端服务代码",
   "source": "包内相对路径",
-  "bytes": 2263,
-  "sha256": "9bb77b91daf664a7fdff0cf75b22de113bed096cc55efb9ab10838185ff5c35c"
+  "bytes": 2533,
+  "sha256": "a7a5cb8bbb627a58cb1994a5d6ff2765963ff79b2704268677eefe9369a59980"
  },
  {
   "path": "backend/database.py",
@@ -189,11 +189,74 @@
   "sha256": "c147142ba087362de08411cc24d4606366f0bb108ba6d438ce9c5af9fae4f52a"
  },
  {
+  "path": "deploy/env.production.example",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 1722,
+  "sha256": "1873c1d0f94c38d88c46a68038f808fe746daadd9db42aad1de8e450e2de42aa"
+ },
+ {
+  "path": "deploy/mysql/future-industry-insight.cnf",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 1359,
+  "sha256": "d18fa9c4f629c7e1ce08fb7bff596a69aed93b330fc3f92fcdba136e5b3165cc"
+ },
+ {
+  "path": "deploy/nginx/future-industry-insight.conf",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 3506,
+  "sha256": "4e44462c6df54eba7e632a214a96ac60d90cd9af6591dcfc5a70c8e378869b4e"
+ },
+ {
+  "path": "deploy/nginx/future-industry-insight.intranet.conf",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 2211,
+  "sha256": "930b7bcedef2d39ed3e53dae92458b2c29cdbb59344523a85b03047765ecad7d"
+ },
+ {
+  "path": "deploy/SERVER_SETUP.md",
+  "purpose": "文档",
+  "source": "包内相对路径",
+  "bytes": 14572,
+  "sha256": "14b97ff1cd6bc0b872162d3a907f643f400ee561239f62165ee0eccf617c3f60"
+ },
+ {
+  "path": "deploy/systemd/future-industry-insight-backup.service",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 763,
+  "sha256": "a8e4db4649681edc6be511ee0a704ffe488895fcf54ca0a007fc1acb606aa8cc"
+ },
+ {
+  "path": "deploy/systemd/future-industry-insight-backup.timer",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 294,
+  "sha256": "4dde99c7751d51ac9ab417a058e2c44103246de14ba72e7c4b4c5c5e681e31b2"
+ },
+ {
+  "path": "deploy/systemd/future-industry-insight-rebuild.service",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 980,
+  "sha256": "efdb5fa340ed309b28a100bb1313170ac45650ce54be3fcd0c70981b3d3bb780"
+ },
+ {
+  "path": "deploy/systemd/future-industry-insight.service",
+  "purpose": "项目文件",
+  "source": "包内相对路径",
+  "bytes": 1956,
+  "sha256": "a40750a0c21d49e1b17c04ca3e233d0a573c92adab12b36ae5f3d497397e310f"
+ },
+ {
   "path": "docs/DELIVERY.md",
   "purpose": "文档",
   "source": "包内相对路径",
-  "bytes": 10944,
-  "sha256": "2725ce969a75a9061a33107c11394d20b9f3725106ae44b21aa03a41671b787c"
+  "bytes": 12512,
+  "sha256": "1496abf53b82e2b8b5d2963c85a4750b393e2cb22d2ad088ddd8e2cc16fd9b4a"
  },
  {
   "path": "frontend/assets/atlas/app.js",
@@ -829,8 +892,8 @@
   "path": "README.md",
   "purpose": "文档",
   "source": "包内相对路径",
-  "bytes": 4497,
-  "sha256": "d967a5fc8f8dba9bfe9bbc1b296e25c3e42e7cd0c92b9a5a8b2a25a49e016b99"
+  "bytes": 6103,
+  "sha256": "1b31895d82f8d73e25ea0bf220900e28dc530e0820089ebb9f7ed38a12c079c1"
  },
  {
   "path": "requirements/build.txt",
@@ -868,6 +931,13 @@
   "sha256": "152a078694fcdf207980aebfb49488230996297b1717ddbf460cfaa59ffdb7ae"
  },
  {
+  "path": "scripts/build_payloads.py",
+  "purpose": "构建/服务代码",
+  "source": "包内相对路径",
+  "bytes": 3475,
+  "sha256": "3fb302187d580ecba6b1b169e1a593dee925cc8d4bb0804264f6dcb52cd0ed48"
+ },
+ {
   "path": "scripts/make_manifest.py",
   "purpose": "构建/服务代码",
   "source": "包内相对路径",
@@ -892,7 +962,7 @@
   "path": "scripts/serve.py",
   "purpose": "构建/服务代码",
   "source": "包内相对路径",
-  "bytes": 787,
-  "sha256": "49129d54dab61d646972607fa7be3047a04fbce090fc97992e459a7c9f4d53b2"
+  "bytes": 1553,
+  "sha256": "828a74c5979f05f9176cee38a75706b959c0d178b986f24a54544498d2dcf003"
  }
 ]

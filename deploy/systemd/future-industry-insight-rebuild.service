@@ -1,0 +1,19 @@
+# 按需重建全部页面载荷：systemctl start future-industry-insight-rebuild
+# 不配 timer——载荷只在数据变化（换了 Excel / 重跑统一库）后才需要重建。
+# 构建期间服务可正常响应：请求路径会在跨进程文件锁外等待，本次构建完成后自动读到新缓存。
+# 内存提示：derwent/atlas 构建会各自起子进程聚合整表，峰值约 0.5-1 GB；4 GB 机型建议低峰执行。
+
+[Unit]
+Description=Rebuild Future Industry Insight page payloads (backend/cache)
+After=mysqld.service
+
+[Service]
+Type=oneshot
+User=fii
+Group=fii
+WorkingDirectory=/opt/future-industry-insight
+Environment=PYTHONUNBUFFERED=1
+# enterprise-insights 的构建器是 node 脚本；node 不在系统 PATH（如 nvm 安装）时需显式补上
+# Environment=PATH=/opt/future-industry-insight/.venv/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/opt/future-industry-insight/.venv/bin/python scripts/build_payloads.py --rebuild
+TimeoutStartSec=3600

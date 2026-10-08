@@ -22,11 +22,13 @@ frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/
 
 ## 部署前置改进
 
-以下能力已在服务内实现，便于后续上云服务器（nginx + 多 worker uvicorn）：
+服务内能力与 `deploy/` 配置均已就绪，端到端的服务器落地步骤（选型规格、系统与依赖安装、数据与建库两条路径、账号与 `.env`、预构建、systemd、nginx/HTTPS、备份、上线验收清单）见 `deploy/SERVER_SETUP.md`。
 
-- **访问日志中间件**：`backend/app.py` 对每个请求打印一行 `IP "方法 路径?查询" 状态 耗时ms 字节B "UA"`。客户端 IP 优先取 `X-Forwarded-For` 首跳（经 nginx/cpolar 反代时才是真实来源），否则取直连 IP。为降噪，静态资源（`.js/.css/.png/.woff2` 等）与 `/api/health` 不记录；页面 `.html` 与所有 `/api/*`（含载荷下载）会记录，可据此排查远程/手机端"谁下了多少数据、耗时多久"。`serve.py` 已关闭 uvicorn 自带访问日志避免重复；设 `.env` 的 `ACCESS_LOG=0` 可整体关闭（如改用 nginx 日志）。
-- **缓存策略（Cache-Control）**：带版本查询参数（`?v=...`，前端每次改动都换）的静态资源返回 `public, max-age=31536000, immutable`，浏览器长期缓存不再回源；HTML 与无版本资源返回 `no-cache`（每次经 ETag 再验证）；`/api/payload/*` 返回 `private, max-age=0, must-revalidate`（因需鉴权、且随重建变化，只允许私有缓存并每次再验证，命中 304 不重传大体积载荷）。生产用 nginx 时，可对 `.json.gz` 开 `gzip_static` 复用旁路文件，静态资源的 immutable 头也可交由 nginx 下发。
-- **多 worker 构建锁**：`backend/payloads.py` 原用进程内 `threading.Lock`，多 worker（`uvicorn --workers N`）下各进程会重复构建同一载荷、并可能因共享 `.tmp` 目标而互相踩踏。现改为跨进程文件锁（`backend/cache/.<name>.lock`，`O_CREAT|O_EXCL` 原子独占 + 陈旧锁破除，兼容 Windows/POSIX），且临时文件改为按进程号唯一（`<name>.json.<pid>.tmp`），即便锁被破也不会写坏产物。**上线建议：先 `python scripts/build.py --rebuild`（或 `serve.py --rebuild-payloads` 跑一次）把载荷预构建好，再启动多 worker 服务**，令运行态不再触发构建、彻底规避锁竞争。
+- **访问日志中间件**：`backend/app.py` 对每个请求打印一行 `IP "方法 路径?查询" 状态 耗时ms 字节B "UA"`。客户端 IP 默认取直连地址；经 nginx 反代时在 `.env` 置 `TRUST_PROXY_HEADERS=1`，改取 `X-Forwarded-For` 首跳（该头可由客户端自报，只在信任的代理后面打开）。为降噪，静态资源（`.js/.css/.png/.woff2` 等）与 `/api/health` 不记录；页面 `.html` 与所有 `/api/*`（含载荷下载）会记录，可据此排查远程访问"谁下了多少数据、耗时多久"。`serve.py` 已关闭 uvicorn 自带访问日志避免重复；设 `ACCESS_LOG=0` 可整体关闭（如改用 nginx 日志）。
+- **缓存策略（Cache-Control）**：带版本查询参数（`?v=...`，前端每次改动都换）的静态资源返回 `public, max-age=31536000, immutable`，浏览器长期缓存不再回源；HTML 与无版本资源返回 `no-cache`（每次经 ETag 再验证）；`/api/payload/*` 返回 `private, max-age=0, must-revalidate`（因需鉴权、且随重建变化，只允许私有缓存并每次再验证，命中 304 不重传大体积载荷）。
+- **多 worker 构建锁**：`backend/payloads.py` 原用进程内 `threading.Lock`，多 worker（`uvicorn --workers N`）下各进程会重复构建同一载荷、并可能因共享 `.tmp` 目标而互相踩踏。现改为跨进程文件锁（`backend/cache/.<name>.lock`，`O_CREAT|O_EXCL` 原子独占 + 陈旧锁破除，兼容 Windows/POSIX），且临时文件改为按进程号唯一（`<name>.json.<pid>.tmp`），即便锁被破也不会写坏产物。**上线预构建用 `python scripts/build_payloads.py --rebuild`**（这个脚本才真正填 `backend/cache`；`build.py --rebuild` 只重建统一库与 `pipeline/output` 的中间产物），把载荷备齐再起多 worker，运行态就不触发构建、彻底规避锁竞争。
+- **反向代理与进程数**：`scripts/serve.py` 与 `backend/app.py` 支持 `--workers N`（多进程须固定 `AUTH_SECRET`）。登录失败锁定按客户端 IP 计数，因此 `TRUST_PROXY_HEADERS` 必须与代理层匹配，否则 nginx 之后所有用户共用 `127.0.0.1` 一个桶（一人输错、全员被锁）。多 worker 下各进程计数独立，全局暴力破解兜底由 nginx `limit_req` 承担。
+- **部署文件**：`deploy/` 内有可直接安装的配置——`nginx/`（HTTPS 与内网 HTTP 两版反代，含预压缩载荷的超时/缓冲与登录限流）、`systemd/`（应用服务 + 每日备份 service/timer + 按需重建 service）、`mysql/future-industry-insight.cnf`（buffer pool 等参数）、`env.production.example`（生产 `.env` 模板）、`SERVER_SETUP.md`（从选型到验收清单的完整步骤）。nginx 侧不对 `.json.gz` 用 `gzip_static` 直发：那会绕开 `/api/payload/*` 的服务端鉴权；现方案是后端鉴权后用 `FileResponse` 流式发送旁路文件，不做二次压缩。
 - **MySQL 专用低权限账号**：`scripts/mysql_provision_user.sql` 建两个库级账号取代 root——`fii_runtime`（只读 + 允许 mysqldump，服务运行与备份用）与 `fii_build`（库级 DDL/DML，仅构建/迁移时用）。改好占位口令后 `mysql -u root -p < scripts/mysql_provision_user.sql`，再把 `.env` 的 `MYSQL_USER/MYSQL_PASSWORD` 指向 `fii_runtime`；跑构建脚本时临时切到 `fii_build`。root 不再被应用持有。
 - **数据库备份**：`python scripts/backup_mysql.py [--keep N] [--output-dir DIR]` 调 `mysqldump --single-transaction` 导出为 gzip 的 `backups/<库>_<UTC时间>.sql.gz`（约 118MB，含建库建表与数据），口令经临时 defaults 文件传入不进命令行。`mysqldump` 不在 PATH 时用环境变量 `MYSQLDUMP_PATH` 指定。恢复：`gunzip -c backups/<file>.sql.gz | mysql -u root -p`。`backups/` 已 gitignore。上线后建议配 cron/计划任务定期备份并异地留存。
 
@@ -40,8 +42,9 @@ frontier 页原 2.7MB 内联 JSON 与消费脚本已外置（`backend/snapshots/
 | pipeline/ | 全部构建脚本（统一库、图谱、技术演进、企业画像/名录、主题索引）；tools 为股东关联所需脚本；output 为生成产物与核验报告 |
 | data/ | 正式专利（incopat_patent_families.xlsx）、企业名单（enterprise_directory.xlsx）、股东结果（shareholder_review.xlsx）三个源表，仅维护端使用 |
 | analytics/ | 主题聚类/指标和上游页面生成代码、当前主题工作簿、已生成主题文本 |
-| scripts/ | 入口：serve.py（起服务）、build.py（交付校验/重建）、migrate_sqlite_to_mysql.py（把旧版 SQLite 统一库导入 MySQL） |
+| scripts/ | 入口：serve.py（起服务，支持 `--workers`）、build.py（交付校验/重建统一库）、build_payloads.py（预构建 backend/cache 载荷）、backup_mysql.py（逻辑备份）、mysql_provision_user.sql（低权限账号）、migrate_sqlite_to_mysql.py（把旧版 SQLite 统一库导入 MySQL） |
 | docs/ | 本交付说明 |
+| deploy/ | 服务器落地：nginx 反代（HTTPS/内网 HTTP 两版）、systemd service/timer、MySQL 参数片段、生产 `.env` 模板、SERVER_SETUP.md 部署指南 |
 | manifest/ | delivery_manifest.json/.csv（每文件用途与 SHA256）、dependency_check.json（本地资源核验） |
 | requirements/ | build.txt / server.txt / frontier.txt 三套依赖 |
 
